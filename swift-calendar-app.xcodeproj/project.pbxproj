@@ -1,0 +1,631 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		77F466A62768FF6F0034C68B /* swift_calendar_appApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466A52768FF6F0034C68B /* swift_calendar_appApp.swift */; };
+		77F466A82768FF6F0034C68B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466A72768FF6F0034C68B /* ContentView.swift */; };
+		77F466AA2768FF720034C68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
+		77F466AD2768FF720034C68B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466AC2768FF720034C68B /* Preview Assets.xcassets */; };
+		77F466AF2768FF720034C68B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466AE2768FF720034C68B /* Persistence.swift */; };
+		77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */; };
+		77F466BC2768FF730034C68B /* swift_calendar_appTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466BB2768FF730034C68B /* swift_calendar_appTests.swift */; };
+		77F466C62768FF730034C68B /* swift_calendar_appUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466C52768FF730034C68B /* swift_calendar_appUITests.swift */; };
+		77F466C82768FF730034C68B /* swift_calendar_appUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466C72768FF730034C68B /* swift_calendar_appUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		77F466B82768FF730034C68B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 77F4669A2768FF6F0034C68B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 77F466A12768FF6F0034C68B;
+			remoteInfo = "swift-calendar-app";
+		};
+		77F466C22768FF730034C68B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 77F4669A2768FF6F0034C68B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 77F466A12768FF6F0034C68B;
+			remoteInfo = "swift-calendar-app";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		77F466A22768FF6F0034C68B /* swift-calendar-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "swift-calendar-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77F466A52768FF6F0034C68B /* swift_calendar_appApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_calendar_appApp.swift; sourceTree = "<group>"; };
+		77F466A72768FF6F0034C68B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		77F466A92768FF720034C68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		77F466AC2768FF720034C68B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		77F466AE2768FF720034C68B /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		77F466B12768FF720034C68B /* swift_calendar_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = swift_calendar_app.xcdatamodel; sourceTree = "<group>"; };
+		77F466B72768FF730034C68B /* swift-calendar-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77F466BB2768FF730034C68B /* swift_calendar_appTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_calendar_appTests.swift; sourceTree = "<group>"; };
+		77F466C12768FF730034C68B /* swift-calendar-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		77F466C52768FF730034C68B /* swift_calendar_appUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_calendar_appUITests.swift; sourceTree = "<group>"; };
+		77F466C72768FF730034C68B /* swift_calendar_appUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swift_calendar_appUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		77F4669F2768FF6F0034C68B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466B42768FF730034C68B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466BE2768FF730034C68B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		77F466992768FF6F0034C68B = {
+			isa = PBXGroup;
+			children = (
+				77F466A42768FF6F0034C68B /* swift-calendar-app */,
+				77F466BA2768FF730034C68B /* swift-calendar-appTests */,
+				77F466C42768FF730034C68B /* swift-calendar-appUITests */,
+				77F466A32768FF6F0034C68B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		77F466A32768FF6F0034C68B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				77F466A22768FF6F0034C68B /* swift-calendar-app.app */,
+				77F466B72768FF730034C68B /* swift-calendar-appTests.xctest */,
+				77F466C12768FF730034C68B /* swift-calendar-appUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		77F466A42768FF6F0034C68B /* swift-calendar-app */ = {
+			isa = PBXGroup;
+			children = (
+				77F466A52768FF6F0034C68B /* swift_calendar_appApp.swift */,
+				77F466A72768FF6F0034C68B /* ContentView.swift */,
+				77F466A92768FF720034C68B /* Assets.xcassets */,
+				77F466AE2768FF720034C68B /* Persistence.swift */,
+				77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */,
+				77F466AB2768FF720034C68B /* Preview Content */,
+			);
+			path = "swift-calendar-app";
+			sourceTree = "<group>";
+		};
+		77F466AB2768FF720034C68B /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				77F466AC2768FF720034C68B /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		77F466BA2768FF730034C68B /* swift-calendar-appTests */ = {
+			isa = PBXGroup;
+			children = (
+				77F466BB2768FF730034C68B /* swift_calendar_appTests.swift */,
+			);
+			path = "swift-calendar-appTests";
+			sourceTree = "<group>";
+		};
+		77F466C42768FF730034C68B /* swift-calendar-appUITests */ = {
+			isa = PBXGroup;
+			children = (
+				77F466C52768FF730034C68B /* swift_calendar_appUITests.swift */,
+				77F466C72768FF730034C68B /* swift_calendar_appUITestsLaunchTests.swift */,
+			);
+			path = "swift-calendar-appUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		77F466A12768FF6F0034C68B /* swift-calendar-app */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77F466CB2768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-app" */;
+			buildPhases = (
+				77F4669E2768FF6F0034C68B /* Sources */,
+				77F4669F2768FF6F0034C68B /* Frameworks */,
+				77F466A02768FF6F0034C68B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "swift-calendar-app";
+			productName = "swift-calendar-app";
+			productReference = 77F466A22768FF6F0034C68B /* swift-calendar-app.app */;
+			productType = "com.apple.product-type.application";
+		};
+		77F466B62768FF730034C68B /* swift-calendar-appTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77F466CE2768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-appTests" */;
+			buildPhases = (
+				77F466B32768FF730034C68B /* Sources */,
+				77F466B42768FF730034C68B /* Frameworks */,
+				77F466B52768FF730034C68B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				77F466B92768FF730034C68B /* PBXTargetDependency */,
+			);
+			name = "swift-calendar-appTests";
+			productName = "swift-calendar-appTests";
+			productReference = 77F466B72768FF730034C68B /* swift-calendar-appTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		77F466C02768FF730034C68B /* swift-calendar-appUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 77F466D12768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-appUITests" */;
+			buildPhases = (
+				77F466BD2768FF730034C68B /* Sources */,
+				77F466BE2768FF730034C68B /* Frameworks */,
+				77F466BF2768FF730034C68B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				77F466C32768FF730034C68B /* PBXTargetDependency */,
+			);
+			name = "swift-calendar-appUITests";
+			productName = "swift-calendar-appUITests";
+			productReference = 77F466C12768FF730034C68B /* swift-calendar-appUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		77F4669A2768FF6F0034C68B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1310;
+				LastUpgradeCheck = 1310;
+				TargetAttributes = {
+					77F466A12768FF6F0034C68B = {
+						CreatedOnToolsVersion = 13.1;
+					};
+					77F466B62768FF730034C68B = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 77F466A12768FF6F0034C68B;
+					};
+					77F466C02768FF730034C68B = {
+						CreatedOnToolsVersion = 13.1;
+						TestTargetID = 77F466A12768FF6F0034C68B;
+					};
+				};
+			};
+			buildConfigurationList = 77F4669D2768FF6F0034C68B /* Build configuration list for PBXProject "swift-calendar-app" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 77F466992768FF6F0034C68B;
+			productRefGroup = 77F466A32768FF6F0034C68B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				77F466A12768FF6F0034C68B /* swift-calendar-app */,
+				77F466B62768FF730034C68B /* swift-calendar-appTests */,
+				77F466C02768FF730034C68B /* swift-calendar-appUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		77F466A02768FF6F0034C68B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77F466AD2768FF720034C68B /* Preview Assets.xcassets in Resources */,
+				77F466AA2768FF720034C68B /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466B52768FF730034C68B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466BF2768FF730034C68B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		77F4669E2768FF6F0034C68B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77F466AF2768FF720034C68B /* Persistence.swift in Sources */,
+				77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */,
+				77F466A82768FF6F0034C68B /* ContentView.swift in Sources */,
+				77F466A62768FF6F0034C68B /* swift_calendar_appApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466B32768FF730034C68B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77F466BC2768FF730034C68B /* swift_calendar_appTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		77F466BD2768FF730034C68B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				77F466C82768FF730034C68B /* swift_calendar_appUITestsLaunchTests.swift in Sources */,
+				77F466C62768FF730034C68B /* swift_calendar_appUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		77F466B92768FF730034C68B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 77F466A12768FF6F0034C68B /* swift-calendar-app */;
+			targetProxy = 77F466B82768FF730034C68B /* PBXContainerItemProxy */;
+		};
+		77F466C32768FF730034C68B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 77F466A12768FF6F0034C68B /* swift-calendar-app */;
+			targetProxy = 77F466C22768FF730034C68B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		77F466C92768FF730034C68B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		77F466CA2768FF730034C68B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		77F466CC2768FF730034C68B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"swift-calendar-app/Preview Content\"";
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		77F466CD2768FF730034C68B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"swift-calendar-app/Preview Content\"";
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-app";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		77F466CF2768FF730034C68B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-calendar-app.app/swift-calendar-app";
+			};
+			name = Debug;
+		};
+		77F466D02768FF730034C68B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-appTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/swift-calendar-app.app/swift-calendar-app";
+			};
+			name = Release;
+		};
+		77F466D22768FF730034C68B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "swift-calendar-app";
+			};
+			name = Debug;
+		};
+		77F466D32768FF730034C68B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-appUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "swift-calendar-app";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		77F4669D2768FF6F0034C68B /* Build configuration list for PBXProject "swift-calendar-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77F466C92768FF730034C68B /* Debug */,
+				77F466CA2768FF730034C68B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77F466CB2768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-app" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77F466CC2768FF730034C68B /* Debug */,
+				77F466CD2768FF730034C68B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77F466CE2768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-appTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77F466CF2768FF730034C68B /* Debug */,
+				77F466D02768FF730034C68B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		77F466D12768FF730034C68B /* Build configuration list for PBXNativeTarget "swift-calendar-appUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				77F466D22768FF730034C68B /* Debug */,
+				77F466D32768FF730034C68B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				77F466B12768FF720034C68B /* swift_calendar_app.xcdatamodel */,
+			);
+			currentVersion = 77F466B12768FF720034C68B /* swift_calendar_app.xcdatamodel */;
+			path = swift_calendar_app.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 77F4669A2768FF6F0034C68B /* Project object */;
+}
