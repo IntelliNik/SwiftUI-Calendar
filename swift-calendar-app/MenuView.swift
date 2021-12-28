@@ -67,6 +67,12 @@ struct MenuView: View {
                             .border(currentlySelectedMenuItem == MenuSelection.month ? .white : .clear, width: 2)
                             .foregroundColor(.white)
                             .font(.headline)
+                        NavigationLink(destination:
+                                        MonthView(month:11,year: 2021)
+                        ){
+                        Text("   " + String(2021) + "   " )
+                            .font(.system(size: 17, weight: .bold, design: .default))
+                        }
                     }
                     Button(action: {currentlySelectedMenuItem = MenuSelection.year}) {
                         Text("Year View")
@@ -74,6 +80,12 @@ struct MenuView: View {
                             .border(currentlySelectedMenuItem == MenuSelection.year ? .white : .clear, width: 2)
                             .foregroundColor(.white)
                             .font(.headline)
+                        NavigationLink(destination:
+                            YearView(year:2021)
+                        ){
+                        Text("   " + String(2021) + "   " )
+                            .font(.system(size: 17, weight: .bold, design: .default))
+                        }
                     }
                     Button(action: {currentlySelectedMenuItem = MenuSelection.allEvents}) {
                         Text("All Events")
