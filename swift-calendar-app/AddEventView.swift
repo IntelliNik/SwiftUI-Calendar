@@ -39,12 +39,12 @@ struct AddEventView: View {
                     .navigationTitle("Add event")
                     .toolbar {
                         ToolbarItem(placement: .navigation) {
-                            Button("Discard event"){
+                            Button("Discard"){
                                 dismiss()
                             }.foregroundColor(.gray)
                         }
                         ToolbarItem(placement: .primaryAction) {
-                            Button("Save event"){
+                            Button("Save"){
                                 dismiss()
                             }.foregroundColor(Color("AccentColor"))
                         }

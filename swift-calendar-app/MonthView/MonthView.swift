@@ -12,29 +12,51 @@ struct MonthView: View {
     //    var month : Int
     //    var year : Int
     //}
-    var month: Int
-    var year: Int
-    let montlist = ["Januar", "Februar","March","April","May","June","July","August","September","October","November","December"]
+    @State var dateComponents: DateComponents
+    @State private var pickerSelection: PickerSelection = .current
     
     var body: some View {
-        
-            VStack {
-                MonthViewMonthAndYear(month: montlist[month], year: year)
-                Spacer()
-                MonthViewCalendar()
-                Spacer()
-                Spacer()
-                Spacer()
-                
-                Text("Here comes the rain!")
-            }.padding() 
-        
-        
+        VStack {
+            MonthViewMonthAndYear(dateComponents: $dateComponents)
+                .padding(.bottom, 50)
+            MonthViewCalendar()
+            Spacer()
+            Picker("", selection: $pickerSelection) {
+                let next = getNextOrPreviousMonth(components: dateComponents, next: true)
+                let previous = getNextOrPreviousMonth(components: dateComponents, next: false)
+                Text("\(previous!.month!) ' \(previous!.year!)").tag(PickerSelection.previous)
+                Text("\(dateComponents.month!) ' \(dateComponents.year!)").tag(PickerSelection.current)
+                Text("\(next!.month!) ' \(next!.year!)").tag(PickerSelection.next)
+            }
+            .onChange(of: pickerSelection){ _ in
+                if(pickerSelection == .previous){
+                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
+                }
+                if(pickerSelection == .next){
+                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
+                }
+                // reset picker
+                pickerSelection = .current
+            }
+            .pickerStyle(.segmented)
+            .colorMultiply(Color("AccentColor"))
+            .padding()
+            .gesture(
+                DragGesture()
+                    .onEnded(){gesture in
+                        if(gesture.translation.width < 0){
+                            pickerSelection = .previous
+                        } else if(gesture.translation.width > 0){
+                            pickerSelection = .next
+                        }
+                    }
+            )
+        }.padding()
     }
 }
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(month: 10, year: 2021)
+        MonthView(dateComponents: Calendar.current.dateComponents([.month, .year], from: Date.now))
     }
 }

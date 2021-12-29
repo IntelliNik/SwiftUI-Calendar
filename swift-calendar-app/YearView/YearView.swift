@@ -19,116 +19,58 @@ struct GrowingButton: ButtonStyle {
     }
 }
 
-struct SwitchYearButton: View {
-    var year: Int
-    
-    var body: some View {
-        HStack(alignment: .center, spacing: nil) {
-            
-            ZStack(alignment: .center){
-                Button() {
-                } label: {
-                    NavigationLink(destination: YearView(year:(year-1)))
-                    {
-                    Text("   " + String(year-1) + "   " )
-                        .font(.system(size: 17, weight: .bold, design: .default))
-                    }
-                }
-                .buttonStyle(GrowingButton())
-                    .offset(x:-10 , y: 0)
-                
-                //Text("    " + String(year-1) + "    ")
-                //    .fontWeight(.bold)
-                //    .padding()
-                //    .background(Color.red)
-                //    .cornerRadius(40)
-                //    .foregroundColor(.white)
-                //    .overlay(
-                //        RoundedRectangle(cornerRadius: 40)
-                //            .stroke(Color.red, lineWidth: 2)
-                //    )
-                //    .offset(x:-20 , y: 0)
-                
-            }
-            
-            ZStack(alignment: .center){
-                Button() {
-                    
-                } label: {
-                    Text("   " + String(year) + "   " )
-                        .font(.system(size: 17, weight: .bold, design: .default))
-                }
-                .buttonStyle(GrowingButton())
-                
-                //Text("    " + String(year) + "    ")
-                //    .fontWeight(.bold)
-                //    .padding()
-                //    .background(Color.red)
-                //    .cornerRadius(40)
-                //    .foregroundColor(.white)
-                //    .overlay(
-                //        RoundedRectangle(cornerRadius: 40)
-                //            .stroke(Color.red, lineWidth: 2)
-                //    )
-                //    .offset(x:0 , y: 0)
-            }
-            
-            ZStack(alignment: .center)
-            {
-                Button() {
-                } label: {
-                    NavigationLink(destination:
-                        YearView(year:(year+1))
-                    ){
-                    Text("   " + String(year+1) + "   " )
-                        .font(.system(size: 17, weight: .bold, design: .default))
-                    }
-                }
-                .buttonStyle(GrowingButton())
-                    .offset(x:10 , y: 0)
-                
-                //Text("    " + String(year+1) + "    ")
-                //    .fontWeight(.bold)
-                //    .padding()
-                //    .background(Color.red)
-                //    .cornerRadius(40)
-                //    .foregroundColor(.white)
-                //    .overlay(
-                //        RoundedRectangle(cornerRadius: 40)
-                //            .stroke(Color.red, lineWidth: 2)
-                //    )
-                //    .offset(x:20 , y: 0)
-            }
-        }
-    }
-}
-
 struct YearView: View {
     //struct Year {
     //    var month : Int
     //    var year : Int
     //}
-    var year : Int
+    @State var dateComponents: DateComponents
+    @State var pickerSelection: PickerSelection = .current
     
     var body: some View {
         
-            VStack {
-                YearViewYearAndToday(year: year)
-                Spacer()
-                YearViewCalendar(year: year)
-                Spacer()
-                Spacer()
-                Spacer()
-                
-                SwitchYearButton(year: year)
-            }.padding() 
-        
-        
+        VStack {
+            YearViewYearAndToday(dateComponents: $dateComponents)
+            Spacer()
+            YearViewCalendar(dateComponents: $dateComponents)
+            Spacer()
+            Picker("", selection: $pickerSelection) {
+                let next = getNextOrPreviousYear(components: dateComponents, next: true)
+                let previous = getNextOrPreviousYear(components: dateComponents, next: false)
+                Text("\(previous!.year!)").tag(PickerSelection.previous)
+                Text("\(dateComponents.year!)").tag(PickerSelection.current)
+                Text("\(next!.year!)").tag(PickerSelection.next)
+            }
+            .onChange(of: pickerSelection){ _ in
+                if(pickerSelection == .previous){
+                    dateComponents = getNextOrPreviousYear(components: dateComponents, next: false)!
+                }
+                if(pickerSelection == .next){
+                    dateComponents = getNextOrPreviousYear(components: dateComponents, next: true)!
+                }
+                // reset picker
+                pickerSelection = .current
+            }
+            .pickerStyle(.segmented)
+            .colorMultiply(Color("AccentColor"))
+            .padding()
+            .gesture(
+                DragGesture()
+                    .onEnded(){gesture in
+                        print(gesture)
+                        if(gesture.translation.width < 0){
+                            pickerSelection = .previous
+                        } else if(gesture.translation.width > 0){
+                            pickerSelection = .next
+                        }
+                    }
+            )
+        }.padding()
     }
 }
 
 struct YearView_Previews: PreviewProvider {
     static var previews: some View {
-        YearView(year: 2021)
+        YearView(dateComponents: Calendar.current.dateComponents([.day, .month, .year], from: Date.now))
     }
 }

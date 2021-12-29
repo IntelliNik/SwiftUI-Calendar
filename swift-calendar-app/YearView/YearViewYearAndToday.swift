@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct YearViewYearAndToday: View {
-    var year : Int
+    @Binding var dateComponents : DateComponents
 
     var body: some View {
         HStack(alignment: .bottom, spacing: 160) {
@@ -17,7 +17,7 @@ struct YearViewYearAndToday: View {
             }
             
             VStack(alignment: .leading, spacing: 170) { //Year
-                Text(String(year))
+                Text(String(dateComponents.year!))
             }.font(.system(size: 30, weight: .bold,
                            design: .monospaced))
         }
@@ -26,6 +26,6 @@ struct YearViewYearAndToday: View {
 
 struct YearViewMonthAndYear_Previews: PreviewProvider {
     static var previews: some View {
-        YearViewYearAndToday(year: 2021)
+        YearView(dateComponents: Calendar.current.dateComponents([.day, .month, .year], from: Date.now))
     }
 }

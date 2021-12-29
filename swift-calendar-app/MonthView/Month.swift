@@ -2,12 +2,9 @@
 //  Month.swift
 //  swift-calendar-app
 //
-//  Created by Din Ferizovic on 26.12.21.
+//  Created by Schulte, Niklas on 29.12.21.
 //
 
 import Foundation
 
-struct Month {
-    
-    
-}
+let Month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

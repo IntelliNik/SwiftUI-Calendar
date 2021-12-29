@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct MonthViewMonthAndYear: View {
-    var month : String
-    var year : Int
+    @Binding var dateComponents: DateComponents
 
     var body: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) { //button and month
                 TodayButton()
-                Text(month)
+                Text(Month[dateComponents.month!-1])
                     .font(.system(size: 45, weight: .bold, design: .monospaced))
             }
             
             Spacer()
             
             VStack(alignment: .trailing, spacing: 0) {
-                Text(String(year).prefix(2))
-                Text(String(year).suffix(2))
+                Text(String(dateComponents.year!).prefix(2))
+                Text(String(dateComponents.year!).suffix(2))
             }.font(.system(size: 80, weight: .bold,
                            design: .monospaced))
         }
@@ -32,6 +31,6 @@ struct MonthViewMonthAndYear: View {
 
 struct MonthViewMonthAndYear_Previews: PreviewProvider {
     static var previews: some View {
-        MonthViewMonthAndYear(month: "November", year: 2021)
+        MonthViewMonthAndYear(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
     }
 }
