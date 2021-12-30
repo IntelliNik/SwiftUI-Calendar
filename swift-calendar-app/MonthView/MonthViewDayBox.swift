@@ -14,19 +14,15 @@ struct MonthViewDayBox: View {
     
     var body: some View {
         ZStack {
-            
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
                 .frame(width: 45, height: 45)
-            
-            
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.thinMaterial)
                 .frame(width: 45, height: 45)
-                .overlay(Text(String(date)))
+                .overlay(Text(String(date)).foregroundColor(Color(getAccentColor())))
 
         }
-        
     }
 }
 

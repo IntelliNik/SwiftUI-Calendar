@@ -7,27 +7,14 @@
 
 import SwiftUI
 
-enum Colors: String, CaseIterable{
-    case pink, green, blue
-    
-    func image() -> String {
-        switch self.rawValue{
-        case "pink":
-            return "flame"
-        case "green":
-            return "leaf"
-        default:
-            return "drop"
-        }
-    }
-}
-
 struct MenuView: View {
-    @State var colorScheme = Colors.pink
+    @State var colorSelection = Colors.pink
+    @State var currentAccentColor = getAccentColor()
     
     @Binding var currentlySelectedView: ContainedView
-    
     @State var currentlySelectedCalendar: Int = 0
+    
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         VStack(alignment: .leading){
@@ -42,8 +29,7 @@ struct MenuView: View {
                         .padding()
                 }
                 Spacer()
-                Button(action: {currentlySelectedView = .day
-                }) {
+                Button(action: {currentlySelectedView = .day}) {
                     Text("Day View")
                         .padding()
                         .border(currentlySelectedView == .day ? .white : .clear, width: 2)
@@ -123,20 +109,48 @@ struct MenuView: View {
                 Text("Color scheme")
                     .font(.headline)
                     .foregroundColor(.white)
-                Picker(selection: $colorScheme, label: Text("Color Scheme")) {
+                Picker(selection: $colorSelection, label: Text("Color Scheme")) {
                     ForEach(Colors.allCases, id: \.self) { color in
                         Image(systemName: color.image()).foregroundColor(.white)
                     }
                 }
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)
+                .onChange(of: colorSelection){color in
+                    var accentColor = ""
+                    switch color {
+                    case .pink:
+                        accentColor = "AccentColorRed"
+                    case .green:
+                        accentColor = "AccentColorGreen"
+                    case .blue:
+                        accentColor = "AccentColorBlue"
+                    }
+                    setAccentColor(colorScheme: accentColor)
+                    currentAccentColor = getAccentColor()
+                }
                 .padding()
-                .colorMultiply(colorHelper(colorScheme))
+                .colorMultiply(colorHelper(colorSelection))
             }
         }.padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color("AccentColor"))
+            .background(Color(currentAccentColor))
             .edgesIgnoringSafeArea(.all)
+    }
+}
+
+enum Colors: String, CaseIterable{
+    case pink, green, blue
+    
+    func image() -> String {
+        switch self.rawValue{
+        case "pink":
+            return "flame"
+        case "green":
+            return "leaf"
+        default:
+            return "drop"
+        }
     }
 }
 

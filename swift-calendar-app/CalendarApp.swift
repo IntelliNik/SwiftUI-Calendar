@@ -45,16 +45,19 @@ struct CalendarApp: App {
                                         ToolbarItem(placement: .navigationBarLeading){
                                             Button(action: {self.showMenu.toggle()}) {
                                                 Image(systemName: "line.horizontal.3")
+                                                    .foregroundColor(Color(getAccentColor()))
                                             }
                                         }
                                         ToolbarItem(placement: .navigationBarTrailing){
                                             Button(action: {self.showSearchBar.toggle()}) {
                                                 Image(systemName: "magnifyingglass")
+                                                    .foregroundColor(Color(getAccentColor()))
                                             }
                                         }
                                         ToolbarItem(placement: .navigationBarTrailing){
                                             Button(action: {self.showAddEventSheet = true}) {
                                                 Image(systemName: "plus")
+                                                    .foregroundColor(Color(getAccentColor()))
                                             }
                                         }
                                     }
@@ -69,7 +72,7 @@ struct CalendarApp: App {
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color("AccentColor"))
+                            .background(Color(getAccentColor()))
                             .opacity(0.05)
                             .onTapGesture {
                                 showMenu = false

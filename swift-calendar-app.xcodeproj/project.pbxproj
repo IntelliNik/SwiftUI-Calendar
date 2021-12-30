@@ -21,6 +21,7 @@
 		770FB6B8276FA26000D38A07 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770FB6B7276FA26000D38A07 /* DayDataModel.swift */; };
 		7719874B2773C3C80061CF34 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719874A2773C3C80061CF34 /* MenuView.swift */; };
 		7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719874E2775F60E0061CF34 /* AddEventView.swift */; };
+		77480F93277E0623005B96ED /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77480F92277E0623005B96ED /* Settings.swift */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
 		77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DAC8EE277CA0EC000D8BCD /* MainView.swift */; };
 		77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10DD277CEB4D00206E60 /* PickerView.swift */; };
@@ -69,6 +70,7 @@
 		770FB6B7276FA26000D38A07 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
 		7719874A2773C3C80061CF34 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		7719874E2775F60E0061CF34 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
+		77480F92277E0623005B96ED /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		77DAC8EA277C6C09000D8BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		77DAC8EE277CA0EC000D8BCD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		77EB10DD277CEB4D00206E60 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				77EB10E1277CFB7C00206E60 /* DateComponents.swift */,
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874A2773C3C80061CF34 /* MenuView.swift */,
+				77480F92277E0623005B96ED /* Settings.swift */,
 				770FB6B5276FA1C700D38A07 /* AllEventsView.swift */,
 				77EB10DD277CEB4D00206E60 /* PickerView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
@@ -342,6 +345,7 @@
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
 				770FB6B8276FA26000D38A07 /* DayDataModel.swift in Sources */,
 				77F466AF2768FF720034C68B /* Persistence.swift in Sources */,
+				77480F93277E0623005B96ED /* Settings.swift in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,
 				35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */,
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,

@@ -10,7 +10,6 @@ import SwiftUI
 struct MonthViewCalendar: View {
     var body: some View {
         VStack {
-            
             HStack(alignment: .center) { //#warning: in case of localization, change!
                 
                 ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
