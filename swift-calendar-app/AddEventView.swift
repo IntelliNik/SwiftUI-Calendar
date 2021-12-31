@@ -46,7 +46,7 @@ struct AddEventView: View {
                         ToolbarItem(placement: .primaryAction) {
                             Button("Save"){
                                 dismiss()
-                            }.foregroundColor(Color("AccentColor"))
+                            }.foregroundColor(Color(getAccentColor()))
                         }
                     }
 

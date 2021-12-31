@@ -61,7 +61,7 @@ struct AllEventsView: View {
                             .foregroundColor(.white)
                             .padding(10)
                     })
-                        .background(Color("AccentColor"))
+                        .background(Color(getAccentColor()))
                         .cornerRadius(45)
                         .shadow(color: Color.black.opacity(0.3),
                                 radius: 3,
