@@ -17,7 +17,7 @@ enum ContainedView{
 
 struct MainView: View {
     @Binding var containedView: ContainedView
-    @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
+    @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
 
     var body: some View {
         switch containedView{
@@ -25,7 +25,7 @@ struct MainView: View {
             Text("TODO")
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
-            Text("TODO")
+            WeekView(dateComponents: dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .month:
             MonthView(dateComponents: dateComponents)
