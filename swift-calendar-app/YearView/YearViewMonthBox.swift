@@ -9,27 +9,29 @@ import SwiftUI
 
 struct Part1View: View {
     var month : String
+    var width, height: CGFloat
     
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
             .fill(.thinMaterial)
-            .frame(width: 110, height: 20)
+            .frame(width: width, height: 20)
             .overlay(Text(String(month)).fontWeight(.heavy))
-            .offset(x:0 , y: -45)
+            .offset(x:0 , y: -((height-20)/2))
             .foregroundColor(.gray)
     }
 }
 
 struct Part2View: View {
+    var width, height: CGFloat
     
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
-                .frame(width: 110, height: 110)
+                .frame(width: width, height: height)
         
         RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .frame(width: 110, height: 1)
-            .offset(x:0 , y: -35)
+            .frame(width: width, height: 1)
+            .offset(x:0 , y: -((height-20)/2)+10)
             .foregroundColor(.gray)
     }
 }
@@ -38,6 +40,7 @@ struct Part2View: View {
 struct Part3View: View {
     var row: Int
     var lastDayOfMonth: Int
+    var width, height: CGFloat
     
     var body: some View {
         HStack(alignment: .center, spacing: nil) {
@@ -58,13 +61,20 @@ struct Part3View: View {
                 }
             }
         }
-        Divider()
+        if (row+7 < lastDayOfMonth)
+        {
+            if (row <= 28)
+            {
+                Divider()
+            }
+        }
     }
 }
 
 
 struct Part4View: View {
     var startOfMonthDay: Int
+    var width, height: CGFloat
     
     var body: some View {
         HStack(alignment: .center, spacing: nil) {
@@ -88,7 +98,7 @@ struct Part4View: View {
 struct YearViewMonthBox: View {
     var month : String
     
-    var width, length: Int
+    var width, height: CGFloat
     
     var startOfMonthDay: Int
     var lastDayOfMonth: Int
@@ -96,17 +106,15 @@ struct YearViewMonthBox: View {
     var body: some View {
         ZStack(alignment: .trailing) {
     
-            Part1View(month: month)
-            Part2View()
+            Part1View(month: month, width: width, height:height)
+            Part2View(width: width, height:height)
             
             VStack(alignment: .center, spacing: 2) {
-
-                Divider()
                 
-                Part4View(startOfMonthDay: startOfMonthDay)
+                Part4View(startOfMonthDay: startOfMonthDay,width: width, height:height)
                 ForEach([7,14,21,28,35], id:\.self)  { row in
                     let number = row - startOfMonthDay
-                    Part3View(row: number, lastDayOfMonth: lastDayOfMonth)
+                    Part3View(row: number, lastDayOfMonth: lastDayOfMonth,width: width, height:height)
                 }
             }.offset(x:0 , y: 10)
             
@@ -117,6 +125,6 @@ struct YearViewMonthBox: View {
 
 struct YearViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
-        YearViewMonthBox(month: "Jan.", width: 45, length: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
+        YearViewMonthBox(month: "Jan.", width: 45, height: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
     }
 }
