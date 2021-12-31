@@ -10,9 +10,13 @@ import CoreLocation
 
 @main
 struct CalendarApp: App {
+    @State var addEventSuccessful = true
+    
     @State private var showMenu = false
     @State private var showAddEventSheet = false
     @State private var showSearchBar = false
+    @State private var showConfirmationBox = false
+    
     @State private var searchBarText = ""
     
     @State var selectedView: ContainedView = .month
@@ -39,9 +43,11 @@ struct CalendarApp: App {
             ZStack{
                 GeometryReader{geometry in
                     NavigationView{
-                        VStack{
-                            if(showSearchBar){
-                                TextField("Search ...", text: $searchBarText).padding()
+                        ZStack{
+                            if(showConfirmationBox){
+                                ConfirmationBoxView(success: addEventSuccessful)
+                                    // show on top
+                                    .zIndex(1)
                             }
                             ZStack(alignment: .leading){
                                 MainView(containedView: $selectedView)
@@ -51,6 +57,11 @@ struct CalendarApp: App {
                                             Button(action: {self.showMenu.toggle()}) {
                                                 Image(systemName: "line.horizontal.3")
                                                     .foregroundColor(Color(getAccentColor()))
+                                            }
+                                        }
+                                        ToolbarItem(placement: .navigationBarTrailing){
+                                            if(showSearchBar){
+                                                TextField("Search ...", text: $searchBarText).padding()
                                             }
                                         }
                                         ToolbarItem(placement: .navigationBarTrailing){
@@ -66,13 +77,18 @@ struct CalendarApp: App {
                                             }
                                         }
                                     }
-                                    .sheet(isPresented: $showAddEventSheet) {
-                                        AddEventView()
+                                    .sheet(isPresented: $showAddEventSheet, onDismiss: {
+                                        showConfirmationBox = true
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                            showConfirmationBox = false
+                                        }
+                                    }) {
+                                        AddEventView(save: $addEventSuccessful)
                                             .interactiveDismissDisabled(true)
                                     }
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
-                        }
+                        }.animation(.easeIn, value: showConfirmationBox)
                     }
                     if self.showMenu {
                         // providing a space that is tappable to close the menu
@@ -88,6 +104,7 @@ struct CalendarApp: App {
                     }
                 }
             }.gesture(drag)
+            .animation(.easeIn, value: showMenu)
         }
     }
 }

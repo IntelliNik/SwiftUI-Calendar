@@ -13,7 +13,7 @@ struct AllEventsView: View {
      
     @State private var scrollTargetTodayButton: UUID?
     @State private var showMenu = false
-    @State private var showAddEventSheet = false
+    @State private var showAddEventSheet = true
     
     @Environment(\.colorScheme) var colorScheme
     

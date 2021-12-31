@@ -131,13 +131,8 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            HStack{
-                MenuView(currentlySelectedView: .constant(.allEvents))
-                    .frame(width: geometry.size.width/2)
-                Text("")
-                    .frame(width: geometry.size.width/2, height: geometry.size.height)
-                    .background(.black)
-            }
+            MenuView(currentlySelectedView: .constant(.allEvents))
+                .frame(width: geometry.size.width/2)
         }
     }
 }
