@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3562DEFD277EFB340054F096 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3562DEFC277EFB340054F096 /* DataController.swift */; };
 		35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6832E277A182E00D9EBAC /* MonthViewCalendar.swift */; };
 		35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6832F277A182E00D9EBAC /* TodayButton.swift */; };
 		35B68336277A182E00D9EBAC /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68330277A182E00D9EBAC /* MonthView.swift */; };
@@ -56,6 +57,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3562DEFC277EFB340054F096 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = "swift-calendar-app/DataController.swift"; sourceTree = SOURCE_ROOT; };
 		35B6832E277A182E00D9EBAC /* MonthViewCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthViewCalendar.swift; sourceTree = "<group>"; };
 		35B6832F277A182E00D9EBAC /* TodayButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodayButton.swift; sourceTree = "<group>"; };
 		35B68330277A182E00D9EBAC /* MonthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
 				770FB6B7276FA26000D38A07 /* DayDataModel.swift */,
 				77F466AE2768FF720034C68B /* Persistence.swift */,
+				3562DEFC277EFB340054F096 /* DataController.swift */,
 				77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */,
 				77F466A92768FF720034C68B /* Assets.xcassets */,
 				77F466AB2768FF720034C68B /* Preview Content */,
@@ -350,6 +353,7 @@
 				35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */,
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,
 				77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */,
+				3562DEFD277EFB340054F096 /* DataController.swift in Sources */,
 				35FC5CBE2779C6E7009033C5 /* YearViewCalendar.swift in Sources */,
 				35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */,
 				77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */,

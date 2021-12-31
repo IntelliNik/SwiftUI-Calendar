@@ -5,6 +5,9 @@
 //  Created by Schulte, Niklas on 14.12.21.
 //
 
+
+//TODO: Remove this file later. Still here to check some things
+
 import CoreData
 
 struct PersistenceController {
@@ -13,10 +16,10 @@ struct PersistenceController {
     static var preview: PersistenceController = {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
-        for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
-        }
+        //for _ in 0..<10 {
+        //    let newItem = Item(context: viewContext)
+        //    newItem.timestamp = Date()
+        //}
         do {
             try viewContext.save()
         } catch {

@@ -18,6 +18,7 @@ struct AddEventView: View {
     @State private var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         NavigationView{
@@ -45,6 +46,13 @@ struct AddEventView: View {
                         }
                         ToolbarItem(placement: .primaryAction) {
                             Button("Save"){
+                                let event = Event(context: moc)
+                                event.name = "Test Event"
+                                event.startdate = startDate
+                                event.enddate = endDate
+                                
+                                try? moc.save()
+                                
                                 dismiss()
                             }.foregroundColor(Color(getAccentColor()))
                         }

@@ -17,6 +17,11 @@ struct CalendarApp: App {
     
     @State var selectedView: ContainedView = .month
     
+    @StateObject private var dataController = DataController()
+    // TODO: Remove next lines when everything is done
+    // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
+    // Fetch Request only where we need a request?
+    
     enum Modes{
         case day
         case week
@@ -65,6 +70,7 @@ struct CalendarApp: App {
                                         AddEventView()
                                             .interactiveDismissDisabled(true)
                                     }
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                         }
                     }

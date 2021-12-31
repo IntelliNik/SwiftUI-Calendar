@@ -103,6 +103,12 @@ struct YearViewMonthBox: View {
     var startOfMonthDay: Int
     var lastDayOfMonth: Int
     
+    //TODO: Remove next comment lines when everything is done
+    //Need the next line in every structure where we make
+    //a data base request.
+    //@FetchRequest(sortDescriptors: [], predicate: NSPredicate(format: "name BEGINSWITH %@", "Hallo")) var events: FetchedResults<Event>
+    //@FetchRequest(sortDescriptors: []) var events: FetchedResults<Event>
+    
     var body: some View {
         ZStack(alignment: .trailing) {
     
@@ -117,6 +123,12 @@ struct YearViewMonthBox: View {
                     Part3View(row: number, lastDayOfMonth: lastDayOfMonth,width: width, height:height)
                 }
             }.offset(x:0 , y: 10)
+            
+            //VStack {
+            //    List(events) { event in
+            //        Text(event.name ?? "Unknown")
+            //    }
+            //}
             
         }
         
