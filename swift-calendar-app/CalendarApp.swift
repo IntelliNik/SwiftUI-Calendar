@@ -95,7 +95,7 @@ struct CalendarApp: App {
                                     }
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
                                     .sheet(isPresented: $showShowEvent){
-                                        ShowEventView()
+                                        ShowEventView(url: "https://apple.com")
                                     }
                             }
                         }.animation(.easeIn, value: showConfirmationBox)

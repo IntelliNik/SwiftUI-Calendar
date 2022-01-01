@@ -13,11 +13,10 @@ struct AddEventView: View {
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
     @State private var name: String = ""
-    @State private var urlString: String = "http://apple.com"
+    @State private var urlString: String = ""
     //@State private var metadataView: MetadataView?
     
     @State private var notes: String = ""
-    
     
     @State private var calendar = 0
     
