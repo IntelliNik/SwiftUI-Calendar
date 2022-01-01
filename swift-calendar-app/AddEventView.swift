@@ -13,8 +13,13 @@ struct AddEventView: View {
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
     @State private var name: String = ""
-    @State private var url: String = ""
+    @State private var urlString: String = "http://apple.com"
+    //@State private var metadataView: MetadataView?
+    
     @State private var notes: String = ""
+    
+    
+    @State private var calendar = 0
     
     @State private var startDate = Date()
     @State private var endDate = Date()
@@ -34,11 +39,11 @@ struct AddEventView: View {
     @State private var amountOfRepetitions = "10"
     
     @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-    
     @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
-    @Binding var save: Bool
     @State var confirmationShown = false
+    
+    @Binding var save: Bool
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
@@ -46,6 +51,28 @@ struct AddEventView: View {
     var body: some View {
         NavigationView{
             Form{
+                Section{
+                    Picker("Calendar", selection: $calendar) {
+                        HStack{                            
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.yellow)
+                                .imageScale(.large)
+                            Text("Calendar x")
+                        }.tag(0)
+                        HStack{
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.green)
+                                .imageScale(.large)
+                            Text("Calendar y")
+                        }.tag(1)
+                        HStack{
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.blue)
+                                .imageScale(.large)
+                            Text("Calendar z")
+                        }.tag(2)
+                    }.padding()
+                }
                 Section{
                     TextField("Name", text: $name).padding()
                         .navigationTitle("Add event")
@@ -68,7 +95,7 @@ struct AddEventView: View {
                                     try? moc.save()
 
                                     dismiss()
-                                }.foregroundColor(Color("AccentColor"))
+                                }.foregroundColor(Color(getAccentColor()))
                             }
                         }
                         .confirmationDialog(
@@ -100,7 +127,7 @@ struct AddEventView: View {
                     }.padding()
                 }
                 Section{
-                    Toggle("Repetition", isOn: $repetition).padding()
+                    Toggle("Repeat", isOn: $repetition).padding()
                     if(repetition){
                         Picker("Until", selection: $repeatUntil) {
                             ForEach(repeatUntilModes, id: \.self) {
@@ -150,10 +177,13 @@ struct AddEventView: View {
                     }
                 }
                 Section{
-                    TextField("URL", text: $url).padding()
+                    TextField("URL", text: $urlString)
+                        .padding()
+                        .onChange(of: urlString){ url in
+                            //metadataView = MetadataView(vm: LinkViewModel(link: url))
+                        }
                     TextField("Notes", text: $notes).padding()
                 }
-                
             }
         }
     }

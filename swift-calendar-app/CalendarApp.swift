@@ -12,6 +12,7 @@ import CoreLocation
 struct CalendarApp: App {
     @State var addEventSuccessful = true
     
+    @State private var showShowEvent = false
     @State private var showMenu = false
     @State private var showAddEventSheet = false
     @State private var showSearchBar = false
@@ -59,6 +60,12 @@ struct CalendarApp: App {
                                                     .foregroundColor(Color(getAccentColor()))
                                             }
                                         }
+                                        // TODO: for development only
+                                        ToolbarItem(placement: .navigationBarTrailing){
+                                            Button("Show event"){
+                                                showShowEvent.toggle()
+                                            }.padding()
+                                        }
                                         ToolbarItem(placement: .navigationBarTrailing){
                                             if(showSearchBar){
                                                 TextField("Search ...", text: $searchBarText).padding()
@@ -87,6 +94,9 @@ struct CalendarApp: App {
                                             .interactiveDismissDisabled(true)
                                     }
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
+                                    .sheet(isPresented: $showShowEvent){
+                                        ShowEventView()
+                                    }
                             }
                         }.animation(.easeIn, value: showConfirmationBox)
                     }
