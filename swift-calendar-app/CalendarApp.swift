@@ -14,10 +14,8 @@ struct CalendarApp: App {
     
     @State private var showMenu = false
     @State private var showAddEventSheet = false
-    @State private var showSearchBar = false
+    @State private var showSearchView = false
     @State private var showConfirmationBox = false
-    
-    @State private var searchBarText = ""
     
     @State var selectedView: ContainedView = .month
     
@@ -60,18 +58,13 @@ struct CalendarApp: App {
                                             }
                                         }
                                         ToolbarItem(placement: .navigationBarTrailing){
-                                            if(showSearchBar){
-                                                TextField("Search ...", text: $searchBarText).padding()
-                                            }
-                                        }
-                                        ToolbarItem(placement: .navigationBarTrailing){
-                                            Button(action: {self.showSearchBar.toggle()}) {
+                                            Button(action: {self.showSearchView.toggle()}) {
                                                 Image(systemName: "magnifyingglass")
                                                     .foregroundColor(Color(getAccentColor()))
                                             }
                                         }
                                         ToolbarItem(placement: .navigationBarTrailing){
-                                            Button(action: {self.showAddEventSheet = true}) {
+                                            Button(action: {self.showAddEventSheet.toggle()}) {
                                                 Image(systemName: "plus")
                                                     .foregroundColor(Color(getAccentColor()))
                                             }
@@ -87,6 +80,9 @@ struct CalendarApp: App {
                                             .interactiveDismissDisabled(true)
                                     }
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
+                                    .sheet(isPresented: $showSearchView){
+                                        SearchEventView()
+                                    }
                             }
                         }.animation(.easeIn, value: showConfirmationBox)
                     }
