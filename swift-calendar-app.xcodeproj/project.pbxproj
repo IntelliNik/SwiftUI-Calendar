@@ -24,6 +24,8 @@
 		7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719874E2775F60E0061CF34 /* AddEventView.swift */; };
 		773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */; };
 		77480F93277E0623005B96ED /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77480F92277E0623005B96ED /* Settings.swift */; };
+		77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06922780974B00767504 /* LinkPreviewProvider.swift */; };
+		77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06962780AEAF00767504 /* ShowEventView.swift */; };
 		77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77535AEB2780E0E1003FAD80 /* SearchEventView.swift */; };
 		775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
@@ -77,6 +79,8 @@
 		7719874E2775F60E0061CF34 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
 		773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationBoxView.swift; sourceTree = "<group>"; };
 		77480F92277E0623005B96ED /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		77AD06922780974B00767504 /* LinkPreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewProvider.swift; sourceTree = "<group>"; };
+		77AD06962780AEAF00767504 /* ShowEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventView.swift; sourceTree = "<group>"; };
 		77535AEB2780E0E1003FAD80 /* SearchEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventView.swift; sourceTree = "<group>"; };
 		775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		77DAC8EA277C6C09000D8BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -184,8 +188,10 @@
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
 				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
+				77AD06962780AEAF00767504 /* ShowEventView.swift */,
 				77F466AE2768FF720034C68B /* Persistence.swift */,
 				3562DEFC277EFB340054F096 /* DataController.swift */,
+				77AD06922780974B00767504 /* LinkPreviewProvider.swift */,
 				77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */,
 				77F466A92768FF720034C68B /* Assets.xcassets */,
 				77F466AB2768FF720034C68B /* Preview Content */,
@@ -370,8 +376,10 @@
 				35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */,
 				77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */,
 				77F466A82768FF6F0034C68B /* (null) in Sources */,
+				77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */,
 				35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */,
 				77F466A62768FF6F0034C68B /* (null) in Sources */,
+				77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */,
 				35FC5CC32779C6E7009033C5 /* YearViewMonthBox.swift in Sources */,
 				77EB10E2277CFB7C00206E60 /* DateComponents.swift in Sources */,
 				770FB6B6276FA1C700D38A07 /* AllEventsView.swift in Sources */,

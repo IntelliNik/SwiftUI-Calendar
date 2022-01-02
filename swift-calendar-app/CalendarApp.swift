@@ -12,6 +12,7 @@ import CoreLocation
 struct CalendarApp: App {
     @State var addEventSuccessful = true
     
+    @State private var showShowEvent = false
     @State private var showMenu = false
     @State private var showAddEventSheet = false
     @State private var showSearchView = false
@@ -56,7 +57,7 @@ struct CalendarApp: App {
                 // show menu on top
                 .zIndex(1)
                 VStack{
-                    NavigationBarView(showMenu: $showMenu, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                    NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
                     ZStack{
                         if(showConfirmationBox){
                             ConfirmationBoxView(success: addEventSuccessful)
@@ -78,6 +79,9 @@ struct CalendarApp: App {
                                 .environment(\.managedObjectContext, dataController.container.viewContext)
                                 .sheet(isPresented: $showSearchView){
                                     SearchEventView()
+                                }
+                                .sheet(isPresented: $showShowEvent){
+                                    ShowEventView(url: "https://apple.com")
                                 }
                         }
                     }.animation(.easeIn, value: showConfirmationBox)
