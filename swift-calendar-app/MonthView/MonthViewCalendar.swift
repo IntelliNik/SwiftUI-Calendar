@@ -22,7 +22,6 @@ struct MonthViewCalendar: View {
             }
             
             VStack {
-
                 ForEach([0,7,14,21,28], id:\.self)  { row in
                     HStack {
                         ForEach([1,2,3,4,5,6,7], id:\.self) { dayofweek in
@@ -30,7 +29,7 @@ struct MonthViewCalendar: View {
                                 Text("Open Day View for the Day here!")
                             } label: {
                                 MonthViewDayBox(date: dayofweek + row, width: 45, length: 45)
-                            .padding(.all, 1)
+                            .padding(1)
                             }
                         }
                     }

@@ -18,7 +18,8 @@ struct MonthView: View {
     var body: some View {
         VStack {
             MonthViewMonthAndYear(dateComponents: $dateComponents)
-                .padding(.bottom, 50)
+                .padding()
+            Spacer()
             MonthViewCalendar()
             Spacer()
             Picker("", selection: $pickerSelection) {
@@ -38,9 +39,9 @@ struct MonthView: View {
                 // reset picker
                 pickerSelection = .current
             }
+            .padding()
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColor()))
-            .padding()
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
@@ -51,7 +52,7 @@ struct MonthView: View {
                         }
                     }
             )
-        }.padding()
+        }
     }
 }
 
