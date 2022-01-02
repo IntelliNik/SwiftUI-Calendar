@@ -12,6 +12,8 @@ struct MenuView: View {
     @State var accentColor = getAccentColor()
     
     @Binding var currentlySelectedView: ContainedView
+    @Binding var showAddCalendar: Bool
+    
     @State var currentlySelectedCalendar: Int = 0
     
     @Environment(\.dismiss) var dismiss
@@ -32,41 +34,55 @@ struct MenuView: View {
                 Button(action: {currentlySelectedView = .day}) {
                     Text("Day View")
                         .padding()
-                        .border(currentlySelectedView == .day ? .white : .clear, width: 2)
+                        .background(currentlySelectedView == .day ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
                 Button(action: {currentlySelectedView = .week}) {
                     Text("Week View")
                         .padding()
-                        .border(currentlySelectedView == .week ? .white : .clear, width: 2)
+                        .background(currentlySelectedView == .week ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
                 Button(action: {currentlySelectedView = .month}) {
                     Text("Month View")
                         .padding()
-                        .border(currentlySelectedView == .month ? .white : .clear, width: 2)
+                        .background(currentlySelectedView == .month ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
                 Button(action: {currentlySelectedView = .year}) {
                     Text("Year View")
                         .padding()
-                        .border(currentlySelectedView == .year ? .white : .clear, width: 2)
+                        .background(currentlySelectedView == .year ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
                 Button(action: {currentlySelectedView = .allEvents}) {
                     Text("All Events")
                         .padding()
-                        .border(currentlySelectedView == .allEvents ? .white : .clear, width: 2)
+                        .background(currentlySelectedView == .allEvents ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
+                Rectangle()
+                    .fill(.white)
+                    .frame(height: 2)
+                    .edgesIgnoringSafeArea(.horizontal)
+                    .padding([.top, .bottom])
             }
             VStack(alignment: .leading) {
                 Spacer()
+                HStack{
+                    Spacer()
+                    Button(action: {showAddCalendar.toggle()}){
+                        Image(systemName: "plus")
+                            .foregroundColor(.white)
+                            .font(.system(size: 20))
+                    }
+                    .padding(.bottom, 5)
+                }
                 HStack{
                     Button(action: {currentlySelectedCalendar = 0}) {
                         Image(systemName: "square.fill")
@@ -78,7 +94,7 @@ struct MenuView: View {
                     }
                 }
                 .padding()
-                .border(currentlySelectedCalendar == 0 ? .white : .clear, width: 2)
+                .background(currentlySelectedCalendar == 0 ? Color(UIColor.darkGray) : .clear)
                 HStack{
                     Button(action: {currentlySelectedCalendar = 1}) {
                         Image(systemName: "square.fill")
@@ -90,7 +106,7 @@ struct MenuView: View {
                     }
                 }
                 .padding()
-                .border(currentlySelectedCalendar == 1 ? .white : .clear, width: 2)
+                .background(currentlySelectedCalendar == 1 ? Color(UIColor.darkGray) : .clear)
                 HStack{
                     Button(action: {currentlySelectedCalendar = 2}) {
                         Image(systemName: "square.fill")
@@ -102,8 +118,12 @@ struct MenuView: View {
                     }
                 }
                 .padding()
-                .border(currentlySelectedCalendar == 2 ? .white : .clear, width: 2)
-                Spacer()
+                .background(currentlySelectedCalendar == 2 ? Color(UIColor.darkGray) : .clear)
+                Rectangle()
+                    .fill(.white)
+                    .frame(height: 2)
+                    .edgesIgnoringSafeArea(.horizontal)
+                    .padding([.top, .bottom])
             }
             VStack(alignment: .leading){
                 Text("Color scheme")
@@ -131,7 +151,7 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            MenuView(currentlySelectedView: .constant(.allEvents))
+            MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false))
                 .frame(width: geometry.size.width/2)
         }
     }

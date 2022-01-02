@@ -10,13 +10,17 @@ import CoreLocation
 
 @main
 struct CalendarApp: App {
-    @State var addEventSuccessful = true
+    @State var saveEvent = true
+    @State var saveCalendar = true
     
     @State private var showShowEvent = false
     @State private var showMenu = false
     @State private var showAddEventSheet = false
     @State private var showSearchView = false
+    @State private var showAddCalendar = false
+    
     @State private var showConfirmationBox = false
+    @State private var confirmationBoxText = ""
     
     @State var selectedView: ContainedView = .month
     
@@ -36,10 +40,17 @@ struct CalendarApp: App {
     var body: some Scene {
         let drag = DragGesture()
             .onEnded { value in
-                self.showMenu = false
+                withAnimation{
+                    self.showMenu = false
+                }
             }
         WindowGroup {
             ZStack{
+                if(showConfirmationBox){
+                    ConfirmationBoxView(success: saveEvent, text: confirmationBoxText)
+                    // show on top, even on top of menu
+                        .zIndex(2)
+                }
                 GeometryReader{geometry in
                     if(self.showMenu){
                         // providing a space that is tappable to close the menu
@@ -48,46 +59,53 @@ struct CalendarApp: App {
                             .background(Color(getAccentColor()))
                             .opacity(0.05)
                             .onTapGesture {
-                                showMenu = false
+                                withAnimation{
+                                    showMenu = false
+                                }
                             }
-                        MenuView(currentlySelectedView: $selectedView)
+                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar)
                             .frame(width: geometry.size.width/2)
+                            .transition(.move(edge: .leading))
                     }
                 }
                 // show menu on top
                 .zIndex(1)
-                ZStack{
-                    if(showConfirmationBox){
-                        ConfirmationBoxView(success: addEventSuccessful)
-                        // show on top
-                            .zIndex(1)
-                    }
                 VStack{
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
-                        ZStack(alignment: .leading){
-                            MainView(containedView: $selectedView)
-                                .onAppear(perform: requestPermissions)
-                                .sheet(isPresented: $showAddEventSheet, onDismiss: {
-                                    showConfirmationBox = true
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                        showConfirmationBox = false
-                                    }
-                                }) {
-                                    AddEventView(save: $addEventSuccessful)
-                                        .interactiveDismissDisabled(true)
+                    ZStack(alignment: .leading){
+                        MainView(containedView: $selectedView)
+                            .onAppear(perform: requestPermissions)
+                            .sheet(isPresented: $showAddEventSheet, onDismiss: {
+                                confirmationBoxText = saveEvent ? "Event saved" : "Event discarded"
+                                showConfirmationBox = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showConfirmationBox = false
                                 }
-                                .environment(\.managedObjectContext, dataController.container.viewContext)
-                                .sheet(isPresented: $showSearchView){
-                                    SearchEventView()
+                            }){
+                                AddEventView(saveEvent: $saveEvent)
+                                    .interactiveDismissDisabled(true)
+                            }
+                            .environment(\.managedObjectContext, dataController.container.viewContext)
+                            .sheet(isPresented: $showAddCalendar, onDismiss: {
+                                confirmationBoxText = saveCalendar ? "Calendar saved" : "Calendar discarded"
+                                showConfirmationBox = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                    showConfirmationBox = false
                                 }
-                                .sheet(isPresented: $showShowEvent){
-                                    ShowEventView(url: "https://apple.com")
-                                }
-                        }
-                    }.animation(.easeIn, value: showConfirmationBox)
-                        .animation(.easeIn, value: showMenu)
+                            }){
+                                AddCalendarView(saveCalendar: $saveCalendar)
+                                    .interactiveDismissDisabled(true)
+                            }
+                            .sheet(isPresented: $showSearchView){
+                                SearchEventView()
+                            }
+                            .sheet(isPresented: $showShowEvent){
+                                ShowEventView(url: "https://apple.com")
+                            }
+                    }
                 }
-            }.gesture(drag)
+            }
+            .gesture(drag)
         }
     }
 }

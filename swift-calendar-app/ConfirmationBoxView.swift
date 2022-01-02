@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConfirmationBoxView: View {
     @State var success: Bool
+    @State var text: String
     
     var body: some View {
         if(success){
@@ -17,7 +18,7 @@ struct ConfirmationBoxView: View {
                     .resizable()
                     .padding(30)
                     .frame(width: 150, height: 150, alignment: .center)
-                Text("Event saved").padding()
+                Text(text).padding()
             }
                 .background(.gray)
                 .cornerRadius(15)
@@ -27,7 +28,7 @@ struct ConfirmationBoxView: View {
                     .resizable()
                     .padding(30)
                     .frame(width: 150, height: 150, alignment: .center)
-                Text("Event discarded").padding()
+                Text(text).padding()
             }
                 .background(.gray)
                 .cornerRadius(15)
@@ -37,7 +38,7 @@ struct ConfirmationBoxView: View {
 
 struct ConfirmationBoxView_Previews: PreviewProvider {
     static var previews: some View {
-        ConfirmationBoxView(success: true)
-        ConfirmationBoxView(success: false)
+        ConfirmationBoxView(success: true, text: "Event saved")
+        ConfirmationBoxView(success: false, text: "Event discarded")
     }
 }

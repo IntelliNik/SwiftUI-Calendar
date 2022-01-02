@@ -22,6 +22,7 @@
 		770FB6B8276FA26000D38A07 /* DayDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770FB6B7276FA26000D38A07 /* DayDataModel.swift */; };
 		7719874B2773C3C80061CF34 /* MenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719874A2773C3C80061CF34 /* MenuView.swift */; };
 		7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7719874E2775F60E0061CF34 /* AddEventView.swift */; };
+		77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77212C402781EAB4005ADA99 /* AddCalendarView.swift */; };
 		773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */; };
 		77480F93277E0623005B96ED /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77480F92277E0623005B96ED /* Settings.swift */; };
 		77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77535AEB2780E0E1003FAD80 /* SearchEventView.swift */; };
@@ -78,6 +79,7 @@
 		770FB6B7276FA26000D38A07 /* DayDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDataModel.swift; sourceTree = "<group>"; };
 		7719874A2773C3C80061CF34 /* MenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuView.swift; sourceTree = "<group>"; };
 		7719874E2775F60E0061CF34 /* AddEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEventView.swift; sourceTree = "<group>"; };
+		77212C402781EAB4005ADA99 /* AddCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCalendarView.swift; sourceTree = "<group>"; };
 		773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationBoxView.swift; sourceTree = "<group>"; };
 		77480F92277E0623005B96ED /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		77535AEB2780E0E1003FAD80 /* SearchEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventView.swift; sourceTree = "<group>"; };
@@ -196,6 +198,7 @@
 				770FB6B7276FA26000D38A07 /* DayDataModel.swift */,
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
+				77212C402781EAB4005ADA99 /* AddCalendarView.swift */,
 				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
@@ -377,6 +380,7 @@
 				77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */,
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
+				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				77F466AF2768FF720034C68B /* Persistence.swift in Sources */,
 				77480F93277E0623005B96ED /* Settings.swift in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,

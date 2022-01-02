@@ -17,7 +17,11 @@ struct NavigationBarView: View {
     
     var body: some View {
         HStack(){
-            Button(action: {self.showMenu.toggle()}) {
+            Button(action: {
+                withAnimation{
+                    self.showMenu.toggle()
+                }
+            }) {
                 Image(systemName: "line.horizontal.3")
                     .foregroundColor(Color(getAccentColor()))
                     .font(.system(size: fontSize))

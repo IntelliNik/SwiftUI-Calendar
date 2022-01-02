@@ -42,7 +42,7 @@ struct AddEventView: View {
     
     @State var confirmationShown = false
     
-    @Binding var save: Bool
+    @Binding var saveEvent: Bool
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
@@ -84,7 +84,7 @@ struct AddEventView: View {
                             }
                             ToolbarItem(placement: .primaryAction) {
                                 Button("Save event"){
-                                    save = true
+                                    saveEvent = true
 
                                     let event = Event(context: moc)
                                     event.name = "Test Event"
@@ -102,7 +102,7 @@ struct AddEventView: View {
                              isPresented: $confirmationShown
                         ) {
                             Button("Discard event"){
-                                save = false
+                                saveEvent = false
                                 dismiss()
                             }
                         }
@@ -190,6 +190,6 @@ struct AddEventView: View {
 
 struct AddEventView_Previews: PreviewProvider {
     static var previews: some View {
-        AddEventView(save: .constant(true))
+        AddEventView(saveEvent: .constant(true))
     }
 }
