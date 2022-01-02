@@ -10,8 +10,7 @@ import CoreLocation
 
 @main
 struct CalendarApp: App {
-    @State var saveEvent = true
-    @State var saveCalendar = true
+    @State var saveSucessful = true
     
     @State private var showShowEvent = false
     @State private var showMenu = false
@@ -47,7 +46,7 @@ struct CalendarApp: App {
         WindowGroup {
             ZStack{
                 if(showConfirmationBox){
-                    ConfirmationBoxView(success: saveEvent, text: confirmationBoxText)
+                    ConfirmationBoxView(success: saveSucessful, text: confirmationBoxText)
                     // show on top, even on top of menu
                         .zIndex(2)
                 }
@@ -76,24 +75,24 @@ struct CalendarApp: App {
                         MainView(containedView: $selectedView)
                             .onAppear(perform: requestPermissions)
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
-                                confirmationBoxText = saveEvent ? "Event saved" : "Event discarded"
+                                confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     showConfirmationBox = false
                                 }
                             }){
-                                AddEventView(saveEvent: $saveEvent)
+                                AddEventView(saveEvent: $saveSucessful)
                                     .interactiveDismissDisabled(true)
                             }
                             .environment(\.managedObjectContext, dataController.container.viewContext)
                             .sheet(isPresented: $showAddCalendar, onDismiss: {
-                                confirmationBoxText = saveCalendar ? "Calendar saved" : "Calendar discarded"
+                                confirmationBoxText = saveSucessful ? "Calendar saved" : "Calendar discarded"
                                 showConfirmationBox = true
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                                     showConfirmationBox = false
                                 }
                             }){
-                                AddCalendarView(saveCalendar: $saveCalendar)
+                                AddCalendarView(saveCalendar: $saveSucessful)
                                     .interactiveDismissDisabled(true)
                             }
                             .sheet(isPresented: $showSearchView){
@@ -106,6 +105,7 @@ struct CalendarApp: App {
                 }
             }
             .gesture(drag)
+            .animation(.easeInOut, value: showConfirmationBox)
         }
     }
 }
