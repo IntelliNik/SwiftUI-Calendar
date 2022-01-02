@@ -56,14 +56,14 @@ struct CalendarApp: App {
                 }
                 // show menu on top
                 .zIndex(1)
+                ZStack{
+                    if(showConfirmationBox){
+                        ConfirmationBoxView(success: addEventSuccessful)
+                        // show on top
+                            .zIndex(1)
+                    }
                 VStack{
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
-                    ZStack{
-                        if(showConfirmationBox){
-                            ConfirmationBoxView(success: addEventSuccessful)
-                            // show on top
-                                .zIndex(1)
-                        }
                         ZStack(alignment: .leading){
                             MainView(containedView: $selectedView)
                                 .onAppear(perform: requestPermissions)

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 
 struct AllEventsView: View {
@@ -16,6 +17,13 @@ struct AllEventsView: View {
     @State private var showAddEventSheet = true
     
     @Environment(\.colorScheme) var colorScheme
+    
+    
+    // TODO: only for development, here the individual events should be included
+    @State var showExtended = false
+    @State var event =                             EventCardView(calendarColor: .red, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true)
+    
+    @State var extendedEvent =                             ExtendedEventCard(calendarColor: .blue, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true, location: true, locationRegion: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)),  url: "https:/apple.com", notes: "Hi Mom")
     
     var body: some View {
         ZStack(alignment: .leading){
@@ -33,6 +41,15 @@ struct AllEventsView: View {
                                 .onAppear {
                                     dataSource.loadMoreContentIfNeeded(currentDate: item)
                                 }
+                            if(showExtended){
+                                extendedEvent.onTapGesture {
+                                    showExtended.toggle()
+                                }
+                            } else {
+                                event.onTapGesture {
+                                    showExtended.toggle()
+                                }
+                            }
                         }
                     }.navigationTitle("All Events")
                 }
