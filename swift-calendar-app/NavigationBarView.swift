@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NavigationBarView: View {
     @Binding var showMenu: Bool
+    @Binding var showShowEvent: Bool
     @Binding var showAddEventSheet: Bool
     @Binding var showSearchView: Bool
     
@@ -22,6 +23,9 @@ struct NavigationBarView: View {
                     .font(.system(size: fontSize))
             }.padding()
             Spacer()
+            Button(action: {self.showShowEvent.toggle()}) {
+                Text("Show Event")
+            }.padding()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Color(getAccentColor()))
@@ -39,6 +43,6 @@ struct NavigationBarView: View {
 
 struct NavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationBarView(showMenu: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false))
+        NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false))
     }
 }
