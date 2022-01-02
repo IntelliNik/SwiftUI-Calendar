@@ -47,12 +47,19 @@ struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
+    @FetchRequest(
+        entity: MCalendar.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
+        ]
+    ) var calendars: FetchedResults<MCalendar>
+    
     var body: some View {
         NavigationView{
             Form{
                 Section{
                     Picker("Calendar", selection: $calendar) {
-                        HStack{                            
+                        /*HStack{
                             Image(systemName: "square.fill")
                                 .foregroundColor(.yellow)
                                 .imageScale(.large)
@@ -69,7 +76,16 @@ struct AddEventView: View {
                                 .foregroundColor(.blue)
                                 .imageScale(.large)
                             Text("Calendar z")
-                        }.tag(2)
+                        }.tag(2)*/
+                        ForEach((0..<calendars.count)) { index in
+                            HStack{
+                                //TODO: Find another way to transform string to color
+                                Image(systemName: "square.fill")
+                                    .foregroundColor( getColor(stringColor: calendars[index].color ?? "Yellow") )
+                                    .imageScale(.large)
+                                Text("\(calendars[index].name ?? "Anonymous")")
+                            }.tag(index)
+                        }
                     }.padding()
                 }
                 Section{
@@ -87,9 +103,53 @@ struct AddEventView: View {
                                     saveEvent = true
 
                                     let event = Event(context: moc)
-                                    event.name = "Test Event"
+                                    //TODO: Is the function UUID doing what we want?
+                                    event.key = UUID()
+                                    // TODO: event.key = generateID(startDate: startDate, endDate: endDate, name: name)
+                                    event.name = name
                                     event.startdate = startDate
                                     event.enddate = endDate
+                                    event.wholeDay = wholeDay
+                                    event.url = urlString
+                                    event.notes = notes
+                                    
+                                    // TODO: Good way to save a location?
+                                    if (location == "Current"){
+                                        event.location = true
+                                        event.latitude = currentRegion.center.latitude
+                                        event.longitude = currentRegion.center.latitude
+                                        event.latitudeDelta = currentRegion.span.latitudeDelta
+                                        event.longitudeDelta = currentRegion.span.longitudeDelta
+                                    } else if (location == "Custom")
+                                               {
+                                        event.location = true
+                                        event.latitude = customRegion.center.latitude
+                                        event.longitude = customRegion.center.latitude
+                                        event.latitudeDelta = customRegion.span.latitudeDelta
+                                        event.longitudeDelta = customRegion.span.longitudeDelta
+                                    } else {
+                                        event.location = false
+                                        //TODO: Check whether it breaks something to have items as nil
+                                        //event.latitude = 0.0
+                                        //event.longitude = 0.0
+                                        //event.latitudeDelta = 0.0
+                                        //event.longitudeDelta = 0.0
+                                    }
+                                    
+                                    if repetition {
+                                        event.repetition = true
+                                        event.skip = false
+                                        // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                                        event.nextRepetition = "Test"
+                                    } else {
+                                        event.repetition = false
+                                        //TODO: Check whether it breaks something to have items as nil
+                                        // event.nextRepetition = ""
+                                    }
+                                    
+                                    //TODO: Search for the correct calendar in the core data base and add the event there
+                                    //calendarAddEvent(name: ("Calendar" + String(calendar)), event: event)
+                                    calendarAddEvent(name: "Calendar1", event: event)
                                     
                                     try? moc.save()
 
@@ -184,6 +244,38 @@ struct AddEventView: View {
                     TextField("Notes", text: $notes).padding()
                 }
             }
+        }
+    }
+    
+    func generateID (startDate: Date, endDate: Date, name: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateStyle = .short
+        
+        let randomInt = Int.random(in: 1..<100000)
+        
+        return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
+    }
+    
+    func calendarAddEvent(name: String, event: Event ){
+        if calendars.isEmpty{
+            //TODO: Tell the user that no calendar exists
+        } else {
+            for calendar in calendars{
+                if (calendar.name == name){
+                    calendar.addToEvents(event)
+                    break
+                }
+            }
+            //TODO: if no calendar of name can be found inform the user
+        }
+    }
+    
+    //TODO: Find another way to transform string to color
+    func getColor(stringColor: String) -> Color{
+        switch stringColor{
+            case "Yellow": return .yellow
+            case ".green": return .green
+            default: return .yellow
         }
     }
 }

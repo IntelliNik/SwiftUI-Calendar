@@ -22,8 +22,9 @@ struct MainView: View {
     var body: some View {
         switch containedView{
         case .day:
-            Text("TODO")
-                .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+            TestDataCore()
+            //Text("TODO")
+            //    .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
             Text("TODO")
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
