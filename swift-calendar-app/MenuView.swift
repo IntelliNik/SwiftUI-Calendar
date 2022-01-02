@@ -71,8 +71,6 @@ struct MenuView: View {
                     .frame(height: 2)
                     .edgesIgnoringSafeArea(.horizontal)
                     .padding([.top, .bottom])
-            }
-            VStack(alignment: .leading) {
                 Spacer()
                 HStack{
                     Spacer()
@@ -83,48 +81,76 @@ struct MenuView: View {
                     }
                     .padding(.bottom, 5)
                 }
-                HStack{
-                    Button(action: {currentlySelectedCalendar = 0}) {
-                        Image(systemName: "square.fill")
-                            .foregroundColor(.yellow)
-                            .imageScale(.large)
-                        Text("Calendar 1")
-                            .foregroundColor(.white)
-                            .font(.headline)
-                    }
-                }
-                .padding()
-                .background(currentlySelectedCalendar == 0 ? Color(UIColor.darkGray) : .clear)
-                HStack{
-                    Button(action: {currentlySelectedCalendar = 1}) {
-                        Image(systemName: "square.fill")
-                            .foregroundColor(.green)
-                            .imageScale(.large)
-                        Text("Calendar 2")
-                            .foregroundColor(.white)
-                            .font(.headline)
-                    }
-                }
-                .padding()
-                .background(currentlySelectedCalendar == 1 ? Color(UIColor.darkGray) : .clear)
-                HStack{
-                    Button(action: {currentlySelectedCalendar = 2}) {
-                        Image(systemName: "square.fill")
-                            .foregroundColor(.blue)
-                            .imageScale(.large)
-                        Text("Calendar 3")
-                            .foregroundColor(.white)
-                            .font(.headline)
-                    }
-                }
-                .padding()
-                .background(currentlySelectedCalendar == 2 ? Color(UIColor.darkGray) : .clear)
-                Rectangle()
-                    .fill(.white)
-                    .frame(height: 2)
-                    .edgesIgnoringSafeArea(.horizontal)
-                    .padding([.top, .bottom])
             }
+            ScrollView{
+                VStack(alignment: .leading) {
+                    HStack{
+                        Button(action: {currentlySelectedCalendar = 0}) {
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.yellow)
+                                .imageScale(.large)
+                            Text("Calendar 1")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    }
+                    .padding()
+                    .background(currentlySelectedCalendar == 0 ? Color(UIColor.darkGray) : .clear)
+                    HStack{
+                        Button(action: {currentlySelectedCalendar = 1}) {
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.green)
+                                .imageScale(.large)
+                            Text("Calendar 2")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    }
+                    .padding()
+                    .background(currentlySelectedCalendar == 1 ? Color(UIColor.darkGray) : .clear)
+                    HStack{
+                        Button(action: {currentlySelectedCalendar = 2}) {
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.blue)
+                                .imageScale(.large)
+                            Text("Calendar 3")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    }
+                    .padding()
+                    .background(currentlySelectedCalendar == 2 ? Color(UIColor.darkGray) : .clear)
+                    HStack{
+                        Button(action: {currentlySelectedCalendar = 3}) {
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.orange)
+                                .imageScale(.large)
+                            Text("Calendar 4")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    }
+                    .padding()
+                    .background(currentlySelectedCalendar == 3 ? Color(UIColor.darkGray) : .clear)
+                    HStack{
+                        Button(action: {currentlySelectedCalendar = 4}) {
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.purple)
+                                .imageScale(.large)
+                            Text("Calendar 5")
+                                .foregroundColor(.white)
+                                .font(.headline)
+                        }
+                    }
+                    .padding()
+                    .background(currentlySelectedCalendar == 4 ? Color(UIColor.darkGray) : .clear)
+                }
+            }
+            Rectangle()
+                .fill(.white)
+                .frame(height: 2)
+                .edgesIgnoringSafeArea(.horizontal)
+                .padding([.top, .bottom])
             VStack(alignment: .leading){
                 Text("Color scheme")
                     .font(.headline)
@@ -132,7 +158,7 @@ struct MenuView: View {
                 Picker(selection: $accentColor, label: Text("Color Scheme")) {                        Image(systemName: "flame").tag("AccentColorRed")
                     Image(systemName: "leaf").tag("AccentColorGreen")
                     Image(systemName: "drop").tag("AccentColorBlue")
-
+                    
                 }
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)

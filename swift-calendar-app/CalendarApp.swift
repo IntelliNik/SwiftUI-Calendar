@@ -28,13 +28,6 @@ struct CalendarApp: App {
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
     // Fetch Request only where we need a request?
     
-    enum Modes{
-        case day
-        case week
-        case month
-        case year
-        case allEvents
-    }
     
     var body: some Scene {
         let drag = DragGesture()
@@ -109,6 +102,7 @@ struct CalendarApp: App {
         }
     }
 }
+
 
 func requestPermissions(){
     // request notification access

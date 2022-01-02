@@ -23,7 +23,7 @@ struct AllEventsView: View {
     @State var showExtended = false
     @State var event =                             EventCardView(calendarColor: .red, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true)
     
-    @State var extendedEvent =                             ExtendedEventCard(calendarColor: .blue, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true, location: true, locationRegion: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)),  url: "https:/apple.com", notes: "Hi Mom")
+    @State var extendedEvent =                             ExtendedEventCard(calendarColor: .blue, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true, location: true, locationRegion: MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5)),  url: "https://rwth.zoom.us", notes: "Hi Mom")
     
     var body: some View {
         ZStack(alignment: .leading){

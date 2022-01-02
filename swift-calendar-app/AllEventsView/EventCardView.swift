@@ -83,6 +83,9 @@ struct ExtendedEventCard: View{
                     Spacer()
                     Text(url)
                 }.padding()
+                GeometryReader{ geometry in
+                    MetadataView(vm: LinkViewModel(link: url))
+                }
             }
             if(notes != ""){
                 HStack{
