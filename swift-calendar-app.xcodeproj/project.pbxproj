@@ -25,6 +25,7 @@
 		773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */; };
 		77480F93277E0623005B96ED /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77480F92277E0623005B96ED /* Settings.swift */; };
 		77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77535AEB2780E0E1003FAD80 /* SearchEventView.swift */; };
+		775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
 		77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DAC8EE277CA0EC000D8BCD /* MainView.swift */; };
 		77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10DD277CEB4D00206E60 /* PickerView.swift */; };
@@ -77,6 +78,7 @@
 		773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationBoxView.swift; sourceTree = "<group>"; };
 		77480F92277E0623005B96ED /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		77535AEB2780E0E1003FAD80 /* SearchEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventView.swift; sourceTree = "<group>"; };
+		775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		77DAC8EA277C6C09000D8BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		77DAC8EE277CA0EC000D8BCD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		77EB10DD277CEB4D00206E60 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 				770FB6B7276FA26000D38A07 /* DayDataModel.swift */,
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
+				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
 				77F466AE2768FF720034C68B /* Persistence.swift */,
 				3562DEFC277EFB340054F096 /* DataController.swift */,
@@ -354,6 +357,7 @@
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
 				770FB6B8276FA26000D38A07 /* DayDataModel.swift in Sources */,
 				77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */,
+				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
 				77F466AF2768FF720034C68B /* Persistence.swift in Sources */,
 				77480F93277E0623005B96ED /* Settings.swift in Sources */,

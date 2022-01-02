@@ -40,53 +40,7 @@ struct CalendarApp: App {
         WindowGroup {
             ZStack{
                 GeometryReader{geometry in
-                    NavigationView{
-                        ZStack{
-                            if(showConfirmationBox){
-                                ConfirmationBoxView(success: addEventSuccessful)
-                                    // show on top
-                                    .zIndex(1)
-                            }
-                            ZStack(alignment: .leading){
-                                MainView(containedView: $selectedView)
-                                    .onAppear(perform: requestPermissions)
-                                    .toolbar {
-                                        ToolbarItem(placement: .navigationBarLeading){
-                                            Button(action: {self.showMenu.toggle()}) {
-                                                Image(systemName: "line.horizontal.3")
-                                                    .foregroundColor(Color(getAccentColor()))
-                                            }
-                                        }
-                                        ToolbarItem(placement: .navigationBarTrailing){
-                                            Button(action: {self.showSearchView.toggle()}) {
-                                                Image(systemName: "magnifyingglass")
-                                                    .foregroundColor(Color(getAccentColor()))
-                                            }
-                                        }
-                                        ToolbarItem(placement: .navigationBarTrailing){
-                                            Button(action: {self.showAddEventSheet.toggle()}) {
-                                                Image(systemName: "plus")
-                                                    .foregroundColor(Color(getAccentColor()))
-                                            }
-                                        }
-                                    }
-                                    .sheet(isPresented: $showAddEventSheet, onDismiss: {
-                                        showConfirmationBox = true
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                                            showConfirmationBox = false
-                                        }
-                                    }) {
-                                        AddEventView(save: $addEventSuccessful)
-                                            .interactiveDismissDisabled(true)
-                                    }
-                                    .environment(\.managedObjectContext, dataController.container.viewContext)
-                                    .sheet(isPresented: $showSearchView){
-                                        SearchEventView()
-                                    }
-                            }
-                        }.animation(.easeIn, value: showConfirmationBox)
-                    }
-                    if self.showMenu {
+                    if(self.showMenu){
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
@@ -99,8 +53,37 @@ struct CalendarApp: App {
                             .frame(width: geometry.size.width/2)
                     }
                 }
+                // show menu on top
+                .zIndex(1)
+                VStack{
+                    NavigationBarView(showMenu: $showMenu, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                    ZStack{
+                        if(showConfirmationBox){
+                            ConfirmationBoxView(success: addEventSuccessful)
+                            // show on top
+                                .zIndex(1)
+                        }
+                        ZStack(alignment: .leading){
+                            MainView(containedView: $selectedView)
+                                .onAppear(perform: requestPermissions)
+                                .sheet(isPresented: $showAddEventSheet, onDismiss: {
+                                    showConfirmationBox = true
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                        showConfirmationBox = false
+                                    }
+                                }) {
+                                    AddEventView(save: $addEventSuccessful)
+                                        .interactiveDismissDisabled(true)
+                                }
+                                .environment(\.managedObjectContext, dataController.container.viewContext)
+                                .sheet(isPresented: $showSearchView){
+                                    SearchEventView()
+                                }
+                        }
+                    }.animation(.easeIn, value: showConfirmationBox)
+                        .animation(.easeIn, value: showMenu)
+                }
             }.gesture(drag)
-            .animation(.easeIn, value: showMenu)
         }
     }
 }

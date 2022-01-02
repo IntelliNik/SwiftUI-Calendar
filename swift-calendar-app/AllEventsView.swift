@@ -22,6 +22,9 @@ struct AllEventsView: View {
             ScrollViewReader { reader in
                 ScrollView(showsIndicators: false) {
                     LazyVStack(alignment: .leading){
+                        Text("All Events")
+                            .font(.system(size: 20, weight: .heavy))
+                            .padding()
                         Spacer()
                         ForEach(dataSource.items) { item in
                             Text(item.date!, style: .date)
