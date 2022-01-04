@@ -21,13 +21,14 @@ struct EditCalendarView: View {
         NavigationView {
             VStack{
                 List {
-                    ForEach(calendars, id: \.self) { calendar in
-                        Text("Calendar Name: \(calendar.name ?? "Anonymous")")
+                    ForEach((0..<calendars.count), id: \.self) { index in
+                        Text("Calendar Name: \(calendars[index].name ?? "Anonymous")")
                     }
                     .onDelete ( perform: removeCalendar)
                 }
                 .toolbar {
                     EditButton()
+                    
                 }
             }
         }
@@ -39,6 +40,7 @@ struct EditCalendarView: View {
             moc.delete(calendar)
         }
         try? moc.save()
+        
     }
 }
 

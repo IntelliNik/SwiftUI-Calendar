@@ -98,11 +98,11 @@ struct MenuView: View {
                 VStack(alignment: .leading) {
                     ForEach((0..<calendars.count)) { index in
                         HStack{
-                            Button(action: {currentlySelectedCalendar = 3}) {
+                            Button(action: {currentlySelectedCalendar = index}) {
                                 Image(systemName: "square.fill")
-                                    .foregroundColor(getColor(stringColor: calendars[index].color ?? "Yellow"))
+                                    .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
-                                Text("\(calendars[index].name ?? "Anonymous")")
+                                Text("\(calendars[index].name ?? "")")
                                     .foregroundColor(.white)
                                     .font(.headline)
                             }

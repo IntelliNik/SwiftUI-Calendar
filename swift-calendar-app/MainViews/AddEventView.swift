@@ -68,7 +68,7 @@ struct AddEventView: View {
                                 HStack{
                                     //TODO: Find another way to transform string to color
                                     Image(systemName: "square.fill")
-                                        .foregroundColor( getColor(stringColor: calendars[index].color ?? "Yellow") )
+                                        .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
                                         .imageScale(.large)
                                     Text("\(calendars[index].name ?? "Anonymous")")
                                 }.tag(index)
@@ -227,24 +227,6 @@ struct AddEventView: View {
                     }
                 }
             }
-        }
-    }
-    
-    func getColor(stringColor: String) -> Color{
-        switch stringColor{
-            case "Yellow": return .yellow
-            case "Green": return .green
-            case "Blue": return .blue
-            case "Pink": return .pink
-            case "Purple": return .purple
-            case "Gray": return .gray
-            case "Black": return .black
-            case "Red": return .red
-            case "Orange": return .orange
-            case "Brown": return .brown
-            case "Cyan": return .cyan
-            case "Indigo": return .indigo
-            default: return .yellow
         }
     }
 }

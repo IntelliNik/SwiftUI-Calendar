@@ -7,18 +7,22 @@
 
 import SwiftUI
 
-public let colorStrings = ["Yellow", "Green", "Red", "Blue", "Purple", "Orange", "Pink", "Cyan"]
+public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Gray","Black","Red","Orange","Brown","Cyan","Indigo"]
 
 func getColorFromString(stringColor: String) -> Color{
     switch stringColor{
-    case "Yellow": return .yellow
-    case "Green": return .green
-    case "Red": return .red
-    case "Blue": return .blue
-    case "Purple": return .purple
-    case "Orange": return .orange
-    case "Pink": return .pink
-    case "Cyan": return .cyan
-    default: return .yellow
+        case "Yellow": return .yellow
+        case "Green": return .green
+        case "Blue": return .blue
+        case "Pink": return .pink
+        case "Purple": return .purple
+        case "Gray": return .gray
+        case "Black": return .black
+        case "Red": return .red
+        case "Orange": return .orange
+        case "Brown": return .brown
+        case "Cyan": return .cyan
+        case "Indigo": return .indigo
+        default: return .yellow
     }
 }
