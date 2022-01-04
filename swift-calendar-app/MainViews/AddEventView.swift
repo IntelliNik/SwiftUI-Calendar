@@ -55,217 +55,196 @@ struct AddEventView: View {
     ) var calendars: FetchedResults<MCalendar>
     
     var body: some View {
-        NavigationView{
-            Form{
-                Section{
-                    Picker("Calendar", selection: $calendar) {
-                        /*HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.yellow)
-                                .imageScale(.large)
-                            Text("Calendar x")
-                        }.tag(0)
-                        HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.green)
-                                .imageScale(.large)
-                            Text("Calendar y")
-                        }.tag(1)
-                        HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.blue)
-                                .imageScale(.large)
-                            Text("Calendar z")
-                        }.tag(2)*/
-                        ForEach((0..<calendars.count)) { index in
-                            HStack{
-                                Image(systemName: "square.fill")
-                                    .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
-                                    .imageScale(.large)
-                                Text("\(calendars[index].name ?? "Anonymous")")
-                            }.tag(index)
-                        }
-                    }.padding()
-                }
-                Section{
-                    TextField("Name", text: $name).padding()
-                        .navigationTitle("Add event")
-                        .toolbar {
-                            ToolbarItem(placement: .navigation) {
-                                Button("Discard"){
-                                    confirmationShown = true
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save event"){
-                                    saveEvent = true
-
-                                    let event = Event(context: moc)
-                                    //TODO: Is the function UUID doing what we want?
-                                    event.key = UUID()
-                                    // TODO: event.key = generateID(startDate: startDate, endDate: endDate, name: name)
-                                    event.name = name
-                                    event.startdate = startDate
-                                    event.enddate = endDate
-                                    event.wholeDay = wholeDay
-                                    event.url = urlString
-                                    event.notes = notes
-                                    
-                                    // TODO: Good way to save a location?
-                                    if (location == "Current"){
-                                        event.location = true
-                                        event.latitude = currentRegion.center.latitude
-                                        event.longitude = currentRegion.center.latitude
-                                        event.latitudeDelta = currentRegion.span.latitudeDelta
-                                        event.longitudeDelta = currentRegion.span.longitudeDelta
-                                    } else if (location == "Custom")
-                                               {
-                                        event.location = true
-                                        event.latitude = customRegion.center.latitude
-                                        event.longitude = customRegion.center.latitude
-                                        event.latitudeDelta = customRegion.span.latitudeDelta
-                                        event.longitudeDelta = customRegion.span.longitudeDelta
-                                    } else {
-                                        event.location = false
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        //event.latitude = 0.0
-                                        //event.longitude = 0.0
-                                        //event.latitudeDelta = 0.0
-                                        //event.longitudeDelta = 0.0
-                                    }
-                                    
-                                    if repetition {
-                                        event.repetition = true
-                                        event.skip = false
-                                        // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                                        event.nextRepetition = "Test"
-                                    } else {
-                                        event.repetition = false
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        // event.nextRepetition = ""
-                                    }
-                                    
-                                    //TODO: Search for the correct calendar in the core data base and add the event there
-                                    //calendarAddEvent(name: ("Calendar" + String(calendar)), event: event)
-                                    calendarAddEvent(name: "Calendar1", event: event)
-                                    
-                                    try? moc.save()
-
-                                    dismiss()
-                                }.foregroundColor(Color(getAccentColor()))
-                            }
-                        }
-                        .confirmationDialog(
-                            "Are you sure?",
-                             isPresented: $confirmationShown
-                        ) {
-                            Button("Discard event"){
-                                saveEvent = false
-                                dismiss()
-                            }
-                        }
-                }
-                Section{
-                    Toggle("Whole Day", isOn: $wholeDay)
-                        .onChange(of: wholeDay) { value in
-                            if(value){
-                                datePickerComponents = [.date]
-                                
-                            } else {
-                                datePickerComponents = [.date, .hourAndMinute]
-                            }
-                        }
-                        .padding()
-                    DatePicker(selection: $startDate, in: ...Date(), displayedComponents: datePickerComponents) {
-                        Text("Start")
-                    }.padding()
-                    DatePicker(selection: $endDate, in: ...Date(), displayedComponents: datePickerComponents) {
-                        Text("End")
-                    }.padding()
-                }
-                Section{
-                    Toggle("Repeat", isOn: $repetition).padding()
-                    if(repetition){
-                        Picker("Until", selection: $repeatUntil) {
-                            ForEach(repeatUntilModes, id: \.self) {
-                                Text($0)
+        if calendars.isEmpty{
+            // TODO: Auch einen Text anzeigen?
+            // Text("Please create at least one calendar")
+            AddCalendarView(saveCalendar: $saveEvent)
+        }else{
+            NavigationView{
+                Form{
+                    Section{
+                        Picker("Calendar", selection: $calendar) {
+                            ForEach((0..<calendars.count)) { index in
+                                HStack{
+                                    //TODO: Find another way to transform string to color
+                                    Image(systemName: "square.fill")
+                                        .foregroundColor( getColor(stringColor: calendars[index].color ?? "Yellow") )
+                                        .imageScale(.large)
+                                    Text("\(calendars[index].name ?? "Anonymous")")
+                                }.tag(index)
                             }
                         }.padding()
-                        if(repeatUntil == "Amount of repetitions"){
-                            HStack(){
-                                Text("Amount of repetitions").padding()
-                                Spacer()
-                                TextField("", text: $amountOfRepetitions)
-                                    .keyboardType(.numberPad)
+                    }
+                    Section{
+                        TextField("Name", text: $name).padding()
+                            .navigationTitle("Add event")
+                            .toolbar {
+                                ToolbarItem(placement: .navigation) {
+                                    Button("Discard"){
+                                        confirmationShown = true
+                                    }
+                                    .foregroundColor(.gray)
+                                }
+                                ToolbarItem(placement: .primaryAction) {
+                                    Button("Save event"){
+                                        saveEvent = true
+
+                                        let event = Event(context: moc)
+                                        event.key = UUID()
+                                        event.name = name
+                                        event.startdate = startDate
+                                        event.enddate = endDate
+                                        event.wholeDay = wholeDay
+                                        event.url = urlString
+                                        event.notes = notes
+                                        
+                                        if (location == "Current"){
+                                            event.location = true
+                                            event.latitude = currentRegion.center.latitude
+                                            event.longitude = currentRegion.center.latitude
+                                            event.latitudeDelta = currentRegion.span.latitudeDelta
+                                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                                        } else if (location == "Custom")
+                                                   {
+                                            event.location = true
+                                            event.latitude = customRegion.center.latitude
+                                            event.longitude = customRegion.center.latitude
+                                            event.latitudeDelta = customRegion.span.latitudeDelta
+                                            event.longitudeDelta = customRegion.span.longitudeDelta
+                                        } else {
+                                            event.location = false
+                                            //TODO: Check whether it breaks something to have items as nil
+                                            //event.latitude = 0.0
+                                            //event.longitude = 0.0
+                                            //event.latitudeDelta = 0.0
+                                            //event.longitudeDelta = 0.0
+                                        }
+                                        
+                                        if repetition {
+                                            event.repetition = true
+                                            event.skip = false
+                                            // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                                            event.nextRepetition = "Test"
+                                        } else {
+                                            event.repetition = false
+                                            //TODO: Check whether it breaks something to have items as nil
+                                            // event.nextRepetition = ""
+                                        }
+                                        
+                                        calendars[calendar].addToEvents(event)
+                                        
+                                        try? moc.save()
+
+                                        dismiss()
+                                    }.foregroundColor(Color(getAccentColor()))
+                                }
                             }
-                        }
-                        if(repeatUntil == "End Date"){
-                            DatePicker(selection: $endRepetitionDate, in: ...Date(), displayedComponents: [.date]){
-                                Text("End Date")
+                            .confirmationDialog(
+                                "Are you sure?",
+                                 isPresented: $confirmationShown
+                            ) {
+                                Button("Discard event"){
+                                    saveEvent = false
+                                    dismiss()
+                                }
+                            }
+                    }
+                    Section{
+                        Toggle("Whole Day", isOn: $wholeDay)
+                            .onChange(of: wholeDay) { value in
+                                if(value){
+                                    datePickerComponents = [.date]
+                                    
+                                } else {
+                                    datePickerComponents = [.date, .hourAndMinute]
+                                }
                             }
                             .padding()
-                        }
+                        DatePicker(selection: $startDate, in: ...Date(), displayedComponents: datePickerComponents) {
+                            Text("Start")
+                        }.padding()
+                        DatePicker(selection: $endDate, in: ...Date(), displayedComponents: datePickerComponents) {
+                            Text("End")
+                        }.padding()
                     }
-                }
-                Section{
-                    HStack{
-                        Text("Location")
-                            .padding()
-                        Picker("Location", selection: $location) {
-                            ForEach(locationModes, id: \.self) {
-                                Text($0)
+                    Section{
+                        Toggle("Repeat", isOn: $repetition).padding()
+                        if(repetition){
+                            Picker("Until", selection: $repeatUntil) {
+                                ForEach(repeatUntilModes, id: \.self) {
+                                    Text($0)
+                                }
+                            }.padding()
+                            if(repeatUntil == "Amount of repetitions"){
+                                HStack(){
+                                    Text("Amount of repetitions").padding()
+                                    Spacer()
+                                    TextField("", text: $amountOfRepetitions)
+                                        .keyboardType(.numberPad)
+                                }
                             }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding()
-                    }
-                    if(location == "Current"){
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow))
-                            .frame(minHeight: 200)
-                    }
-                    if(location == "Custom"){
-                        HStack{
-                            TextField("Search for location ...", text: $locationSearch)
+                            if(repeatUntil == "End Date"){
+                                DatePicker(selection: $endRepetitionDate, in: ...Date(), displayedComponents: [.date]){
+                                    Text("End Date")
+                                }
                                 .padding()
-                            Image(systemName: "magnifyingglass")
+                            }
                         }
-                        Map(coordinateRegion: $customRegion)
-                            .frame(minHeight: 200)
                     }
-                }
-                Section{
-                    TextField("URL", text: $urlString)
-                        .padding()
-                        .onChange(of: urlString){ url in
-                            //metadataView = MetadataView(vm: LinkViewModel(link: url))
+                    Section{
+                        HStack{
+                            Text("Location")
+                                .padding()
+                            Picker("Location", selection: $location) {
+                                ForEach(locationModes, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .padding()
                         }
-                    TextField("Notes", text: $notes).padding()
+                        if(location == "Current"){
+                            Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow))
+                                .frame(minHeight: 200)
+                        }
+                        if(location == "Custom"){
+                            HStack{
+                                TextField("Search for location ...", text: $locationSearch)
+                                    .padding()
+                                Image(systemName: "magnifyingglass")
+                            }
+                            Map(coordinateRegion: $customRegion)
+                                .frame(minHeight: 200)
+                        }
+                    }
+                    Section{
+                        TextField("URL", text: $urlString)
+                            .padding()
+                            .onChange(of: urlString){ url in
+                                //metadataView = MetadataView(vm: LinkViewModel(link: url))
+                            }
+                        TextField("Notes", text: $notes).padding()
+                    }
                 }
             }
         }
     }
     
-    func generateID (startDate: Date, endDate: Date, name: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        
-        let randomInt = Int.random(in: 1..<100000)
-        
-        return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
-    }
-    
-    func calendarAddEvent(name: String, event: Event ){
-        if calendars.isEmpty{
-            //TODO: Tell the user that no calendar exists
-        } else {
-            for calendar in calendars{
-                if (calendar.name == name){
-                    calendar.addToEvents(event)
-                    break
-                }
-            }
-            //TODO: if no calendar of name can be found inform the user
+    func getColor(stringColor: String) -> Color{
+        switch stringColor{
+            case "Yellow": return .yellow
+            case "Green": return .green
+            case "Blue": return .blue
+            case "Pink": return .pink
+            case "Purple": return .purple
+            case "Gray": return .gray
+            case "Black": return .black
+            case "Red": return .red
+            case "Orange": return .orange
+            case "Brown": return .brown
+            case "Cyan": return .cyan
+            case "Indigo": return .indigo
+            default: return .yellow
         }
     }
 }

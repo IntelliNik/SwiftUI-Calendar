@@ -66,6 +66,7 @@ struct CalendarApp: App {
                 .zIndex(1)
                 VStack{
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                        .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
                             .onAppear(perform: requestPermissions)
@@ -78,6 +79,7 @@ struct CalendarApp: App {
                             }){
                                 AddEventView(saveEvent: $saveSucessful)
                                     .interactiveDismissDisabled(true)
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                             .environment(\.managedObjectContext, dataController.container.viewContext)
                             .sheet(isPresented: $showAddCalendar, onDismiss: {
@@ -93,9 +95,11 @@ struct CalendarApp: App {
                             }
                             .sheet(isPresented: $showSearchView){
                                 SearchEventView()
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                             .sheet(isPresented: $showShowEvent){
                                 ShowEventView(url: "https://apple.com")
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                     }
                 }

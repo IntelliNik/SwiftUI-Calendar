@@ -98,12 +98,11 @@ struct MenuView: View {
                 VStack(alignment: .leading) {
                     ForEach((0..<calendars.count)) { index in
                         HStack{
-                            Button(action: {currentlySelectedCalendar = index}) {
-                                //TODO: Find another way to transform string to color
+                            Button(action: {currentlySelectedCalendar = 3}) {
                                 Image(systemName: "square.fill")
-                                    .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
+                                    .foregroundColor(getColor(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
-                                Text("\(calendars[index].name ?? "")")
+                                Text("\(calendars[index].name ?? "Anonymous")")
                                     .foregroundColor(.white)
                                     .font(.headline)
                             }
@@ -141,6 +140,24 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+    }
+    
+    func getColor(stringColor: String) -> Color{
+        switch stringColor{
+            case "Yellow": return .yellow
+            case "Green": return .green
+            case "Blue": return .blue
+            case "Pink": return .pink
+            case "Purple": return .purple
+            case "Gray": return .gray
+            case "Black": return .black
+            case "Red": return .red
+            case "Orange": return .orange
+            case "Brown": return .brown
+            case "Cyan": return .cyan
+            case "Indigo": return .indigo
+            default: return .yellow
+        }
     }
 }
 

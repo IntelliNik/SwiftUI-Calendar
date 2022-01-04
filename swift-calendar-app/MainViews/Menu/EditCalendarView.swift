@@ -17,27 +17,28 @@ struct EditCalendarView: View {
     
     @Environment(\.managedObjectContext) var moc
     
+    var body: some View {
+        NavigationView {
+            VStack{
+                List {
+                    ForEach(calendars, id: \.self) { calendar in
+                        Text("Calendar Name: \(calendar.name ?? "Anonymous")")
+                    }
+                    .onDelete ( perform: removeCalendar)
+                }
+                .toolbar {
+                    EditButton()
+                }
+            }
+        }
+    }
+    
     func removeCalendar(at offsets: IndexSet) {
         for index in offsets.sorted().reversed() {
             let calendar = calendars[index]
             moc.delete(calendar)
         }
         try? moc.save()
-    }
-    
-    var body: some View {
-        NavigationView {
-            List {
-                ForEach(calendars, id: \.self) { calendar in
-                    Text(calendar.name ?? "")
-                }
-                .onDelete ( perform: removeCalendar)
-            }
-            .toolbar {
-                EditButton()
-            }
-            .navigationTitle("Edit Calendars")
-        }
     }
 }
 
