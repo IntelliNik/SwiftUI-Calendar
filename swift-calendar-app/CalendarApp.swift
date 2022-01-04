@@ -90,6 +90,7 @@ struct CalendarApp: App {
                             }
                             .sheet(isPresented: $showSearchView){
                                 SearchEventView()
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                             .sheet(isPresented: $showShowEvent){
                                 ShowEventView(url: "https://apple.com")
