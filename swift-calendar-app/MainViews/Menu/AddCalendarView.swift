@@ -59,7 +59,6 @@ struct AddCalendarView: View {
                     Picker("Color", selection: $color) {
                         ForEach((0..<colorStrings.count)) { index in
                             HStack{
-                                //TODO: Find another way to transform string to color
                                 Image(systemName: "square.fill")
                                     .foregroundColor( getColorFromString(stringColor: colorStrings[index]) )
                                     .imageScale(.large)

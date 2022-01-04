@@ -96,7 +96,7 @@ struct MenuView: View {
             }
             ScrollView(){
                 VStack(alignment: .leading) {
-                    ForEach((0..<calendars.count)) { index in
+                    ForEach((0..<calendars.count),id: \.self) { index in
                         HStack{
                             Button(action: {currentlySelectedCalendar = index}) {
                                 Image(systemName: "square.fill")

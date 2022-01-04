@@ -64,7 +64,7 @@ struct AddEventView: View {
                 Form{
                     Section{
                         Picker("Calendar", selection: $calendar) {
-                            ForEach((0..<calendars.count)) { index in
+                            ForEach((0..<calendars.count), id: \.self) { index in
                                 HStack{
                                     //TODO: Find another way to transform string to color
                                     Image(systemName: "square.fill")
