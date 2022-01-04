@@ -14,9 +14,18 @@ struct MenuView: View {
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     
+    @State var calendarEditMode = false
     @State var currentlySelectedCalendar: Int = 0
     
+    @FetchRequest(
+        entity: MCalendar.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
+        ]
+    ) var calendars: FetchedResults<MCalendar>
+    
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         VStack(alignment: .leading){
@@ -73,78 +82,39 @@ struct MenuView: View {
                     .padding([.top, .bottom])
                 Spacer()
                 HStack{
+                    Button(action: {calendarEditMode.toggle()}){
+                        Text("Edit")
+                            .foregroundColor(.white)
+                    }
                     Spacer()
                     Button(action: {showAddCalendar.toggle()}){
                         Image(systemName: "plus")
                             .foregroundColor(.white)
                             .font(.system(size: 20))
                     }
-                    .padding(.bottom, 5)
+                }.padding(.bottom)
+            }
+            ScrollView(){
+                VStack(alignment: .leading) {
+                    ForEach((0..<calendars.count)) { index in
+                        HStack{
+                            Button(action: {currentlySelectedCalendar = index}) {
+                                //TODO: Find another way to transform string to color
+                                Image(systemName: "square.fill")
+                                    .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
+                                    .imageScale(.large)
+                                Text("\(calendars[index].name ?? "")")
+                                    .foregroundColor(.white)
+                                    .font(.headline)
+                            }
+                        }
+                        .padding()
+                        .background(currentlySelectedCalendar == index ? Color(UIColor.darkGray) : .clear)
+                    }
                 }
             }
-            ScrollView{
-                VStack(alignment: .leading) {
-                    HStack{
-                        Button(action: {currentlySelectedCalendar = 0}) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.yellow)
-                                .imageScale(.large)
-                            Text("Calendar 1")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                    }
-                    .padding()
-                    .background(currentlySelectedCalendar == 0 ? Color(UIColor.darkGray) : .clear)
-                    HStack{
-                        Button(action: {currentlySelectedCalendar = 1}) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.green)
-                                .imageScale(.large)
-                            Text("Calendar 2")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                    }
-                    .padding()
-                    .background(currentlySelectedCalendar == 1 ? Color(UIColor.darkGray) : .clear)
-                    HStack{
-                        Button(action: {currentlySelectedCalendar = 2}) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.blue)
-                                .imageScale(.large)
-                            Text("Calendar 3")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                    }
-                    .padding()
-                    .background(currentlySelectedCalendar == 2 ? Color(UIColor.darkGray) : .clear)
-                    HStack{
-                        Button(action: {currentlySelectedCalendar = 3}) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.orange)
-                                .imageScale(.large)
-                            Text("Calendar 4")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                    }
-                    .padding()
-                    .background(currentlySelectedCalendar == 3 ? Color(UIColor.darkGray) : .clear)
-                    HStack{
-                        Button(action: {currentlySelectedCalendar = 4}) {
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.purple)
-                                .imageScale(.large)
-                            Text("Calendar 5")
-                                .foregroundColor(.white)
-                                .font(.headline)
-                        }
-                    }
-                    .padding()
-                    .background(currentlySelectedCalendar == 4 ? Color(UIColor.darkGray) : .clear)
-                }
+            .sheet(isPresented: $calendarEditMode){
+                EditCalendarView()
             }
             Rectangle()
                 .fill(.white)
@@ -172,6 +142,16 @@ struct MenuView: View {
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
     }
+}
+
+func setAccentColor(colorScheme: String){
+    let defaults = UserDefaults.standard
+    defaults.set(colorScheme, forKey: "ColorScheme")
+}
+
+func getAccentColor() -> String{
+    let defaults = UserDefaults.standard
+    return defaults.string(forKey: "ColorScheme") ?? "AccentColorRed"
 }
 
 struct MenuView_Previews: PreviewProvider {

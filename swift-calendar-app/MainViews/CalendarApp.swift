@@ -24,6 +24,7 @@ struct CalendarApp: App {
     @State var selectedView: ContainedView = .month
     
     @StateObject private var dataController = DataController()
+    
     // TODO: Remove next lines when everything is done
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
     // Fetch Request only where we need a request?
@@ -58,6 +59,7 @@ struct CalendarApp: App {
                         MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar)
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .leading))
+                            .environment(\.managedObjectContext, dataController.container.viewContext)
                     }
                 }
                 // show menu on top
@@ -87,6 +89,7 @@ struct CalendarApp: App {
                             }){
                                 AddCalendarView(saveCalendar: $saveSucessful)
                                     .interactiveDismissDisabled(true)
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                             .sheet(isPresented: $showSearchView){
                                 SearchEventView()

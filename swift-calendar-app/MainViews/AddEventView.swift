@@ -79,9 +79,8 @@ struct AddEventView: View {
                         }.tag(2)*/
                         ForEach((0..<calendars.count)) { index in
                             HStack{
-                                //TODO: Find another way to transform string to color
                                 Image(systemName: "square.fill")
-                                    .foregroundColor( getColor(stringColor: calendars[index].color ?? "Yellow") )
+                                    .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
                                     .imageScale(.large)
                                 Text("\(calendars[index].name ?? "Anonymous")")
                             }.tag(index)
@@ -267,15 +266,6 @@ struct AddEventView: View {
                 }
             }
             //TODO: if no calendar of name can be found inform the user
-        }
-    }
-    
-    //TODO: Find another way to transform string to color
-    func getColor(stringColor: String) -> Color{
-        switch stringColor{
-            case "Yellow": return .yellow
-            case ".green": return .green
-            default: return .yellow
         }
     }
 }
