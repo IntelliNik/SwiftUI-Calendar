@@ -18,6 +18,13 @@ struct MenuView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @FetchRequest(
+        entity: MCalendar.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
+        ]
+    ) var calendars: FetchedResults<MCalendar>
+    
     var body: some View {
         VStack(alignment: .leading){
             VStack(alignment: .leading) {
@@ -84,7 +91,7 @@ struct MenuView: View {
             }
             ScrollView{
                 VStack(alignment: .leading) {
-                    HStack{
+                    /*HStack{
                         Button(action: {currentlySelectedCalendar = 0}) {
                             Image(systemName: "square.fill")
                                 .foregroundColor(.yellow)
@@ -144,6 +151,21 @@ struct MenuView: View {
                     }
                     .padding()
                     .background(currentlySelectedCalendar == 4 ? Color(UIColor.darkGray) : .clear)
+                     */
+                    ForEach((0..<calendars.count)) { index in
+                        HStack{
+                            Button(action: {currentlySelectedCalendar = 3}) {
+                                Image(systemName: "square.fill")
+                                    .foregroundColor(getColor(stringColor: calendars[index].color ?? "Yellow"))
+                                    .imageScale(.large)
+                                Text("\(calendars[index].name ?? "Anonymous")")
+                                    .foregroundColor(.white)
+                                    .font(.headline)
+                            }
+                        }
+                        .padding()
+                        .background(currentlySelectedCalendar == index ? Color(UIColor.darkGray) : .clear)
+                    }
                 }
             }
             Rectangle()
@@ -171,6 +193,24 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+    }
+    
+    func getColor(stringColor: String) -> Color{
+        switch stringColor{
+            case "Yellow": return .yellow
+            case "Green": return .green
+            case "Blue": return .blue
+            case "Pink": return .pink
+            case "Purple": return .purple
+            case "Gray": return .gray
+            case "Black": return .black
+            case "Red": return .red
+            case "Orange": return .orange
+            case "Brown": return .brown
+            case "Cyan": return .cyan
+            case "Indigo": return .indigo
+            default: return .yellow
+        }
     }
 }
 

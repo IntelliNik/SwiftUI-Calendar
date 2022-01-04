@@ -46,28 +46,24 @@ struct TestDataCore: View {
         NavigationView {
             VStack{
             List {
-                ForEach(events, id: \.self) { event in
-                    Text("Name: \(event.name ?? "") in Calendar: \(event.calendar?.name ?? "No Calendar")")
+                    ForEach(events, id: \.self) { event in
+                        Text("Name: \(event.name ?? "") in Calendar: \(event.calendar?.name ?? "No Calendar")")
+                    }
+                    .onDelete ( perform: removeEvent)
                 }
-                .onDelete ( perform: removeEvent)
-            }
-            .toolbar {
-                EditButton()
-            }
-            
-            List {
-                ForEach(calendars, id: \.self) { calendar in
-                    Text("Calendar Name: \(calendar.name ?? "Anonymous")")
+                .toolbar {
+                    EditButton()
                 }
-                .onDelete ( perform: removeCalendar)
-            }
-            .toolbar {
-                EditButton()
-            }
-            
-            Button(action: addCalendar){
-                Text("Add Calendar")
-            }
+                
+                List {
+                    ForEach(calendars, id: \.self) { calendar in
+                        Text("Calendar Name: \(calendar.name ?? "Anonymous")")
+                    }
+                    .onDelete ( perform: removeCalendar)
+                }
+                .toolbar {
+                    EditButton()
+                }
             }
         }
         
@@ -103,22 +99,6 @@ struct TestDataCore: View {
         try? moc.save()
     }
     
-    func addCalendar (){
-        if calendars.isEmpty {
-            let calendar = MCalendar(context: moc)
-            calendar.key = UUID()
-            calendar.name = "Calendar1"
-            calendar.color = "Yellow"
-            
-            try? moc.save()
-        }
-        
-        /*let calendar = MCalendar(context: moc)
-        calendar.name = "Calendar2"
-        calendar.color = ".green"
-        
-        try? moc.save()*/
-    }
 }
 
 // TODO: Remove this structure
