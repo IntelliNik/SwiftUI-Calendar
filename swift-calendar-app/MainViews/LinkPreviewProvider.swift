@@ -8,6 +8,7 @@
 import SwiftUI
 import LinkPresentation
 
+// TODO: copyed from StackOverflow
 struct LPLinkViewRepresented: UIViewRepresentable {
     var metadata: LPLinkMetadata
     
