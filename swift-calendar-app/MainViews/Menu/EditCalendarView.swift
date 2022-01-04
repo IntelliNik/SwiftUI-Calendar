@@ -22,7 +22,7 @@ struct EditCalendarView: View {
             VStack{
                 List {
                     ForEach((0..<calendars.count), id: \.self) { index in
-                        Text("Calendar Name: \(calendars[index].name ?? "Anonymous")")
+                        Text("Calendar Name: \(calendars[index].name ?? "")")
                     }
                     .onDelete ( perform: removeCalendar)
                 }
@@ -32,6 +32,7 @@ struct EditCalendarView: View {
                 }
             }
         }
+        .navigationTitle("Edit Calendars")
     }
     
     func removeCalendar(at offsets: IndexSet) {

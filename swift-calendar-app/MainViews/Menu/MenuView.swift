@@ -141,24 +141,6 @@ struct MenuView: View {
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
     }
-    
-    func getColor(stringColor: String) -> Color{
-        switch stringColor{
-            case "Yellow": return .yellow
-            case "Green": return .green
-            case "Blue": return .blue
-            case "Pink": return .pink
-            case "Purple": return .purple
-            case "Gray": return .gray
-            case "Black": return .black
-            case "Red": return .red
-            case "Orange": return .orange
-            case "Brown": return .brown
-            case "Cyan": return .cyan
-            case "Indigo": return .indigo
-            default: return .yellow
-        }
-    }
 }
 
 func setAccentColor(colorScheme: String){
