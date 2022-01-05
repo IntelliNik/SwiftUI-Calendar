@@ -48,7 +48,7 @@ struct ShowEventView: View {
                         Image(systemName: "bell.fill")
                         Spacer()
                         if(event.notification){
-                            if(event.wholeDay){
+                            if(!event.wholeDay){
                                 Text("\(event.notificationMinutesBefore) minutes before")
                             } else{
                                 HStack{
@@ -83,6 +83,34 @@ struct ShowEventView: View {
                         }
                     }.padding()
                 }
+                Section{
+                    if(event.location){
+                        HStack{
+                            Image(systemName: "location.fill").padding()
+                            Spacer()
+                            Text(event.locationName ?? "").padding()
+                        }
+                        let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
+                        Map(coordinateRegion: .constant(region))
+                            .frame(height: 200)
+                    }
+                }
+                
+                Section{
+                    // TODO: doesn't really work within a List
+                    MetadataView(vm: LinkViewModel(link: event.url!))
+                    HStack{
+                        Image(systemName: "globe")
+                        Spacer()
+                        Text(event.url ?? "None")
+                    }
+                    HStack{
+                        Image(systemName: "note.text")
+                        Spacer()
+                        Text(event.notes ?? "None")
+                    }
+
+                }
             }
         }
     }
@@ -91,43 +119,6 @@ struct ShowEventView: View {
             /*
 
 
-                Section{
-                    HStack{
-                        Text("Location")
-                            .padding()
-                        Picker("Location", selection: $location) {
-                            ForEach(locationModes, id: \.self) {
-                                Text($0)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding()
-                    }
-                    if(location == "Current"){
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow))
-                            .frame(minHeight: 200)
-                    }
-                    if(location == "Custom"){
-                        HStack{
-                            TextField("Search for location ...", text: $locationSearch)
-                                .autocapitalization(.none)
-                                .padding()
-                            Image(systemName: "magnifyingglass")
-                        }
-                        Map(coordinateRegion: $customRegion)
-                            .frame(minHeight: 200)
-                    }
-                }
-                Section{
-                    TextField("URL", text: $urlString)
-                        .padding()
-                        .autocapitalization(.none)
-                        .onChange(of: urlString){ url in
-                            //metadataView = MetadataView(vm: LinkViewModel(link: url))
-                        }
-                    TextField("Notes", text: $notes)
-                        .autocapitalization(.none)
-                        .padding()
 
     
     func generateID (startDate: Date, endDate: Date, name: String) -> String {
