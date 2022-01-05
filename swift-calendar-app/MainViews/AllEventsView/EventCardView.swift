@@ -40,7 +40,8 @@ struct EventCardView: View {
                     Button(action: {
                         showShowEvent = true
                     }, label: {
-                        Text("Edit")
+                        // TODO: should later directly link to Edit instead of "Show"
+                        Text("Show")
                             .foregroundColor(.white)
                             .padding(10)
                     })
