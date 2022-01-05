@@ -50,5 +50,5 @@ func getRegionFromDatabase(latitude: Double, longitude: Double, latitudeDelta: D
 func getDateFromHours(hours: String) -> Date?{
     let hourFormatter = DateFormatter()
     hourFormatter.dateFormat = "HH:mm"
-    return hourFormatter.date(from: "08:00")
+    return hourFormatter.date(from: hours)
 }

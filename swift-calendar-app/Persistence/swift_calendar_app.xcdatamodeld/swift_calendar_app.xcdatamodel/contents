@@ -14,7 +14,7 @@
         <attribute name="notification" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="notificationMinutesBefore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="notificationTimeAtWholeDay" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="repetition" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="repetition" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="repetitionAmount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="repetitionEndDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repetitionInterval" optional="YES" attributeType="String"/>

@@ -33,7 +33,7 @@ struct ShowEventView: View {
                         Spacer()
                         Text(event.enddate!, style: .date)
                     }.padding()
-                    if(event.wholeDay){
+                    if(!event.wholeDay){
                         HStack{
                             Text(event.startdate!, style: .time)
                             Spacer()
@@ -47,13 +47,17 @@ struct ShowEventView: View {
                     HStack{
                         Image(systemName: "bell.fill")
                         Spacer()
-                        if(event.wholeDay){
-                            Text("\(event.notificationMinutesBefore) minutes before")
-                        } else{
-                            HStack{
-                                Text("At")
-                                Text(event.notificationTimeAtWholeDay!, style: .time)
+                        if(event.notification){
+                            if(event.wholeDay){
+                                Text("\(event.notificationMinutesBefore) minutes before")
+                            } else{
+                                HStack{
+                                    Text("At")
+                                    Text(event.notificationTimeAtWholeDay!, style: .time)
+                                }
                             }
+                        } else{
+                            Text("None")
                         }
                     }.padding()
                 }
@@ -74,6 +78,8 @@ struct ShowEventView: View {
                                     }
                                 }
                             }
+                        } else {
+                            Text("None")
                         }
                     }.padding()
                 }
