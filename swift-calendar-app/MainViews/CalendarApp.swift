@@ -21,7 +21,7 @@ struct CalendarApp: App {
     @State private var showConfirmationBox = false
     @State private var confirmationBoxText = ""
     
-    @State var selectedView: ContainedView = .month
+    @State var selectedView: ContainedView = .allEvents
     
     @StateObject private var dataController = DataController()
     
@@ -56,7 +56,7 @@ struct CalendarApp: App {
                                     showMenu = false
                                 }
                             }
-                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar)
+                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu)
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .leading))
                             .environment(\.managedObjectContext, dataController.container.viewContext)

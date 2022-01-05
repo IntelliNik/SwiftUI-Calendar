@@ -31,11 +31,15 @@ struct AddEventView: View {
     @State private var wholeDay = false
     
     @State private var repetition = false
-    let repetionModes = ["Daily", "Weekly", "Monthly", "Yearly"]
-    @State private var repetitionMode = "Daily"
-    let repeatUntilModes = ["Forever", "Amount of repetitions", "End Date"]
+    let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
+    @State private var repetitionInterval = "Daily"
+    let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
     @State private var repeatUntil = "Forever"
     @State private var amountOfRepetitions = "10"
+    
+    @State private var notification = true
+    @State private var notificationMinutesBefore = 5
+    @State private var notficationTimeAtWholeDay = getDateFromHours(hours: "08:00")!
     
     @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
@@ -59,24 +63,6 @@ struct AddEventView: View {
             Form{
                 Section{
                     Picker("Calendar", selection: $calendar) {
-                        /*HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.yellow)
-                                .imageScale(.large)
-                            Text("Calendar x")
-                        }.tag(0)
-                        HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.green)
-                                .imageScale(.large)
-                            Text("Calendar y")
-                        }.tag(1)
-                        HStack{
-                            Image(systemName: "square.fill")
-                                .foregroundColor(.blue)
-                                .imageScale(.large)
-                            Text("Calendar z")
-                        }.tag(2)*/
                         ForEach((0..<calendars.count)) { index in
                             HStack{
                                 Image(systemName: "square.fill")
@@ -100,7 +86,7 @@ struct AddEventView: View {
                             ToolbarItem(placement: .primaryAction) {
                                 Button("Save event"){
                                     saveEvent = true
-
+                                    
                                     let event = Event(context: moc)
                                     //TODO: Is the function UUID doing what we want?
                                     event.key = UUID()
@@ -120,7 +106,7 @@ struct AddEventView: View {
                                         event.latitudeDelta = currentRegion.span.latitudeDelta
                                         event.longitudeDelta = currentRegion.span.longitudeDelta
                                     } else if (location == "Custom")
-                                               {
+                                    {
                                         event.location = true
                                         event.latitude = customRegion.center.latitude
                                         event.longitude = customRegion.center.latitude
@@ -146,19 +132,29 @@ struct AddEventView: View {
                                         // event.nextRepetition = ""
                                     }
                                     
+                                    if notification {
+                                        event.notification = true
+                                        if(!wholeDay){
+                                            event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                                        } else {
+                                            event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                        }
+
+                                    }
+                                    
                                     //TODO: Search for the correct calendar in the core data base and add the event there
                                     //calendarAddEvent(name: ("Calendar" + String(calendar)), event: event)
                                     calendarAddEvent(name: "Calendar1", event: event)
                                     
                                     try? moc.save()
-
+                                    
                                     dismiss()
                                 }.foregroundColor(Color(getAccentColor()))
                             }
                         }
                         .confirmationDialog(
                             "Are you sure?",
-                             isPresented: $confirmationShown
+                            isPresented: $confirmationShown
                         ) {
                             Button("Discard event"){
                                 saveEvent = false
@@ -171,37 +167,71 @@ struct AddEventView: View {
                         .onChange(of: wholeDay) { value in
                             if(value){
                                 datePickerComponents = [.date]
-                                
+                                // set notification default to one day before
+                                notificationMinutesBefore = 24*60
                             } else {
                                 datePickerComponents = [.date, .hourAndMinute]
+                                // set notification default to 5 minutes before
+                                notificationMinutesBefore = 5
                             }
                         }
                         .padding()
-                    DatePicker(selection: $startDate, in: ...Date(), displayedComponents: datePickerComponents) {
+                    DatePicker(selection: $startDate, displayedComponents: datePickerComponents) {
                         Text("Start")
                     }.padding()
-                    DatePicker(selection: $endDate, in: ...Date(), displayedComponents: datePickerComponents) {
+                    DatePicker(selection: $endDate, in: startDate..., displayedComponents: datePickerComponents) {
                         Text("End")
                     }.padding()
                 }
                 Section{
+                    Toggle("Notification", isOn: $notification).padding()
+                    if(notification){
+                        Picker("When", selection: $notificationMinutesBefore) {
+                            if(!wholeDay){
+                                Text("On Time").tag(0)
+                                Text("5min before").tag(5)
+                                Text("15min before").tag(15)
+                                Text("30min before").tag(30)
+                                Text("1 hour before").tag(60)
+                                Text("1 day before").tag(24*60)
+                            } else {
+                                Text("1 day before").tag(24*60)
+                                Text("2 days before").tag(2*24*60)
+                                Text("1 week before").tag(7*24*60)
+                            }
+                        }.padding()
+                        if(wholeDay){
+                            DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
+                                Text("At time")
+                            }.padding()
+                        }
+                    }
+                }
+                Section{
                     Toggle("Repeat", isOn: $repetition).padding()
                     if(repetition){
+                        Picker("Interval", selection: $repetitionInterval) {
+                            ForEach(repetitionIntevals, id: \.self) {
+                                Text($0)
+                            }
+                        }.padding()
                         Picker("Until", selection: $repeatUntil) {
                             ForEach(repeatUntilModes, id: \.self) {
                                 Text($0)
                             }
                         }.padding()
-                        if(repeatUntil == "Amount of repetitions"){
-                            HStack(){
-                                Text("Amount of repetitions").padding()
+                        if(repeatUntil == "Repetitions"){
+                            HStack{
+                                Text("Repetitions").padding()
                                 Spacer()
-                                TextField("", text: $amountOfRepetitions)
+                                TextField("Repetitions", text: $amountOfRepetitions)
                                     .keyboardType(.numberPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .padding()
                             }
                         }
                         if(repeatUntil == "End Date"){
-                            DatePicker(selection: $endRepetitionDate, in: ...Date(), displayedComponents: [.date]){
+                            DatePicker(selection: $endRepetitionDate, in: endDate..., displayedComponents: [.date]){
                                 Text("End Date")
                             }
                             .padding()
@@ -227,6 +257,7 @@ struct AddEventView: View {
                     if(location == "Custom"){
                         HStack{
                             TextField("Search for location ...", text: $locationSearch)
+                                .autocapitalization(.none)
                                 .padding()
                             Image(systemName: "magnifyingglass")
                         }
@@ -237,10 +268,13 @@ struct AddEventView: View {
                 Section{
                     TextField("URL", text: $urlString)
                         .padding()
+                        .autocapitalization(.none)
                         .onChange(of: urlString){ url in
                             //metadataView = MetadataView(vm: LinkViewModel(link: url))
                         }
-                    TextField("Notes", text: $notes).padding()
+                    TextField("Notes", text: $notes)
+                        .autocapitalization(.none)
+                        .padding()
                 }
             }
         }

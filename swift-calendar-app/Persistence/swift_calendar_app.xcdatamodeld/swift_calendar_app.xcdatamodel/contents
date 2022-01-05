@@ -11,6 +11,9 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="nextRepetition" optional="YES" attributeType="String"/>
         <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="notification" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="notificationMinutesBefore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="notificationTimeAtWholeDay" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="repetition" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="skip" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="startdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -25,7 +28,7 @@
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-63" positionY="-18" width="128" height="269"/>
+        <element name="Event" positionX="-63" positionY="-18" width="128" height="314"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="89"/>
     </elements>
 </model>
