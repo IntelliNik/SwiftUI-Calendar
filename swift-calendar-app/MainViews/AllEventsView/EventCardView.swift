@@ -12,6 +12,8 @@ struct EventCardView: View {
     @State var event: Event
     @State var editButton: Bool
     
+    @State var showShowEvent = false
+    
     var body: some View {
         VStack{
             HStack{
@@ -36,7 +38,7 @@ struct EventCardView: View {
                 }
                 if(editButton){
                     Button(action: {
-                        
+                        showShowEvent = true
                     }, label: {
                         Text("Edit")
                             .foregroundColor(.white)
@@ -66,6 +68,9 @@ struct EventCardView: View {
         }
         .background(getColorFromString(stringColor: event.calendar?.color))
         .frame(maxWidth: .infinity, maxHeight: 200)
+        .sheet(isPresented: $showShowEvent){
+            ShowEventView(event: event)
+        }
     }
 }
 

@@ -21,7 +21,7 @@ func getColorFromString(stringColor: String?) -> Color{
     case "Orange": return .orange
     case "Pink": return .pink
     case "Cyan": return .cyan
-    default: return .yellow
+    default: return .gray
     }
 }
 

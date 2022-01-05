@@ -27,9 +27,6 @@ struct NavigationBarView: View {
                     .font(.system(size: fontSize))
             }.padding()
             Spacer()
-            Button(action: {self.showShowEvent.toggle()}) {
-                Text("Show Event")
-            }.padding()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(Color(getAccentColor()))

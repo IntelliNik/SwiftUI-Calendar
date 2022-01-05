@@ -128,6 +128,7 @@ struct AddEventView: View {
                                         event.nextRepetition = "Test"
                                     } else {
                                         event.repetition = false
+                                        
                                         //TODO: Check whether it breaks something to have items as nil
                                         // event.nextRepetition = ""
                                     }
