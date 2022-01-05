@@ -29,7 +29,6 @@ struct CalendarApp: App {
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
     // Fetch Request only where we need a request?
     
-    
     var body: some Scene {
         let drag = DragGesture()
             .onEnded { value in
@@ -66,6 +65,7 @@ struct CalendarApp: App {
                 .zIndex(1)
                 VStack{
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                        .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
                             .onAppear(perform: requestPermissions)
@@ -78,6 +78,7 @@ struct CalendarApp: App {
                             }){
                                 AddEventView(saveEvent: $saveSucessful)
                                     .interactiveDismissDisabled(true)
+                                    .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                             .environment(\.managedObjectContext, dataController.container.viewContext)
                             .sheet(isPresented: $showAddCalendar, onDismiss: {

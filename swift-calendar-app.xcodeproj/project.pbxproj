@@ -13,7 +13,7 @@
 		35B68336277A182E00D9EBAC /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68330277A182E00D9EBAC /* MonthView.swift */; };
 		35B68337277A182E00D9EBAC /* MonthViewMonthAndYear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68331277A182E00D9EBAC /* MonthViewMonthAndYear.swift */; };
 		35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */; };
-		35BB12D827806E94000AF889 /* TestDataCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BB12D727806E94000AF889 /* TestDataCore.swift */; };
+		35BC03732784DC810041F097 /* ModifyCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35BC03722784DC810041F097 /* ModifyCalendar.swift */; };
 		35FC5CBE2779C6E7009033C5 /* YearViewCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC5CB82779C6E7009033C5 /* YearViewCalendar.swift */; };
 		35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC5CBA2779C6E7009033C5 /* YearViewYearAndToday.swift */; };
 		35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35FC5CBB2779C6E7009033C5 /* YearView.swift */; };
@@ -67,7 +67,7 @@
 		35B68330277A182E00D9EBAC /* MonthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
 		35B68331277A182E00D9EBAC /* MonthViewMonthAndYear.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthViewMonthAndYear.swift; sourceTree = "<group>"; };
 		35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthViewDayBox.swift; sourceTree = "<group>"; };
-		35BB12D727806E94000AF889 /* TestDataCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDataCore.swift; sourceTree = "<group>"; };
+		35BC03722784DC810041F097 /* ModifyCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyCalendar.swift; sourceTree = "<group>"; };
 		35FC5CB82779C6E7009033C5 /* YearViewCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearViewCalendar.swift; sourceTree = "<group>"; };
 		35FC5CBA2779C6E7009033C5 /* YearViewYearAndToday.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearViewYearAndToday.swift; sourceTree = "<group>"; };
 		35FC5CBB2779C6E7009033C5 /* YearView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YearView.swift; sourceTree = "<group>"; };
@@ -171,6 +171,7 @@
 				7719874A2773C3C80061CF34 /* MenuView.swift */,
 				77212C402781EAB4005ADA99 /* AddCalendarView.swift */,
 				7706517427847ADF008390EC /* EditCalendarView.swift */,
+				35BC03722784DC810041F097 /* ModifyCalendar.swift */,
 			);
 			path = Menu;
 			sourceTree = "<group>";
@@ -200,7 +201,6 @@
 			children = (
 				3562DEFC277EFB340054F096 /* DataController.swift */,
 				77F466AE2768FF720034C68B /* Persistence.swift */,
-				35BB12D727806E94000AF889 /* TestDataCore.swift */,
 				77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */,
 			);
 			path = Persistence;
@@ -393,11 +393,11 @@
 				35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */,
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,
 				77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */,
-				35BB12D827806E94000AF889 /* TestDataCore.swift in Sources */,
 				3562DEFD277EFB340054F096 /* DataController.swift in Sources */,
 				35FC5CBE2779C6E7009033C5 /* YearViewCalendar.swift in Sources */,
 				35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */,
 				77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */,
+				35BC03732784DC810041F097 /* ModifyCalendar.swift in Sources */,
 				77F466A82768FF6F0034C68B /* (null) in Sources */,
 				77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */,
 				35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */,

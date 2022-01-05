@@ -1,16 +1,17 @@
 //
-//  AddCalendarView.swift
+//  ModifyCalendar.swift
 //  swift-calendar-app
 //
-//  Created by Schulte, Niklas on 02.01.22.
+//  Created by Daniel Rademacher on 04.01.22.
 //
 
 import SwiftUI
 
-struct AddCalendarView: View {
+struct ModifyCalendar: View {
+    @State var mcalendar: MCalendar
     @State var confirmationShown = false
     @State private var name: String = ""
-    @State private var color = 0
+    @State private var color: Int = 0
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
@@ -22,7 +23,7 @@ struct AddCalendarView: View {
             Form{
                 Section{
                     TextField("Name", text: $name).padding()
-                        .navigationTitle("Add calendar")
+                        .navigationTitle("Reconfigure calendar")
                         .toolbar {
                             ToolbarItem(placement: .navigation) {
                                 Button("Discard"){
@@ -33,10 +34,8 @@ struct AddCalendarView: View {
                             ToolbarItem(placement: .primaryAction) {
                                 Button("Save calendar"){
                                     
-                                    let calendar = MCalendar(context: moc)
-                                    calendar.key = UUID()
-                                    calendar.name = name
-                                    calendar.color = colorStrings[color]
+                                    mcalendar.setValue(name,forKey: "name")
+                                    mcalendar.setValue(colorStrings[color],forKey:"color")
                                     
                                     try? moc.save()
 
@@ -69,12 +68,10 @@ struct AddCalendarView: View {
                 }
             }
         }
+        .onAppear {
+            name = mcalendar.name!
+            color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
+        }
     }
+    
 }
-
-struct AddCalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddCalendarView(saveCalendar: .constant(true))
-    }
-}
-

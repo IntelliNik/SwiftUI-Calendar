@@ -84,7 +84,7 @@ struct MenuView: View {
                 Spacer()
                 HStack{
                     Button(action: {calendarEditMode.toggle()}){
-                        Text("Edit")
+                        Text("Manage")
                             .foregroundColor(.white)
                     }
                     Spacer()
@@ -97,10 +97,9 @@ struct MenuView: View {
             }
             ScrollView(){
                 VStack(alignment: .leading) {
-                    ForEach((0..<calendars.count)) { index in
+                    ForEach((0..<calendars.count),id: \.self) { index in
                         HStack{
                             Button(action: {currentlySelectedCalendar = index}) {
-                                //TODO: Find another way to transform string to color
                                 Image(systemName: "square.fill")
                                     .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)

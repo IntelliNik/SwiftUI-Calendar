@@ -63,12 +63,12 @@ struct AddEventView: View {
             Form{
                 Section{
                     Picker("Calendar", selection: $calendar) {
-                        ForEach((0..<calendars.count)) { index in
+                        ForEach((0..<calendars.count), id: \.self) { index in
                             HStack{
                                 Image(systemName: "square.fill")
                                     .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
                                     .imageScale(.large)
-                                Text("\(calendars[index].name ?? "Anonymous")")
+                                Text("\(calendars[index].name!)")
                             }.tag(index)
                         }
                     }.padding()
@@ -88,9 +88,7 @@ struct AddEventView: View {
                                     saveEvent = true
                                     
                                     let event = Event(context: moc)
-                                    //TODO: Is the function UUID doing what we want?
                                     event.key = UUID()
-                                    // TODO: event.key = generateID(startDate: startDate, endDate: endDate, name: name)
                                     event.name = name
                                     event.startdate = startDate
                                     event.enddate = endDate
@@ -98,7 +96,6 @@ struct AddEventView: View {
                                     event.url = urlString
                                     event.notes = notes
                                     
-                                    // TODO: Good way to save a location?
                                     if (location == "Current"){
                                         event.location = true
                                         event.latitude = currentRegion.center.latitude
@@ -132,7 +129,7 @@ struct AddEventView: View {
                                         //TODO: Check whether it breaks something to have items as nil
                                         // event.nextRepetition = ""
                                     }
-                                    
+
                                     if notification {
                                         event.notification = true
                                         if(!wholeDay){
@@ -142,10 +139,7 @@ struct AddEventView: View {
                                         }
 
                                     }
-                                    
-                                    //TODO: Search for the correct calendar in the core data base and add the event there
-                                    //calendarAddEvent(name: ("Calendar" + String(calendar)), event: event)
-                                    calendarAddEvent(name: "Calendar1", event: event)
+                                    calendars[calendar].addToEvents(event)
                                     
                                     try? moc.save()
                                     
@@ -278,29 +272,6 @@ struct AddEventView: View {
                         .padding()
                 }
             }
-        }
-    }
-    
-    func generateID (startDate: Date, endDate: Date, name: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        
-        let randomInt = Int.random(in: 1..<100000)
-        
-        return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
-    }
-    
-    func calendarAddEvent(name: String, event: Event ){
-        if calendars.isEmpty{
-            //TODO: Tell the user that no calendar exists
-        } else {
-            for calendar in calendars{
-                if (calendar.name == name){
-                    calendar.addToEvents(event)
-                    break
-                }
-            }
-            //TODO: if no calendar of name can be found inform the user
         }
     }
 }
