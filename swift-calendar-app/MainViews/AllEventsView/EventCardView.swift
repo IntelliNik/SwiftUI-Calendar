@@ -83,8 +83,14 @@ struct ExtendedEventCard: View{
             EventCardView(event: event, editButton: true)
             if(event.location){
                 let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
+                HStack{
+                    Image(systemName: "location.fill").padding()
+                    Spacer()
+                    Text(event.locationName ?? "Location Name").padding()
+                }
                 Map(coordinateRegion: .constant(region))
                     .frame(height: 200)
+                    .padding([.bottom, .leading, .trailing])
             }
                 if let urlString = event.url{
                     if(urlString != ""){
@@ -93,6 +99,7 @@ struct ExtendedEventCard: View{
                             Spacer()
                             if let url = URL(string: event.urlPrefix! + urlString) {
                                 Link(urlString, destination: url)
+                                    .foregroundColor(.blue)
                             } else{
                                 Text(urlString)
                                     .foregroundColor(.black)
@@ -108,8 +115,9 @@ struct ExtendedEventCard: View{
                     }.padding()
                 }
             }
-                .background(getColorFromString(stringColor: event.calendar?.color))
-                .frame(maxWidth: .infinity, maxHeight: 800)
+            .background(getColorFromString(stringColor: event.calendar?.color))
+            .frame(maxWidth: .infinity, maxHeight: 800)
+            .padding(.bottom)
         }
     }
     
