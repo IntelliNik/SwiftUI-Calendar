@@ -127,9 +127,9 @@ struct AddEventView: View {
                                         if(repeatUntil == "End Date"){
                                             event.repetitionEndDate = endRepetitionDate
                                         }
-                                        event.skip = false
+                                        event.repetitionSkip = false
                                         // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                                        event.nextRepetition = "Test"
+                                        event.repetitionNext = "Test"
                                     } else {
                                         event.repetition = false
                                         
