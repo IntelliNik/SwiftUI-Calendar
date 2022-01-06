@@ -47,14 +47,14 @@ struct AllEventsView: View {
                                         currentlyExtended = nil
                                     }
                                 }
-                                .transition(.move(edge: .leading))
+                                .transition(.slide)
                             } else{
                                 EventCardView(event: event, editButton: false).onTapGesture(){
                                     withAnimation{
                                         currentlyExtended = event
                                     }
                                 }
-                                .transition(.move(edge: .trailing))
+                                .transition(.slide)
                             }
                         }
                     }.navigationTitle("All Events")
