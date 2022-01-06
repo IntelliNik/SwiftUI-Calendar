@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Combine
 
 struct AddEventView: View {
     
@@ -45,6 +46,8 @@ struct AddEventView: View {
     @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
     
     @State var confirmationShown = false
+    
+    @ObservedObject var locationService: LocationService
     
     @Binding var saveEvent: Bool
     
@@ -250,10 +253,64 @@ struct AddEventView: View {
                     }
                     if(location == "Custom"){
                         HStack{
-                            TextField("Search for location ...", text: $locationSearch)
+                            TextField("Search for location ...", text: $locationService.queryFragment)
                                 .autocapitalization(.none)
                                 .padding()
                             Image(systemName: "magnifyingglass")
+                            if locationService.status == .isSearching {
+                                Image(systemName: "clock")
+                                .foregroundColor(Color.gray)
+                            }
+                        }
+                        /*Section(header: Text("Search")) {
+                            ZStack(alignment: .trailing) {
+                                TextField("Search", text: $locationService.queryFragment)
+                                
+                                // while user is typing input it sends the current query to the location service
+                                // which in turns sets its status to searching; when searching status is set on
+                                // searching then a clock symbol will be shown beside the search box
+                                if locationService.status == .isSearching {
+                                    Image(systemName: "clock")
+                                    .foregroundColor(Color.gray)
+                                }
+                            }
+                        }*/
+                        
+                        Section(header: Text("Results")) {
+                            List {
+                                Group { () -> AnyView in
+                                    switch locationService.status {
+                                        case .noResults: return AnyView(Text("No Results"))
+                                        case .error(let description): return AnyView(Text("Error: \(description)"))
+                                        default: return AnyView(EmptyView())
+                                        }
+                                }.foregroundColor(Color.gray)
+                                               
+                                // display the results as a list
+                                ForEach(locationService.searchResults, id: \.self) {
+                                    completionResult in
+                                    Button(action: {
+                                               self.locationService.queryFragment = completionResult.title + ", " + completionResult.subtitle
+                                        let search =  MKLocalSearch(request: MKLocalSearch.Request(__naturalLanguageQuery: (completionResult.title + ", " + completionResult.subtitle)))
+                                        search.start { (response, error) in
+                                            let response = response!
+                                            
+                                            for item in response.mapItems {
+                                                if let name = item.name,
+                                                    let location = item.placemark.location {
+                                                    print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
+                                                    customRegion.center.latitude = location.coordinate.latitude
+                                                    customRegion.center.longitude = location.coordinate.longitude
+                                                }
+                                            }
+                                        }
+                                            }) {
+                                                Text(completionResult.title + ", " + completionResult.subtitle)
+                                            }
+                                    
+                                    //Text(completionResult.title)
+                                }
+                            }
                         }
                         Map(coordinateRegion: $customRegion)
                             .frame(minHeight: 200)
@@ -275,8 +332,74 @@ struct AddEventView: View {
     }
 }
 
+class LocationService: NSObject, ObservableObject {
+    
+    // Different search states
+    enum LocationStatus: Equatable {
+        case idle
+        case noResults
+        case isSearching
+        case error(String)
+        case result
+    }
+    
+    // queryFragment used in view gets updated every time the user types something
+    // default status is idle
+    // searchResults contains all the results from the queries
+    @Published var queryFragment: String = ""
+    @Published private(set) var status: LocationStatus = .idle
+    @Published private(set) var searchResults: [MKLocalSearchCompletion] = []
+    
+    private var queryCancellable: AnyCancellable?
+    private let searchCompleter: MKLocalSearchCompleter!
+    
+    // initiate the search completer, set the delegate on self
+    init(searchCompleter: MKLocalSearchCompleter = MKLocalSearchCompleter()) {
+        self.searchCompleter = searchCompleter
+        super.init()
+        self.searchCompleter.delegate = self
+        self.searchCompleter.region = MKCoordinateRegion(.world)
+        self.searchCompleter.resultTypes = MKLocalSearchCompleter.ResultType([.address, .pointOfInterest])
+
+        
+        // receive a stream from the queryFragment in the view
+        // debounce (wait) for 500 milliseconds before pushing the event further
+        // sink returns the updated string after waiting the specified amount of time
+        queryCancellable = $queryFragment
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.main, options: nil)
+            .sink(receiveValue: { fragment in
+                
+                // if fragment isn't empty then set the queryFrament to the current updated string
+                self.status = .isSearching
+                if !fragment.isEmpty {
+                    self.searchCompleter.queryFragment = fragment
+                } else {
+                    self.status = .idle
+                    self.searchResults = []
+                }
+        })
+    }
+}
+
+// every time the queryFragment gets updated these functions get called
+extension LocationService: MKLocalSearchCompleterDelegate {
+    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        // query the current input, filter out the results that have subtitles
+        // results with no subtitles are usually countries and cities
+        // remove filter if you want to get points of interest as well
+        //self.searchResults = completer.results.filter({ $0.subtitle != "" })
+        self.searchResults = completer.results
+        self.status = completer.results.isEmpty ? .noResults : .result
+    }
+    
+    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
+        self.status = .error(error.localizedDescription)
+    }
+}
+
 struct AddEventView_Previews: PreviewProvider {
     static var previews: some View {
-        AddEventView(saveEvent: .constant(true))
+        AddEventView(locationService: LocationService(), saveEvent: .constant(true))
     }
 }

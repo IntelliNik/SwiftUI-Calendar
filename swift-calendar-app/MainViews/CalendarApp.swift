@@ -76,7 +76,7 @@ struct CalendarApp: App {
                                     showConfirmationBox = false
                                 }
                             }){
-                                AddEventView(saveEvent: $saveSucessful)
+                                AddEventView(locationService: LocationService(), saveEvent: $saveSucessful)
                                     .interactiveDismissDisabled(true)
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
