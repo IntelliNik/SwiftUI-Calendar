@@ -100,7 +100,7 @@ struct ExtendedEventCard: View{
                         }.padding()
                     }
                 }
-                if event.notes != nil && event.notes != ""{
+            if event.notes != nil && event.notes != ""{
                     HStack{
                         Text("Notes: ")
                         Spacer()

@@ -101,20 +101,18 @@ struct ShowEventView: View {
                 Section{
                     // TODO: doesn't really work within a List
                     if let url = event.url{
-                        if(url != ""){
                             MetadataView(vm: LinkViewModel(link: url))
                             HStack{
-                                Image(systemName: "globe")
+                                Image(systemName: "globe").padding()
                                 Spacer()
-                                Text(event.url ?? "None")
+                                Text(url).padding()
                             }
-                        }
                     }
-                    if event.notes != nil && event.notes != ""{
+                    if let notes = event.notes{
                         HStack{
-                            Image(systemName: "note.text")
+                            Image(systemName: "note.text").padding()
                             Spacer()
-                            Text(event.notes ?? "None")
+                            Text(notes).padding()
                         }
                     }
                 }

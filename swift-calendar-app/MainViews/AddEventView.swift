@@ -228,7 +228,6 @@ struct AddEventView: View {
                         if(notes != ""){
                             event.notes = notes
                         }
-                        
                         if (location == "Current"){
                             event.location = true
                             event.latitude = currentRegion.center.latitude
