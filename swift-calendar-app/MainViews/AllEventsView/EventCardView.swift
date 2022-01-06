@@ -19,7 +19,7 @@ struct EventCardView: View {
                 // to keep the height for the edit button
                     .padding([.top, .bottom], 15)
                 Spacer()
-                if(event.notes! != ""){
+                if(event.notes != nil){
                     Image(systemName: "note.text")
                 }
                 if(event.location){

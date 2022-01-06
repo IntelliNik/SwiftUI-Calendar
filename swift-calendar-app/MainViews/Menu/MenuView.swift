@@ -103,7 +103,7 @@ struct MenuView: View {
                                 Image(systemName: "square.fill")
                                     .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
-                                Text("\(calendars[index].name ?? "")")
+                                Text("\(String((calendars[index].name!).prefix(10)))")
                                     .foregroundColor(.white)
                                     .font(.headline)
                             }
