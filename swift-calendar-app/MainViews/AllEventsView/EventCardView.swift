@@ -12,6 +12,8 @@ struct EventCardView: View {
     @State var event: Event
     @State var editButton: Bool
     
+    @State var showShowEvent = false
+    
     var body: some View {
         VStack{
             HStack{
@@ -19,10 +21,10 @@ struct EventCardView: View {
                 // to keep the height for the edit button
                     .padding([.top, .bottom], 15)
                 Spacer()
-                if(event.notes != nil){
+                if event.notes != nil && event.notes != ""{
                     Image(systemName: "note.text")
                 }
-                if(event.location){
+                if event.url != nil && event.url != ""{
                     Image(systemName: "globe")
                 }
                 if(event.location){
@@ -36,13 +38,14 @@ struct EventCardView: View {
                 }
                 if(editButton){
                     Button(action: {
-                        
+                        showShowEvent = true
                     }, label: {
-                        Text("Edit")
+                        // TODO: should later directly link to Edit instead of "Show"
+                        Text("Show")
                             .foregroundColor(.white)
                             .padding(10)
                     })
-                        .background(Color(getAccentColor()))
+                        .background(Color(getAccentColorString()))
                         .cornerRadius(45)
                 }
             }.padding()
@@ -66,19 +69,38 @@ struct EventCardView: View {
         }
         .background(getColorFromString(stringColor: event.calendar?.color))
         .frame(maxWidth: .infinity, maxHeight: 200)
+        .sheet(isPresented: $showShowEvent){
+            ShowEventView(event: event)
+        }
     }
 }
 
 struct ExtendedEventCard: View{
     @State var event: Event
     
+    func getURLwithoutProtocol(urlString: String) -> String{
+        if(urlString.hasPrefix("http://")){
+            return String(urlString.dropFirst(7))
+        }
+        if(urlString.hasPrefix("https://")){
+            return String(urlString.dropFirst(8))
+        }
+        return urlString
+    }
+    
     var body: some View{
         VStack{
             EventCardView(event: event, editButton: true)
             if(event.location){
                 let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
+                HStack{
+                    Image(systemName: "location.fill").padding()
+                    Spacer()
+                    Text(event.locationName ?? "Location Name").padding()
+                }
                 Map(coordinateRegion: .constant(region))
                     .frame(height: 200)
+                    .padding([.bottom, .leading, .trailing])
             }
                 if let urlString = event.url{
                     if(urlString != ""){
@@ -86,7 +108,8 @@ struct ExtendedEventCard: View{
                             Text("URL: ")
                             Spacer()
                             if let url = URL(string: urlString) {
-                                Link(urlString, destination: url)
+                                Link(getURLwithoutProtocol(urlString: urlString), destination: url)
+                                    .foregroundColor(.blue)
                             } else{
                                 Text(urlString)
                                     .foregroundColor(.black)
@@ -94,7 +117,7 @@ struct ExtendedEventCard: View{
                         }.padding()
                     }
                 }
-                if(event.notes != ""){
+            if event.notes != nil && event.notes != ""{
                     HStack{
                         Text("Notes: ")
                         Spacer()
@@ -102,8 +125,9 @@ struct ExtendedEventCard: View{
                     }.padding()
                 }
             }
-                .background(getColorFromString(stringColor: event.calendar?.color))
-                .frame(maxWidth: .infinity, maxHeight: 800)
+            .background(getColorFromString(stringColor: event.calendar?.color))
+            .frame(maxWidth: .infinity, maxHeight: 800)
+            .padding(.bottom)
         }
     }
     

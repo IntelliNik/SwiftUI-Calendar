@@ -13,6 +13,7 @@ struct NavigationBarView: View {
     @Binding var showAddEventSheet: Bool
     @Binding var showSearchView: Bool
     
+    @State var title = "XXX"
     @State var fontSize = 20.0
     
     var body: some View {
@@ -23,21 +24,23 @@ struct NavigationBarView: View {
                 }
             }) {
                 Image(systemName: "line.horizontal.3")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
             Spacer()
-            Button(action: {self.showShowEvent.toggle()}) {
-                Text("Show Event")
-            }.padding()
+            HStack{
+                Text(title)
+                    .font(.system(size: 20, weight: .heavy))
+            }
+            Spacer()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
             Button(action: {self.showAddEventSheet.toggle()}) {
                 Image(systemName: "plus")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
         }
@@ -47,6 +50,6 @@ struct NavigationBarView: View {
 
 struct NavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false))
+        NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false), title: "Preview")
     }
 }

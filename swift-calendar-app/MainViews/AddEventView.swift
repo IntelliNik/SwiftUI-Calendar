@@ -14,7 +14,7 @@ struct AddEventView: View {
     
     @State private var name: String = ""
     @State private var urlString: String = ""
-    //@State private var metadataView: MetadataView?
+    let urlPrefixes = ["http://", "https://"]
     
     @State private var notes: String = ""
     
@@ -57,7 +57,7 @@ struct AddEventView: View {
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
         ]
     ) var calendars: FetchedResults<MCalendar>
-    
+        
     var body: some View {
         NavigationView{
             Form{
@@ -75,86 +75,6 @@ struct AddEventView: View {
                 }
                 Section{
                     TextField("Name", text: $name).padding()
-                        .navigationTitle("Add event")
-                        .toolbar {
-                            ToolbarItem(placement: .navigation) {
-                                Button("Discard"){
-                                    confirmationShown = true
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save event"){
-                                    saveEvent = true
-                                    
-                                    let event = Event(context: moc)
-                                    event.key = UUID()
-                                    event.name = name
-                                    event.startdate = startDate
-                                    event.enddate = endDate
-                                    event.wholeDay = wholeDay
-                                    event.url = urlString
-                                    event.notes = notes
-                                    
-                                    if (location == "Current"){
-                                        event.location = true
-                                        event.latitude = currentRegion.center.latitude
-                                        event.longitude = currentRegion.center.latitude
-                                        event.latitudeDelta = currentRegion.span.latitudeDelta
-                                        event.longitudeDelta = currentRegion.span.longitudeDelta
-                                    } else if (location == "Custom")
-                                    {
-                                        event.location = true
-                                        event.latitude = customRegion.center.latitude
-                                        event.longitude = customRegion.center.latitude
-                                        event.latitudeDelta = customRegion.span.latitudeDelta
-                                        event.longitudeDelta = customRegion.span.longitudeDelta
-                                    } else {
-                                        event.location = false
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        //event.latitude = 0.0
-                                        //event.longitude = 0.0
-                                        //event.latitudeDelta = 0.0
-                                        //event.longitudeDelta = 0.0
-                                    }
-                                    
-                                    if repetition {
-                                        event.repetition = true
-                                        event.skip = false
-                                        // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                                        event.nextRepetition = "Test"
-                                    } else {
-                                        event.repetition = false
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        // event.nextRepetition = ""
-                                    }
-
-                                    if notification {
-                                        event.notification = true
-                                        if(!wholeDay){
-                                            event.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                                        } else {
-                                            event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                                        }
-
-                                    }
-                                    calendars[calendar].addToEvents(event)
-                                    
-                                    try? moc.save()
-                                    
-                                    dismiss()
-                                }.foregroundColor(Color(getAccentColor()))
-                            }
-                        }
-                        .confirmationDialog(
-                            "Are you sure?",
-                            isPresented: $confirmationShown
-                        ) {
-                            Button("Discard event"){
-                                saveEvent = false
-                                dismiss()
-                            }
-                        }
                 }
                 Section{
                     Toggle("Whole Day", isOn: $wholeDay)
@@ -250,25 +170,122 @@ struct AddEventView: View {
                     }
                     if(location == "Custom"){
                         HStack{
+                            Image(systemName: "magnifyingglass").padding()
+                            Spacer()
                             TextField("Search for location ...", text: $locationSearch)
                                 .autocapitalization(.none)
                                 .padding()
-                            Image(systemName: "magnifyingglass")
                         }
                         Map(coordinateRegion: $customRegion)
                             .frame(minHeight: 200)
                     }
                 }
                 Section{
-                    TextField("URL", text: $urlString)
-                        .padding()
-                        .autocapitalization(.none)
-                        .onChange(of: urlString){ url in
-                            //metadataView = MetadataView(vm: LinkViewModel(link: url))
-                        }
+                    HStack{
+                        TextField("URL", text: $urlString)
+                            .autocapitalization(.none)
+                            .padding()
+                    }
                     TextField("Notes", text: $notes)
                         .autocapitalization(.none)
                         .padding()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    Button("Discard"){
+                        confirmationShown = true
+                    }
+                    .foregroundColor(.gray)
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save event"){
+                        saveEvent = true
+                        
+                        let event = Event(context: moc)
+                        event.key = UUID()
+                        if name != ""{
+                            event.name = name
+                        }
+                        event.startdate = startDate
+                        event.enddate = endDate
+                        event.wholeDay = wholeDay
+                        // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
+                        if(urlString != ""){
+                            event.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
+
+                        }
+                        if(notes != ""){
+                            event.notes = notes
+                        }
+                        if (location == "Current"){
+                            event.location = true
+                            event.latitude = currentRegion.center.latitude
+                            event.longitude = currentRegion.center.latitude
+                            event.latitudeDelta = currentRegion.span.latitudeDelta
+                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                        } else if (location == "Custom")
+                        {
+                            event.location = true
+                            event.latitude = customRegion.center.latitude
+                            event.longitude = customRegion.center.latitude
+                            event.latitudeDelta = customRegion.span.latitudeDelta
+                            event.longitudeDelta = customRegion.span.longitudeDelta
+                            // TODO: save the name of the location somehow in event.locationName
+                        } else {
+                            event.location = false
+                            //TODO: Check whether it breaks something to have items as nil
+                            //event.latitude = 0.0
+                            //event.longitude = 0.0
+                            //event.latitudeDelta = 0.0
+                            //event.longitudeDelta = 0.0
+                        }
+                        
+                        if repetition {
+                            event.repetition = true
+                            event.repetitionUntil = repeatUntil
+                            event.repetitionInterval = repetitionInterval
+                            if(repeatUntil == "Repetitions"){
+                                event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
+                            }
+                            if(repeatUntil == "End Date"){
+                                event.repetitionEndDate = endRepetitionDate
+                            }
+                            event.repetitionSkip = false
+                            // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                            event.repetitionNext = "Test"
+                        } else {
+                            event.repetition = false
+                            
+                            //TODO: Check whether it breaks something to have items as nil
+                            // event.nextRepetition = ""
+                        }
+
+                        if notification {
+                            event.notification = true
+                            if(!wholeDay){
+                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            } else {
+                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                            }
+
+                        }
+                        calendars[calendar].addToEvents(event)
+                        
+                        try? moc.save()
+                        
+                        dismiss()
+                    }.foregroundColor(Color(getAccentColorString()))
+                    .navigationTitle("Add event")
+                    .confirmationDialog(
+                        "Are you sure?",
+                        isPresented: $confirmationShown
+                    ) {
+                        Button("Discard event"){
+                            saveEvent = false
+                            dismiss()
+                        }
+                    }
                 }
             }
         }

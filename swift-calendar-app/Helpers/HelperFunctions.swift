@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 // Color
-public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Gray","Black","Red","Orange","Brown","Cyan","Indigo"]
+public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red","Orange","Brown","Cyan","Indigo"]
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
@@ -18,14 +18,13 @@ func getColorFromString(stringColor: String?) -> Color{
         case "Blue": return .blue
         case "Pink": return .pink
         case "Purple": return .purple
-        case "Gray": return .gray
         case "Black": return .black
         case "Red": return .red
         case "Orange": return .orange
         case "Brown": return .brown
         case "Cyan": return .cyan
         case "Indigo": return .indigo
-        default: return .yellow
+        default: return .gray
     }
 }
 
@@ -34,7 +33,7 @@ func setAccentColor(colorScheme: String){
     defaults.set(colorScheme, forKey: "ColorScheme")
 }
 
-func getAccentColor() -> String{
+func getAccentColorString() -> String{
     let defaults = UserDefaults.standard
     return defaults.string(forKey: "ColorScheme") ?? "AccentColorRed"
 }
@@ -50,5 +49,5 @@ func getRegionFromDatabase(latitude: Double, longitude: Double, latitudeDelta: D
 func getDateFromHours(hours: String) -> Date?{
     let hourFormatter = DateFormatter()
     hourFormatter.dateFormat = "HH:mm"
-    return hourFormatter.date(from: "08:00")
+    return hourFormatter.date(from: hours)
 }

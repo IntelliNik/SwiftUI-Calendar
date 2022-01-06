@@ -20,7 +20,7 @@ struct MonthViewDayBox: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.thinMaterial)
                 .frame(width: 45, height: 45)
-                .overlay(Text(String(date)).foregroundColor(Color(getAccentColor())))
+                .overlay(Text(String(date)).foregroundColor(Color(getAccentColorString())))
 
         }
     }

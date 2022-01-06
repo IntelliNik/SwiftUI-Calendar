@@ -22,6 +22,7 @@ struct CalendarApp: App {
     @State private var confirmationBoxText = ""
     
     @State var selectedView: ContainedView = .allEvents
+    @State var title = "All Events"
     
     @StateObject private var dataController = DataController()
     
@@ -48,14 +49,14 @@ struct CalendarApp: App {
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color(getAccentColor()))
+                            .background(Color(getAccentColorString()))
                             .opacity(0.05)
                             .onTapGesture {
                                 withAnimation{
                                     showMenu = false
                                 }
                             }
-                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu)
+                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu, title: $title)
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .leading))
                             .environment(\.managedObjectContext, dataController.container.viewContext)
@@ -64,7 +65,8 @@ struct CalendarApp: App {
                 // show menu on top
                 .zIndex(1)
                 VStack{
-                    NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                    // TODO: why is the title update not working ???
+                    NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView, title: title)
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
@@ -72,7 +74,7 @@ struct CalendarApp: App {
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     showConfirmationBox = false
                                 }
                             }){
@@ -84,7 +86,7 @@ struct CalendarApp: App {
                             .sheet(isPresented: $showAddCalendar, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Calendar saved" : "Calendar discarded"
                                 showConfirmationBox = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     showConfirmationBox = false
                                 }
                             }){
@@ -94,10 +96,6 @@ struct CalendarApp: App {
                             }
                             .sheet(isPresented: $showSearchView){
                                 SearchEventView()
-                                    .environment(\.managedObjectContext, dataController.container.viewContext)
-                            }
-                            .sheet(isPresented: $showShowEvent){
-                                ShowEventView(url: "https://apple.com")
                                     .environment(\.managedObjectContext, dataController.container.viewContext)
                             }
                     }

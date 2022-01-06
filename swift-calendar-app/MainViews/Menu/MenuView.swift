@@ -9,11 +9,12 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    @State var accentColor = getAccentColor()
+    @State var accentColor = getAccentColorString()
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
+    @Binding var title: String
     
     @State var calendarEditMode = false
     @State var currentlySelectedCalendar: Int = 0
@@ -41,35 +42,35 @@ struct MenuView: View {
                         .padding()
                 }
                 Spacer()
-                Button(action: {currentlySelectedView = .day; withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .day; title = "Day View"; withAnimation{menuOpen = false}}) {
                     Text("Day View")
                         .padding()
                         .background(currentlySelectedView == .day ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .week;  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .week; title = "Week View";  withAnimation{menuOpen = false}}) {
                     Text("Week View")
                         .padding()
                         .background(currentlySelectedView == .week ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .month;  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .month; title = "Month View";  withAnimation{menuOpen = false}}) {
                     Text("Month View")
                         .padding()
                         .background(currentlySelectedView == .month ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .year;  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .year; title = "Year View"; withAnimation{menuOpen = false}}) {
                     Text("Year View")
                         .padding()
                         .background(currentlySelectedView == .year ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .allEvents;  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .allEvents; title = "All Events";  withAnimation{menuOpen = false}}) {
                     Text("All Events")
                         .padding()
                         .background(currentlySelectedView == .allEvents ? Color(UIColor.darkGray) : .clear)
@@ -149,7 +150,7 @@ struct MenuView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false), menuOpen: .constant(true))
+            MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false), menuOpen: .constant(true), title: .constant("Title"))
                 .frame(width: geometry.size.width/2)
         }
     }
