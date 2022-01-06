@@ -77,88 +77,6 @@ struct AddEventView: View {
                 Section{
                     TextField("Name", text: $name).padding()
                         .navigationTitle("Add event")
-                        .toolbar {
-                            ToolbarItem(placement: .navigation) {
-                                Button("Discard"){
-                                    confirmationShown = true
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save event"){
-                                    saveEvent = true
-                                    
-                                    let event = Event(context: moc)
-                                    event.key = UUID()
-                                    event.name = name
-                                    event.startdate = startDate
-                                    event.enddate = endDate
-                                    event.wholeDay = wholeDay
-                                    // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
-                                    if(urlString != ""){
-                                        event.url = urlPrefix + urlString
-                                    }
-                                    event.notes = notes
-                                    
-                                    if (location == "Current"){
-                                        event.location = true
-                                        event.latitude = currentRegion.center.latitude
-                                        event.longitude = currentRegion.center.latitude
-                                        event.latitudeDelta = currentRegion.span.latitudeDelta
-                                        event.longitudeDelta = currentRegion.span.longitudeDelta
-                                    } else if (location == "Custom")
-                                    {
-                                        event.location = true
-                                        event.latitude = customRegion.center.latitude
-                                        event.longitude = customRegion.center.latitude
-                                        event.latitudeDelta = customRegion.span.latitudeDelta
-                                        event.longitudeDelta = customRegion.span.longitudeDelta
-                                    } else {
-                                        event.location = false
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        //event.latitude = 0.0
-                                        //event.longitude = 0.0
-                                        //event.latitudeDelta = 0.0
-                                        //event.longitudeDelta = 0.0
-                                    }
-                                    
-                                    if repetition {
-                                        event.repetition = true
-                                        event.repetitionUntil = repeatUntil
-                                        event.repetitionInterval = repetitionInterval
-                                        if(repeatUntil == "Repetitions"){
-                                            event.repetitionAmount = Int16(amountOfRepetitions)!
-                                        }
-                                        if(repeatUntil == "End Date"){
-                                            event.repetitionEndDate = endRepetitionDate
-                                        }
-                                        event.repetitionSkip = false
-                                        // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                                        event.repetitionNext = "Test"
-                                    } else {
-                                        event.repetition = false
-                                        
-                                        //TODO: Check whether it breaks something to have items as nil
-                                        // event.nextRepetition = ""
-                                    }
-
-                                    if notification {
-                                        event.notification = true
-                                        if(!wholeDay){
-                                            event.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                                        } else {
-                                            event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                                        }
-
-                                    }
-                                    calendars[calendar].addToEvents(event)
-                                    
-                                    try? moc.save()
-                                    
-                                    dismiss()
-                                }.foregroundColor(Color(getAccentColor()))
-                            }
-                        }
                         .confirmationDialog(
                             "Are you sure?",
                             isPresented: $confirmationShown
@@ -290,6 +208,88 @@ struct AddEventView: View {
                     TextField("Notes", text: $notes)
                         .autocapitalization(.none)
                         .padding()
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigation) {
+                    Button("Discard"){
+                        confirmationShown = true
+                    }
+                    .foregroundColor(.gray)
+                }
+                ToolbarItem(placement: .primaryAction) {
+                    Button("Save event"){
+                        saveEvent = true
+                        
+                        let event = Event(context: moc)
+                        event.key = UUID()
+                        event.name = name
+                        event.startdate = startDate
+                        event.enddate = endDate
+                        event.wholeDay = wholeDay
+                        // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
+                        if(urlString != ""){
+                            event.url = urlPrefix + urlString
+                        }
+                        event.notes = notes
+                        
+                        if (location == "Current"){
+                            event.location = true
+                            event.latitude = currentRegion.center.latitude
+                            event.longitude = currentRegion.center.latitude
+                            event.latitudeDelta = currentRegion.span.latitudeDelta
+                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                        } else if (location == "Custom")
+                        {
+                            event.location = true
+                            event.latitude = customRegion.center.latitude
+                            event.longitude = customRegion.center.latitude
+                            event.latitudeDelta = customRegion.span.latitudeDelta
+                            event.longitudeDelta = customRegion.span.longitudeDelta
+                        } else {
+                            event.location = false
+                            //TODO: Check whether it breaks something to have items as nil
+                            //event.latitude = 0.0
+                            //event.longitude = 0.0
+                            //event.latitudeDelta = 0.0
+                            //event.longitudeDelta = 0.0
+                        }
+                        
+                        if repetition {
+                            event.repetition = true
+                            event.repetitionUntil = repeatUntil
+                            event.repetitionInterval = repetitionInterval
+                            if(repeatUntil == "Repetitions"){
+                                event.repetitionAmount = Int16(amountOfRepetitions)!
+                            }
+                            if(repeatUntil == "End Date"){
+                                event.repetitionEndDate = endRepetitionDate
+                            }
+                            event.repetitionSkip = false
+                            // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                            event.repetitionNext = "Test"
+                        } else {
+                            event.repetition = false
+                            
+                            //TODO: Check whether it breaks something to have items as nil
+                            // event.nextRepetition = ""
+                        }
+
+                        if notification {
+                            event.notification = true
+                            if(!wholeDay){
+                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            } else {
+                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                            }
+
+                        }
+                        calendars[calendar].addToEvents(event)
+                        
+                        try? moc.save()
+                        
+                        dismiss()
+                    }.foregroundColor(Color(getAccentColor()))
                 }
             }
         }

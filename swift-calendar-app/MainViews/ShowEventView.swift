@@ -59,9 +59,7 @@ struct ShowEventView: View {
                         } else{
                             Text("None")
                         }
-                    }.padding()
-                }
-                Section{
+                    }
                     HStack{
                         Image(systemName: "repeat")
                         Spacer()
