@@ -23,6 +23,7 @@
         <attribute name="repetitionUntil" optional="YES" attributeType="String"/>
         <attribute name="startdate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="urlPrefix" optional="YES" attributeType="String"/>
         <attribute name="wholeDay" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="calendar" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MCalendar" inverseName="events" inverseEntity="MCalendar"/>
     </entity>
@@ -33,7 +34,7 @@
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="403"/>
+        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="418"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="89"/>
     </elements>
 </model>

@@ -22,6 +22,7 @@ struct CalendarApp: App {
     @State private var confirmationBoxText = ""
     
     @State var selectedView: ContainedView = .allEvents
+    @State var title = "All Events"
     
     @StateObject private var dataController = DataController()
     
@@ -55,7 +56,7 @@ struct CalendarApp: App {
                                     showMenu = false
                                 }
                             }
-                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu)
+                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu, title: $title)
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .leading))
                             .environment(\.managedObjectContext, dataController.container.viewContext)
@@ -64,7 +65,8 @@ struct CalendarApp: App {
                 // show menu on top
                 .zIndex(1)
                 VStack{
-                    NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView)
+                    // TODO: why is the title update not working ???
+                    NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView, title: title)
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)

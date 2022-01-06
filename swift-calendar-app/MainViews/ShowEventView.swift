@@ -24,7 +24,6 @@ struct ShowEventView: View {
                         Text("\(event.calendar?.name ?? "No Calendar")")
                     }
                 }.padding()
-                    .navigationTitle("Event: \(event.name ?? "")")
                 Section{
                     HStack{
                         Text(event.startdate!, style: .date)
@@ -91,7 +90,7 @@ struct ShowEventView: View {
                         HStack{
                             Image(systemName: "location.fill").padding()
                             Spacer()
-                            Text(event.locationName ?? "").padding()
+                            Text(event.locationName ?? "Location Name").padding()
                         }
                         let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
                         Map(coordinateRegion: .constant(region))
@@ -101,7 +100,9 @@ struct ShowEventView: View {
                 
                 Section{
                     // TODO: doesn't really work within a List
-                    MetadataView(vm: LinkViewModel(link: event.url!))
+                    if let url = event.url{
+                        MetadataView(vm: LinkViewModel(link: url))
+                    }
                     HStack{
                         Image(systemName: "globe")
                         Spacer()
@@ -115,6 +116,7 @@ struct ShowEventView: View {
                     
                 }
             }
+            .navigationTitle(event.name != nil ? "Event: \(event.name!)" : "Show Event")
         }
     }
 }

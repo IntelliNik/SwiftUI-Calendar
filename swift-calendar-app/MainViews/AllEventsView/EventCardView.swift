@@ -21,10 +21,10 @@ struct EventCardView: View {
                 // to keep the height for the edit button
                     .padding([.top, .bottom], 15)
                 Spacer()
-                if(event.notes! != ""){
+                if event.notes != nil{
                     Image(systemName: "note.text")
                 }
-                if(event.location){
+                if event.url != nil{
                     Image(systemName: "globe")
                 }
                 if(event.location){
@@ -91,7 +91,7 @@ struct ExtendedEventCard: View{
                         HStack{
                             Text("URL: ")
                             Spacer()
-                            if let url = URL(string: urlString) {
+                            if let url = URL(string: event.urlPrefix! + urlString) {
                                 Link(urlString, destination: url)
                             } else{
                                 Text(urlString)
@@ -100,7 +100,7 @@ struct ExtendedEventCard: View{
                         }.padding()
                     }
                 }
-                if(event.notes != ""){
+                if event.notes != nil{
                     HStack{
                         Text("Notes: ")
                         Spacer()

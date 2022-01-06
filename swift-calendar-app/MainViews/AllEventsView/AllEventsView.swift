@@ -34,12 +34,6 @@ struct AllEventsView: View {
             ScrollViewReader { reader in
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading){
-                        HStack{
-                            Text("All Events")
-                                .font(.system(size: 20, weight: .heavy))
-                                .padding()
-                        }
-                        Spacer()
                         ForEach(events, id: \.self) { event in
                             if(currentlyExtended == event){
                                 ExtendedEventCard(event: event).onTapGesture(){

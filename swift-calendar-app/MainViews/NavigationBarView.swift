@@ -13,6 +13,7 @@ struct NavigationBarView: View {
     @Binding var showAddEventSheet: Bool
     @Binding var showSearchView: Bool
     
+    @State var title = "XXX"
     @State var fontSize = 20.0
     
     var body: some View {
@@ -26,6 +27,11 @@ struct NavigationBarView: View {
                     .foregroundColor(Color(getAccentColor()))
                     .font(.system(size: fontSize))
             }.padding()
+            Spacer()
+            HStack{
+                Text(title)
+                    .font(.system(size: 20, weight: .heavy))
+            }
             Spacer()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
@@ -44,6 +50,6 @@ struct NavigationBarView: View {
 
 struct NavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false))
+        NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false), title: "Preview")
     }
 }

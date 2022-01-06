@@ -76,16 +76,6 @@ struct AddEventView: View {
                 }
                 Section{
                     TextField("Name", text: $name).padding()
-                        .navigationTitle("Add event")
-                        .confirmationDialog(
-                            "Are you sure?",
-                            isPresented: $confirmationShown
-                        ) {
-                            Button("Discard event"){
-                                saveEvent = false
-                                dismiss()
-                            }
-                        }
                 }
                 Section{
                     Toggle("Whole Day", isOn: $wholeDay)
@@ -181,10 +171,11 @@ struct AddEventView: View {
                     }
                     if(location == "Custom"){
                         HStack{
+                            Image(systemName: "magnifyingglass").padding()
+                            Spacer()
                             TextField("Search for location ...", text: $locationSearch)
                                 .autocapitalization(.none)
                                 .padding()
-                            Image(systemName: "magnifyingglass")
                         }
                         Map(coordinateRegion: $customRegion)
                             .frame(minHeight: 200)
@@ -201,7 +192,7 @@ struct AddEventView: View {
                         .pickerStyle(.wheel)
                         .frame(width: 80, height: 25)
                         .clipped()
-                        .padding()
+                        .padding([.trailing, .top, .bottom])
                         TextField("URL", text: $urlString)
                             .autocapitalization(.none)
                     }
@@ -223,15 +214,20 @@ struct AddEventView: View {
                         
                         let event = Event(context: moc)
                         event.key = UUID()
-                        event.name = name
+                        if name != ""{
+                            event.name = name
+                        }
                         event.startdate = startDate
                         event.enddate = endDate
                         event.wholeDay = wholeDay
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
-                            event.url = urlPrefix + urlString
+                            event.urlPrefix = urlPrefix
+                            event.url = urlString
                         }
-                        event.notes = notes
+                        if(notes != ""){
+                            event.notes = notes
+                        }
                         
                         if (location == "Current"){
                             event.location = true
@@ -246,6 +242,7 @@ struct AddEventView: View {
                             event.longitude = customRegion.center.latitude
                             event.latitudeDelta = customRegion.span.latitudeDelta
                             event.longitudeDelta = customRegion.span.longitudeDelta
+                            // TODO: save the name of the location somehow in event.locationName
                         } else {
                             event.location = false
                             //TODO: Check whether it breaks something to have items as nil
@@ -290,6 +287,16 @@ struct AddEventView: View {
                         
                         dismiss()
                     }.foregroundColor(Color(getAccentColor()))
+                    .navigationTitle("Add event")
+                    .confirmationDialog(
+                        "Are you sure?",
+                        isPresented: $confirmationShown
+                    ) {
+                        Button("Discard event"){
+                            saveEvent = false
+                            dismiss()
+                        }
+                    }
                 }
             }
         }
