@@ -72,7 +72,7 @@ struct CalendarApp: App {
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     showConfirmationBox = false
                                 }
                             }){
@@ -84,7 +84,7 @@ struct CalendarApp: App {
                             .sheet(isPresented: $showAddCalendar, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Calendar saved" : "Calendar discarded"
                                 showConfirmationBox = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                                     showConfirmationBox = false
                                 }
                             }){

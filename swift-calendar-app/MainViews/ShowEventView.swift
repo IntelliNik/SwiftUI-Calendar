@@ -22,8 +22,8 @@ struct ShowEventView: View {
                                 .imageScale(.large)
                         }
                         Text("\(event.calendar?.name ?? "No Calendar")")
-                        }
-                    }.padding()
+                    }
+                }.padding()
                     .navigationTitle("Event: \(event.name ?? "")")
                 Section{
                     HStack{
@@ -66,23 +66,28 @@ struct ShowEventView: View {
                         Image(systemName: "repeat")
                         Spacer()
                         if(event.repetition){
-                            HStack{
-                                Text("\(event.repetitionInterval!), \(event.repetitionUntil!)")
-                                if(event.repetitionUntil! == "Repetitions"){
-                                    Text(", \(event.repetitionAmount)")
-                                }
-                                if(event.repetitionUntil! == "End Date"){
-                                    HStack{
-                                        Text(", until")
-                                        Text(event.repetitionEndDate!, style: .date)
-                                    }
-                                }
-                            }
-                        } else {
+                            Text("\(event.repetitionInterval!)")
+                        }else {
                             Text("None")
                         }
-                    }.padding()
-                }
+                    }
+                    if(event.repetition){
+                        if(event.repetitionUntil! == "Repetitions"){
+                            HStack{
+                                Text("Repetitions: ")
+                                Spacer()
+                                Text("\(event.repetitionAmount)")
+                            }
+                        }
+                        if(event.repetitionUntil! == "End Date"){
+                            HStack{
+                                Text("End Date: ")
+                                Spacer()
+                                Text(event.repetitionEndDate!, style: .date)
+                            }
+                        }
+                    }
+                }.padding()
                 Section{
                     if(event.location){
                         HStack{
@@ -109,58 +114,58 @@ struct ShowEventView: View {
                         Spacer()
                         Text(event.notes ?? "None")
                     }
-
+                    
                 }
             }
         }
     }
 }
-                
-            /*
-
-
-
-    
-    func generateID (startDate: Date, endDate: Date, name: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateStyle = .short
-        
-        let randomInt = Int.random(in: 1..<100000)
-        
-        return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
-    }
-    
-    func calendarAddEvent(name: String, event: Event ){
-        if calendars.isEmpty{
-            //TODO: Tell the user that no calendar exists
-        } else {
-            for calendar in calendars{
-                if (calendar.name == name){
-                    calendar.addToEvents(event)
-                    break
-                }
-
-            }
-        }
-    }
-}
-             
-
-NavigationView(){
-    VStack{
-    Text("URL: \(url)")
-    // TODO: this preview can be used to visualize the link of an event
-    MetadataView(vm: LinkViewModel(link: url))
-        .padding()
-        .frame(maxHeight: 400)
-        .navigationTitle("Event: \"Apple Event\"")
-    }
-}*/
 
 /*
-struct ShowEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        ShowEventView(url: "https://apple.com")
-    }
-}
-*/
+ 
+ 
+ 
+ 
+ func generateID (startDate: Date, endDate: Date, name: String) -> String {
+ let formatter = DateFormatter()
+ formatter.dateStyle = .short
+ 
+ let randomInt = Int.random(in: 1..<100000)
+ 
+ return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
+ }
+ 
+ func calendarAddEvent(name: String, event: Event ){
+ if calendars.isEmpty{
+ //TODO: Tell the user that no calendar exists
+ } else {
+ for calendar in calendars{
+ if (calendar.name == name){
+ calendar.addToEvents(event)
+ break
+ }
+ 
+ }
+ }
+ }
+ }
+ 
+ 
+ NavigationView(){
+ VStack{
+ Text("URL: \(url)")
+ // TODO: this preview can be used to visualize the link of an event
+ MetadataView(vm: LinkViewModel(link: url))
+ .padding()
+ .frame(maxHeight: 400)
+ .navigationTitle("Event: \"Apple Event\"")
+ }
+ }*/
+
+/*
+ struct ShowEventView_Previews: PreviewProvider {
+ static var previews: some View {
+ ShowEventView(url: "https://apple.com")
+ }
+ }
+ */

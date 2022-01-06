@@ -14,7 +14,8 @@ struct AddEventView: View {
     
     @State private var name: String = ""
     @State private var urlString: String = ""
-    //@State private var metadataView: MetadataView?
+    let urlPrefixes = ["http://", "https://"]
+    @State private var urlPrefix: String = "https://"
     
     @State private var notes: String = ""
     
@@ -57,7 +58,7 @@ struct AddEventView: View {
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
         ]
     ) var calendars: FetchedResults<MCalendar>
-    
+        
     var body: some View {
         NavigationView{
             Form{
@@ -93,7 +94,10 @@ struct AddEventView: View {
                                     event.startdate = startDate
                                     event.enddate = endDate
                                     event.wholeDay = wholeDay
-                                    event.url = urlString
+                                    // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
+                                    if(urlString != ""){
+                                        event.url = urlPrefix + urlString
+                                    }
                                     event.notes = notes
                                     
                                     if (location == "Current"){
@@ -120,6 +124,7 @@ struct AddEventView: View {
                                     
                                     if repetition {
                                         event.repetition = true
+                                        event.repetitionUntil = repeatUntil
                                         event.repetitionInterval = repetitionInterval
                                         if(repeatUntil == "Repetitions"){
                                             event.repetitionAmount = Int16(amountOfRepetitions)!
@@ -268,12 +273,20 @@ struct AddEventView: View {
                     }
                 }
                 Section{
-                    TextField("URL", text: $urlString)
-                        .padding()
-                        .autocapitalization(.none)
-                        .onChange(of: urlString){ url in
-                            //metadataView = MetadataView(vm: LinkViewModel(link: url))
+                    HStack{
+                        Picker("", selection: $urlPrefix){
+                            ForEach(urlPrefixes, id: \.self) {
+                                Text($0).tag($0)
+                                    .font(.system(size: 16))
+                            }
                         }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80, height: 25)
+                        .clipped()
+                        .padding()
+                        TextField("URL", text: $urlString)
+                            .autocapitalization(.none)
+                    }
                     TextField("Notes", text: $notes)
                         .autocapitalization(.none)
                         .padding()

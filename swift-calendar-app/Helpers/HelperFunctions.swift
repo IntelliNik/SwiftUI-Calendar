@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 // Color
-public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Gray","Black","Red","Orange","Brown","Cyan","Indigo"]
+public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red","Orange","Brown","Cyan","Indigo"]
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
@@ -18,7 +18,6 @@ func getColorFromString(stringColor: String?) -> Color{
         case "Blue": return .blue
         case "Pink": return .pink
         case "Purple": return .purple
-        case "Gray": return .gray
         case "Black": return .black
         case "Red": return .red
         case "Orange": return .orange

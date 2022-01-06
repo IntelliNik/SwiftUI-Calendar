@@ -60,7 +60,7 @@ struct AddCalendarView: View {
                         ForEach((0..<colorStrings.count)) { index in
                             HStack{
                                 Image(systemName: "square.fill")
-                                    .foregroundColor( getColorFromString(stringColor: colorStrings[index]) )
+                                    .foregroundColor(getColorFromString(stringColor: colorStrings[index]))
                                     .imageScale(.large)
                                 Text("\(colorStrings[index])")
                             }.tag(index)
