@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    @State var accentColor = getAccentColor()
+    @State var accentColor = getAccentColorString()
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool

@@ -117,6 +117,14 @@ struct ShowEventView: View {
                 }
             }
             .navigationTitle(event.name != nil ? "Event: \(event.name!)" : "Show Event")
+            .toolbar{
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}){
+                        Text("Edit")
+                            .foregroundColor(Color(getAccentColorString()))
+                    }
+                }
+            }
         }
     }
 }

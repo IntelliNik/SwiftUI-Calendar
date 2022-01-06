@@ -41,7 +41,7 @@ struct ModifyCalendar: View {
 
                                     saveCalendar = true
                                     dismiss()
-                                }.foregroundColor(Color(getAccentColor()))
+                                }.foregroundColor(Color(getAccentColorString()))
                             }
                         }
                         .confirmationDialog(

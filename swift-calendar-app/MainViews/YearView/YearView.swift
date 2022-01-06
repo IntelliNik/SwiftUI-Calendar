@@ -40,7 +40,7 @@ struct YearView: View {
                 pickerSelection = .current
             }
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColor()))
+            .colorMultiply(Color(getAccentColorString()))
             .padding()
             .gesture(
                 DragGesture()

@@ -257,7 +257,7 @@ struct AddEventView: View {
                             event.repetitionUntil = repeatUntil
                             event.repetitionInterval = repetitionInterval
                             if(repeatUntil == "Repetitions"){
-                                event.repetitionAmount = Int16(amountOfRepetitions)!
+                                event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
                             }
                             if(repeatUntil == "End Date"){
                                 event.repetitionEndDate = endRepetitionDate
@@ -286,7 +286,7 @@ struct AddEventView: View {
                         try? moc.save()
                         
                         dismiss()
-                    }.foregroundColor(Color(getAccentColor()))
+                    }.foregroundColor(Color(getAccentColorString()))
                     .navigationTitle("Add event")
                     .confirmationDialog(
                         "Are you sure?",

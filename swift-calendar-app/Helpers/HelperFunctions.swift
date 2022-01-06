@@ -33,7 +33,7 @@ func setAccentColor(colorScheme: String){
     defaults.set(colorScheme, forKey: "ColorScheme")
 }
 
-func getAccentColor() -> String{
+func getAccentColorString() -> String{
     let defaults = UserDefaults.standard
     return defaults.string(forKey: "ColorScheme") ?? "AccentColorRed"
 }

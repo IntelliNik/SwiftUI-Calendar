@@ -24,7 +24,7 @@ struct NavigationBarView: View {
                 }
             }) {
                 Image(systemName: "line.horizontal.3")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
             Spacer()
@@ -35,12 +35,12 @@ struct NavigationBarView: View {
             Spacer()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
             Button(action: {self.showAddEventSheet.toggle()}) {
                 Image(systemName: "plus")
-                    .foregroundColor(Color(getAccentColor()))
+                    .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
         }

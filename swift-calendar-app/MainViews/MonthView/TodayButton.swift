@@ -19,11 +19,11 @@ struct TodayButton: View {
         .frame(height: 40)
         .frame(maxWidth: 90)
         .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColor()))
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString()))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color(getAccentColor()), lineWidth: 1)
+                .strokeBorder(Color(getAccentColorString()), lineWidth: 1)
         )
         
     }

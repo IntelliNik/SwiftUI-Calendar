@@ -49,7 +49,7 @@ struct CalendarApp: App {
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color(getAccentColor()))
+                            .background(Color(getAccentColorString()))
                             .opacity(0.05)
                             .onTapGesture {
                                 withAnimation{

@@ -45,7 +45,7 @@ struct EventCardView: View {
                             .foregroundColor(.white)
                             .padding(10)
                     })
-                        .background(Color(getAccentColor()))
+                        .background(Color(getAccentColorString()))
                         .cornerRadius(45)
                 }
             }.padding()

@@ -41,7 +41,7 @@ struct MonthView: View {
             }
             .padding()
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColor()))
+            .colorMultiply(Color(getAccentColorString()))
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
