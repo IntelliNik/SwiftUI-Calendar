@@ -27,6 +27,7 @@ struct AddEventView: View {
     
     @State private var location: String = "None"
     @State private var locationSearch = ""
+    @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
     
     @State private var wholeDay = false
@@ -43,7 +44,7 @@ struct AddEventView: View {
     @State private var notficationTimeAtWholeDay = getDateFromHours(hours: "08:00")!
     
     @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-    @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+    @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     @State var confirmationShown = false
     
@@ -253,7 +254,7 @@ struct AddEventView: View {
                     }
                     if(location == "Custom"){
                         HStack{
-                            TextField("Search for location ...", text: $locationService.queryFragment)
+                            TextField("Search for location ...", text: $locationSearch)
                                 .autocapitalization(.none)
                                 .padding()
                             Image(systemName: "magnifyingglass")
@@ -262,6 +263,9 @@ struct AddEventView: View {
                                 .foregroundColor(Color.gray)
                             }
                         }
+                        .onChange(of: locationSearch) { newValue in
+                            locationService.queryFragment = locationSearch
+                         }
                         /*Section(header: Text("Search")) {
                             ZStack(alignment: .trailing) {
                                 TextField("Search", text: $locationService.queryFragment)
@@ -276,7 +280,7 @@ struct AddEventView: View {
                             }
                         }*/
                         
-                        Section(header: Text("Results")) {
+                        Section() {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
@@ -290,7 +294,7 @@ struct AddEventView: View {
                                 ForEach(locationService.searchResults, id: \.self) {
                                     completionResult in
                                     Button(action: {
-                                               self.locationService.queryFragment = completionResult.title + ", " + completionResult.subtitle
+                                        self.locationSearch = completionResult.title + ", " + completionResult.subtitle
                                         let search =  MKLocalSearch(request: MKLocalSearch.Request(__naturalLanguageQuery: (completionResult.title + ", " + completionResult.subtitle)))
                                         search.start { (response, error) in
                                             let response = response!
@@ -301,8 +305,15 @@ struct AddEventView: View {
                                                     print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
                                                     customRegion.center.latitude = location.coordinate.latitude
                                                     customRegion.center.longitude = location.coordinate.longitude
+                                                    let annotation = MKPointAnnotation()
+                                                    annotation.coordinate = customRegion.center
                                                 }
                                             }
+                                            
+                                            markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+                                            
+                                            self.locationService.queryFragment = ""
+                                            self.locationService.clear()
                                         }
                                             }) {
                                                 Text(completionResult.title + ", " + completionResult.subtitle)
@@ -312,7 +323,10 @@ struct AddEventView: View {
                                 }
                             }
                         }
-                        Map(coordinateRegion: $customRegion)
+                        Map(coordinateRegion: $customRegion,
+                            annotationItems: markers) { marker in
+                              marker.location
+                          }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                     }
                 }
@@ -396,6 +410,15 @@ extension LocationService: MKLocalSearchCompleterDelegate {
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         self.status = .error(error.localizedDescription)
     }
+    
+    func clear() {
+        self.searchResults = []
+    }
+}
+
+struct Marker: Identifiable {
+    let id = UUID()
+    var location: MapMarker
 }
 
 struct AddEventView_Previews: PreviewProvider {
