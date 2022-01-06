@@ -101,12 +101,12 @@ struct ShowEventView: View {
                 Section{
                     // TODO: doesn't really work within a List
                     if let url = event.url{
-                            MetadataView(vm: LinkViewModel(link: url))
-                            HStack{
-                                Image(systemName: "globe").padding()
-                                Spacer()
-                                Text(url).padding()
-                            }
+                        MetadataView(vm: LinkViewModel(link: url))
+                        HStack{
+                            Image(systemName: "globe").padding()
+                            Spacer()
+                            Text(url).padding()
+                        }
                     }
                     if let notes = event.notes{
                         HStack{
@@ -130,51 +130,8 @@ struct ShowEventView: View {
     }
 }
 
-/*
- 
- 
- 
- 
- func generateID (startDate: Date, endDate: Date, name: String) -> String {
- let formatter = DateFormatter()
- formatter.dateStyle = .short
- 
- let randomInt = Int.random(in: 1..<100000)
- 
- return name + formatter.string(from: startDate) + formatter.string(from: endDate) + String(randomInt)
- }
- 
- func calendarAddEvent(name: String, event: Event ){
- if calendars.isEmpty{
- //TODO: Tell the user that no calendar exists
- } else {
- for calendar in calendars{
- if (calendar.name == name){
- calendar.addToEvents(event)
- break
- }
- 
- }
- }
- }
- }
- 
- 
- NavigationView(){
- VStack{
- Text("URL: \(url)")
- // TODO: this preview can be used to visualize the link of an event
- MetadataView(vm: LinkViewModel(link: url))
- .padding()
- .frame(maxHeight: 400)
- .navigationTitle("Event: \"Apple Event\"")
- }
- }*/
-
-/*
- struct ShowEventView_Previews: PreviewProvider {
- static var previews: some View {
- ShowEventView(url: "https://apple.com")
- }
- }
- */
+struct ShowEventView_Previews: PreviewProvider {
+    static var previews: some View {
+        ShowEventView(event: Event())
+    }
+}

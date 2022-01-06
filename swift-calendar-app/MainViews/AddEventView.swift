@@ -15,7 +15,6 @@ struct AddEventView: View {
     @State private var name: String = ""
     @State private var urlString: String = ""
     let urlPrefixes = ["http://", "https://"]
-    @State private var urlPrefix: String = "https://"
     
     @State private var notes: String = ""
     
@@ -183,18 +182,9 @@ struct AddEventView: View {
                 }
                 Section{
                     HStack{
-                        Picker("", selection: $urlPrefix){
-                            ForEach(urlPrefixes, id: \.self) {
-                                Text($0).tag($0)
-                                    .font(.system(size: 16))
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(width: 80, height: 25)
-                        .clipped()
-                        .padding([.trailing, .top, .bottom])
                         TextField("URL", text: $urlString)
                             .autocapitalization(.none)
+                            .padding()
                     }
                     TextField("Notes", text: $notes)
                         .autocapitalization(.none)
@@ -222,8 +212,8 @@ struct AddEventView: View {
                         event.wholeDay = wholeDay
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
-                            event.urlPrefix = urlPrefix
-                            event.url = urlString
+                            event.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
+
                         }
                         if(notes != ""){
                             event.notes = notes
