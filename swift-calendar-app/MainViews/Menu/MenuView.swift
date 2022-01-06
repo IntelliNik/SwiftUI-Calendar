@@ -86,12 +86,13 @@ struct MenuView: View {
                     Button(action: {calendarEditMode.toggle()}){
                         Text("Manage")
                             .foregroundColor(.white)
+                            .font(.headline)
                     }
                     Spacer()
                     Button(action: {showAddCalendar.toggle()}){
                         Image(systemName: "plus")
                             .foregroundColor(.white)
-                            .font(.system(size: 20))
+                            .font(.headline)
                     }
                 }.padding(.bottom)
             }
@@ -103,12 +104,13 @@ struct MenuView: View {
                                 Image(systemName: "square.fill")
                                     .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
-                                Text("\(calendars[index].name ?? "")")
+                                Text("\(calendars[index].name!)")
                                     .foregroundColor(.white)
-                                    .font(.headline)
-                            }
+                                    .lineLimit(1)
+                                    .frame(maxWidth: .infinity)
+                            }.padding([.leading, .trailing])
                         }
-                        .padding()
+                        .padding([.top, .bottom])
                         .background(currentlySelectedCalendar == index ? Color(UIColor.darkGray) : .clear)
                     }
                 }
