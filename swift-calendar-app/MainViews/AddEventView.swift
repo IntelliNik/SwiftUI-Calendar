@@ -43,7 +43,7 @@ struct AddEventView: View {
     @State private var notificationMinutesBefore = 5
     @State private var notficationTimeAtWholeDay = getDateFromHours(hours: "08:00")!
     
-    @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+    @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
     @State var confirmationShown = false
@@ -169,8 +169,17 @@ struct AddEventView: View {
                         .padding()
                     }
                     if(location == "Current"){
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow))
+                        
+                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                            annotationItems: markers) { marker in
+                              marker.location
+                          }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
+                            .onAppear(){
+                                let annotationCurrent = MKPointAnnotation()
+                                annotationCurrent.coordinate = currentRegion.center
+                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                            }
                     }
                     if(location == "Custom"){
                         HStack{
