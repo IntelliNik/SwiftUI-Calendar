@@ -12,7 +12,7 @@ struct MonthView: View {
     //    var month : Int
     //    var year : Int
     //}
-    @State var dateComponents: DateComponents
+    @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     
     var body: some View {
@@ -58,6 +58,6 @@ struct MonthView: View {
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: Calendar.current.dateComponents([.month, .year], from: Date.now))
+        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
     }
 }
