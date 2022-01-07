@@ -254,13 +254,22 @@ struct AddEventView: View {
                     }
                     if(location == "Custom"){
                         HStack{
+                            Image(systemName: "magnifyingglass")
                             TextField("Search for location ...", text: $locationSearch)
                                 .autocapitalization(.none)
                                 .padding()
-                            Image(systemName: "magnifyingglass")
                             if locationService.status == .isSearching {
                                 Image(systemName: "clock")
                                 .foregroundColor(Color.gray)
+                            }
+                            if self.locationSearch != "" {
+                                Button(action: {
+                                    self.locationSearch = ""
+                                })
+                                {
+                                    Image(systemName: "multiply.circle")
+                                    .foregroundColor(Color.gray)
+                                }
                             }
                         }
                         .onChange(of: locationSearch) { newValue in
