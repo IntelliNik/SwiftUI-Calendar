@@ -9,8 +9,7 @@ import SwiftUI
 
 struct YearViewCalendar: View {
     @Binding var dateComponents: DateComponents
-    @Binding var currentlySelectedView: ContainedView
-    @Binding var changeToMonth: Int?
+    @Binding var updateView: Bool
     
     let montlist = ["Jan.", "Feb.","Mar.","Apr.","May","June","July","Aug.","Sep.","Oct.","Nov.","Dec."]
 
@@ -23,9 +22,8 @@ struct YearViewCalendar: View {
                         HStack {
                             ForEach([1,2,3], id:\.self) { monthofyear in
                                 Button(action: {
-                                    currentlySelectedView = .month
-                                    changeToMonth = monthofyear + row
-                                    //MonthView(dateComponents: addMonthToComponents(components: dateComponents, month: monthofyear + row)!)
+                                    dateComponents = setMonth(dateComponents: dateComponents, month: monthofyear + row)
+                                    updateView = true
                                 }){
                                     YearViewMonthBox(month: montlist[monthofyear + row-1], width: calculateWidth(geo: geo), height: calculateHeight(geo: geo), startOfMonthDay: getFirstDayOfMonth(year: dateComponents.year!, month:monthofyear + row), lastDayOfMonth: getNumberOfDaysOfMonth(year:dateComponents.year!,month:monthofyear + row))
                                     //YearViewMonthBox(month: montlist[monthofyear + row-1], width: 110, height: 110, startOfMonthDay: 6, lastDayOfMonth: 31)
@@ -70,6 +68,6 @@ struct YearViewCalendar: View {
 
 struct YearViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
-        YearViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), currentlySelectedView: .constant(.year), changeToMonth: .constant(nil))
+        YearViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), updateView: .constant(false))
     }
 }

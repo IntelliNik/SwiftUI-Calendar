@@ -12,17 +12,16 @@ struct YearView: View {
     //    var month : Int
     //    var year : Int
     //}
-    @State var dateComponents: DateComponents
+    @Binding var dateComponents: DateComponents
+    @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
-    @Binding var currentlySelectedView: ContainedView
-    @Binding var changeToMonth: Int?
     
     var body: some View {
         
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
             Spacer()
-            YearViewCalendar(dateComponents: $dateComponents, currentlySelectedView: $currentlySelectedView, changeToMonth: $changeToMonth)
+            YearViewCalendar(dateComponents: $dateComponents, updateView: $updateView)
             Spacer()
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousYear(components: dateComponents, next: true)
@@ -61,6 +60,6 @@ struct YearView: View {
 
 struct YearView_Previews: PreviewProvider {
     static var previews: some View {
-        YearView(dateComponents: Calendar.current.dateComponents([.day, .month, .year], from: Date.now), currentlySelectedView: .constant(.year), changeToMonth: .constant(nil))
+        YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year], from: Date.now)), updateView: .constant(false))
     }
 }
