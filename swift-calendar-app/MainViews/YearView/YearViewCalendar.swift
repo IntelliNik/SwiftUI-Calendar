@@ -9,6 +9,9 @@ import SwiftUI
 
 struct YearViewCalendar: View {
     @Binding var dateComponents: DateComponents
+    @Binding var currentlySelectedView: ContainedView
+    @Binding var changeToMonth: Int?
+    
     let montlist = ["Jan.", "Feb.","Mar.","Apr.","May","June","July","Aug.","Sep.","Oct.","Nov.","Dec."]
 
     var body: some View {
@@ -19,9 +22,11 @@ struct YearViewCalendar: View {
                     ForEach([0,3,6,9], id:\.self)  { row in
                         HStack {
                             ForEach([1,2,3], id:\.self) { monthofyear in
-                                NavigationLink {
-                                    MonthView(dateComponents: addMonthToComponents(components: dateComponents, month: monthofyear + row)!)
-                                } label: {
+                                Button(action: {
+                                    currentlySelectedView = .month
+                                    changeToMonth = monthofyear + row
+                                    //MonthView(dateComponents: addMonthToComponents(components: dateComponents, month: monthofyear + row)!)
+                                }){
                                     YearViewMonthBox(month: montlist[monthofyear + row-1], width: calculateWidth(geo: geo), height: calculateHeight(geo: geo), startOfMonthDay: getFirstDayOfMonth(year: dateComponents.year!, month:monthofyear + row), lastDayOfMonth: getNumberOfDaysOfMonth(year:dateComponents.year!,month:monthofyear + row))
                                     //YearViewMonthBox(month: montlist[monthofyear + row-1], width: 110, height: 110, startOfMonthDay: 6, lastDayOfMonth: 31)
                                 .padding(.all, 1)
@@ -65,6 +70,6 @@ struct YearViewCalendar: View {
 
 struct YearViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: Calendar.current.dateComponents([.month, .year], from: Date.now))
+        YearViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), currentlySelectedView: .constant(.year), changeToMonth: .constant(nil))
     }
 }

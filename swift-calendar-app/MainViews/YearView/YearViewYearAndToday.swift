@@ -26,6 +26,6 @@ struct YearViewYearAndToday: View {
 
 struct YearViewMonthAndYear_Previews: PreviewProvider {
     static var previews: some View {
-        YearView(dateComponents: Calendar.current.dateComponents([.day, .month, .year], from: Date.now))
+        YearView(dateComponents: Calendar.current.dateComponents([.day, .month, .year], from: Date.now), currentlySelectedView: .constant(.year), changeToMonth: .constant(nil))
     }
 }

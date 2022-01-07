@@ -51,3 +51,10 @@ func getDateFromHours(hours: String) -> Date?{
     hourFormatter.dateFormat = "HH:mm"
     return hourFormatter.date(from: hours)
 }
+
+func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = month
+    return newDateComponents
+}

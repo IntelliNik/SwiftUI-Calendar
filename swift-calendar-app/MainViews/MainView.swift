@@ -18,7 +18,9 @@ enum ContainedView{
 struct MainView: View {
     @Binding var containedView: ContainedView
     @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
-
+    @State var changeToMonth: Int?
+    
+    
     var body: some View {
         switch containedView{
         case .day:
@@ -31,8 +33,13 @@ struct MainView: View {
             MonthView(dateComponents: dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .year:
-            YearView(dateComponents: dateComponents)
+            YearView(dateComponents: dateComponents, currentlySelectedView: $containedView, changeToMonth: $changeToMonth)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+                .onChange(of: changeToMonth){ newMonth in
+                    if let month = newMonth{
+                        dateComponents = setMonth(dateComponents: dateComponents, month: month)
+                    }
+                }
         case .allEvents:
             AllEventsView()
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
