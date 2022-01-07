@@ -16,7 +16,7 @@ struct SearchEventView: View {
     var body: some View {
         NavigationView {
             if query.isEmpty{
-                Text("Searching for...")
+                Text("Searching for events...")
                     .listStyle(.plain)
                     .navigationTitle("Search Events")
             } else {
@@ -28,6 +28,15 @@ struct SearchEventView: View {
                 }
                 .listStyle(.plain)
                 .navigationTitle("Search Events")
+            }
+            if self.query != "" {
+                Button(action: {
+                    self.query = ""
+                })
+                {
+                    Image(systemName: "multiply.circle")
+                    .foregroundColor(Color.gray)
+                }
             }
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Search events")
