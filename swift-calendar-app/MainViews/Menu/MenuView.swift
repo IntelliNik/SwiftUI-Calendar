@@ -85,7 +85,7 @@ struct MenuView: View {
                 Spacer()
                 HStack{
                     Button(action: {calendarEditMode.toggle()}){
-                        Text("Manage")
+                        Text("Edit")
                             .foregroundColor(.white)
                             .font(.headline)
                     }
@@ -144,6 +144,16 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+            .onAppear(){
+                if(!isAppAlreadyLaunchedOnce()){
+                    let calendar = MCalendar(context: moc)
+                    calendar.key = UUID()
+                    calendar.name = "Default"
+                    calendar.color = "Yellow"
+                    
+                    try? moc.save()
+                }
+            }
     }
 }
 

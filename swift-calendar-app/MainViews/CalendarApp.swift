@@ -121,4 +121,16 @@ func requestPermissions(){
     // request location access
     let locationManager = CLLocationManager()
     locationManager.requestWhenInUseAuthorization()
+    
+
+}
+
+func isAppAlreadyLaunchedOnce() -> Bool {
+    let defaults = UserDefaults.standard
+    if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
+        return true
+    } else {
+        defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+        return false
+    }
 }
