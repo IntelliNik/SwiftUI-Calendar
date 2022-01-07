@@ -58,9 +58,3 @@ func setMonth(dateComponents: DateComponents, month: Int?) -> DateComponents{
     newDateComponents.month = month
     return newDateComponents
 }
-
-func resetMonth(dateComponents: DateComponents) -> DateComponents{
-    var newDateComponents = DateComponents()
-    newDateComponents.year = dateComponents.year
-    return newDateComponents
-}
