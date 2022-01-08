@@ -7,5 +7,5 @@
 
 import Foundation
 
-let Weekday = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-let Month_short = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+let Weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+

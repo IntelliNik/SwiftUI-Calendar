@@ -12,7 +12,7 @@ struct MonthViewCalendar: View {
         VStack {
             HStack(alignment: .center) { //#warning: in case of localization, change!
                 
-                ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
+                ForEach(["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
                     Spacer()
                     Text(weekday)
                         .font(.subheadline)
