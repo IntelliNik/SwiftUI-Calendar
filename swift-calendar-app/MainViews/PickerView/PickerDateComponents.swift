@@ -7,6 +7,12 @@
 
 import Foundation
 
+public func getNextOrPreviousDay(components: DateComponents, next: Bool) -> DateComponents?{
+    guard let date = Calendar.current.date(from: components) else {return nil}
+    guard let nextDate = Calendar.current.date(byAdding: .day, value: next ? 1 : -1, to: date) else {return nil}
+    return Calendar.current.dateComponents([.day, .weekday, .month, .year], from: nextDate)
+}
+
 public func getNextOrPreviousMonth(components: DateComponents, next: Bool) -> DateComponents?{
     guard let date = Calendar.current.date(from: components) else {return nil}
     guard let nextDate = Calendar.current.date(byAdding: .month, value: next ? 1 : -1, to: date) else {return nil}
