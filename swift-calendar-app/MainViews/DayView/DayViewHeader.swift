@@ -22,9 +22,8 @@ struct DayViewHeader: View {
             HStack{
                 Text("\(dateComponents.day!)").font(.system(size: 45, weight: .bold, design: .monospaced))
                 //weekday is Int from 1 - 7 with 1 is Sun
-                let weekday = Weekday[dateComponents.weekday!-1]
+                let weekday = Weekday[addWeekday(dateComponents: dateComponents).weekday!-1]
                 let month = Month_short[dateComponents.month!-1]
-                let year = dateComponents.year!
 
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(weekday)")
