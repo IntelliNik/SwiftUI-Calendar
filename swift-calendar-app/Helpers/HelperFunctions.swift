@@ -59,6 +59,14 @@ func setMonth(dateComponents: DateComponents, month: Int?) -> DateComponents{
     return newDateComponents
 }
 
+func setDay(dateComponents: DateComponents, day: Int?) -> DateComponents{
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = dateComponents.month
+    newDateComponents.day = day
+    return newDateComponents
+}
+
 func addWeekday(dateComponents: DateComponents) -> DateComponents{
     let date = Calendar.current.date(from: dateComponents)
     var newDateComponents = DateComponents()

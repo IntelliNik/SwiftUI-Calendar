@@ -14,13 +14,14 @@ struct MonthView: View {
     //}
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
-    
+    @Binding var updateView: Bool
+
     var body: some View {
         VStack {
             MonthViewMonthAndYear(dateComponents: $dateComponents)
                 .padding()
             Spacer()
-            MonthViewCalendar()
+            MonthViewCalendar(dateComponents: $dateComponents, updateView: $updateView)
             Spacer()
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousMonth(components: dateComponents, next: true)
@@ -58,6 +59,6 @@ struct MonthView: View {
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
+        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), updateView: .constant(false))
     }
 }

@@ -11,20 +11,29 @@ struct DayViewTime: View {
 
     var body: some View {
         ScrollView{
-            VStack(alignment: .leading){
-
-                ForEach(0...23, id:\.self){
-                    hour in
-                    Divider()
-                    HStack{
-                        Text("\(String(hour)):00")
-                        .padding()
+            ZStack{
+                VStack(alignment: .leading, spacing: 25){
+                    ForEach(0...23, id:\.self){
+                        hour in
+                        Spacer()
+                        GeometryReader{ geometry in
+                            HStack{
+                                Text("\(String(hour)):00")
+                                    .padding().frame(width: geometry.size.width * 0.2)
+                                Rectangle().fill(Color(UIColor.lightGray)).frame(width: geometry.size.width * 0.7, height: 1.5)
+                            }
+                        }
                     }
-                    
+                    Spacer()
+                    GeometryReader {
+                        geometry in
+                        HStack{
+                            Text("00:00").padding().frame(width: geometry.size.width * 0.2)
+                            Rectangle().fill(Color(UIColor.lightGray)).frame(width: geometry.size.width * 0.7, height: 1.5)
+                        }
+                    }
                 }
-                Divider()
-                Text("00:00").padding()
-                Divider()
+                
             }
         }
     }
