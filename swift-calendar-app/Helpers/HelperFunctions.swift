@@ -52,9 +52,19 @@ func getDateFromHours(hours: String) -> Date?{
     return hourFormatter.date(from: hours)
 }
 
-func setMonth(dateComponents: DateComponents, month: Int?) -> DateComponents{
+func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
     newDateComponents.month = month
     return newDateComponents
+}
+
+func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    return newDateComponents
+}
+
+func getToday() -> DateComponents{
+    return Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
 }
