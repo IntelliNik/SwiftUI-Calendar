@@ -7,9 +7,13 @@
 
 import SwiftUI
 
+
 struct TodayButton: View {
+    @Binding var dateComponents: DateComponents
+    
     var body: some View {
         Button(action: {
+            dateComponents = getToday()
         }, label: {
             Text("Today")
                 .foregroundColor(.white)
@@ -31,6 +35,6 @@ struct TodayButton: View {
 
 struct TodayButton_Previews: PreviewProvider {
     static var previews: some View {
-        TodayButton()
+        TodayButton(dateComponents: .constant(DateComponents()))
     }
 }
