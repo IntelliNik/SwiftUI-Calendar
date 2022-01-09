@@ -69,15 +69,15 @@ struct EditCalendarView: View {
     
     func removeCalendar(at offsets: IndexSet) {
         for index in offsets.sorted().reversed() {
-            if(index != 0){
-                let calendar = calendars[index]
+            
+            let calendar = calendars[index]
+            if(calendar.defaultCalendar != true){
                 moc.delete(calendar)
             }else{
                 showAlert = true
             }
-        }
-        try? moc.save()
-        
+    }
+    try? moc.save()
     }
 }
 

@@ -28,12 +28,13 @@
     </entity>
     <entity name="MCalendar" representedClassName="MCalendar" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String"/>
+        <attribute name="defaultCalendar" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
     </entity>
     <elements>
         <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="389"/>
-        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="89"/>
+        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="104"/>
     </elements>
 </model>
