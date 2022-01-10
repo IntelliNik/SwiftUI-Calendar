@@ -11,12 +11,20 @@ struct DayView: View {
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+        ],
+        predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
+    ) var eventsToday: FetchedResults<Event>
+
     var body: some View {
         VStack{
             DayViewHeader(dateComponents: $dateComponents)
                 .padding()
 
-            DayViewTime(dateComponents: $dateComponents)
+            DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
             
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousDay(components: dateComponents, next: true)
