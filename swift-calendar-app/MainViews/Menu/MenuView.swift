@@ -17,13 +17,13 @@ struct MenuView: View {
     @Binding var title: String
     
     @State var calendarEditMode = false
-    @State var currentlySelectedCalendar: Int = 0
     
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ]
+        ],
+        predicate: NSPredicate(format: "defaultCalendar == %@", "NO")
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.dismiss) var dismiss
@@ -85,7 +85,7 @@ struct MenuView: View {
                 Spacer()
                 HStack{
                     Button(action: {calendarEditMode.toggle()}){
-                        Text("Manage")
+                        Text("Edit")
                             .foregroundColor(.white)
                             .font(.headline)
                     }
@@ -99,9 +99,19 @@ struct MenuView: View {
             }
             ScrollView(){
                 VStack(alignment: .leading) {
+                    HStack{
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.yellow)
+                                .imageScale(.large)
+                            Text("Default")
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity)
+                                .padding([.leading, .trailing])
+                    }
+                    .padding([.top, .bottom])
                     ForEach((0..<calendars.count),id: \.self) { index in
                         HStack{
-                            Button(action: {currentlySelectedCalendar = index}) {
                                 Image(systemName: "square.fill")
                                     .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
@@ -109,10 +119,9 @@ struct MenuView: View {
                                     .foregroundColor(.white)
                                     .lineLimit(1)
                                     .frame(maxWidth: .infinity)
-                            }.padding([.leading, .trailing])
+                                    .padding([.leading, .trailing])
                         }
                         .padding([.top, .bottom])
-                        .background(currentlySelectedCalendar == index ? Color(UIColor.darkGray) : .clear)
                     }
                 }
             }
@@ -144,6 +153,17 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+            .onAppear(){
+                if(!isAppAlreadyLaunchedOnce()){
+                    let calendar = MCalendar(context: moc)
+                    calendar.key = UUID()
+                    calendar.name = "Default"
+                    calendar.color = "Yellow"
+                    calendar.defaultCalendar = true
+                    
+                    try? moc.save()
+                }
+            }
     }
 }
 

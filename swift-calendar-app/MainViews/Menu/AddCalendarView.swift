@@ -37,6 +37,7 @@ struct AddCalendarView: View {
                                     calendar.key = UUID()
                                     calendar.name = name
                                     calendar.color = colorStrings[color]
+                                    calendar.defaultCalendar = false
                                     
                                     try? moc.save()
 
