@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		3562DEFD277EFB340054F096 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3562DEFC277EFB340054F096 /* DataController.swift */; };
+		3579ED9D278DA70400B46AD0 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3579ED9C278DA70400B46AD0 /* EditEventView.swift */; };
 		35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6832E277A182E00D9EBAC /* MonthViewCalendar.swift */; };
 		35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B6832F277A182E00D9EBAC /* TodayButton.swift */; };
 		35B68336277A182E00D9EBAC /* MonthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68330277A182E00D9EBAC /* MonthView.swift */; };
@@ -62,6 +63,7 @@
 
 /* Begin PBXFileReference section */
 		3562DEFC277EFB340054F096 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DataController.swift; path = "swift-calendar-app/Persistence/DataController.swift"; sourceTree = SOURCE_ROOT; };
+		3579ED9C278DA70400B46AD0 /* EditEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		35B6832E277A182E00D9EBAC /* MonthViewCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthViewCalendar.swift; sourceTree = "<group>"; };
 		35B6832F277A182E00D9EBAC /* TodayButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodayButton.swift; sourceTree = "<group>"; };
 		35B68330277A182E00D9EBAC /* MonthView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthView.swift; sourceTree = "<group>"; };
@@ -192,6 +194,7 @@
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
 				77AD06962780AEAF00767504 /* ShowEventView.swift */,
 				77AD06922780974B00767504 /* LinkPreviewProvider.swift */,
+				3579ED9C278DA70400B46AD0 /* EditEventView.swift */,
 			);
 			path = MainViews;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				77F466AF2768FF720034C68B /* Persistence.swift in Sources */,
+				3579ED9D278DA70400B46AD0 /* EditEventView.swift in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,
 				35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */,
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,

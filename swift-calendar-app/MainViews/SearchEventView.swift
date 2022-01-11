@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SearchEventView: View {    
     @State private var query = ""
+    
+    @State var saveSucessful = true
+    @State var showAddEventSheet = false
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
     private var events: FetchedResults<Event>
@@ -20,14 +23,21 @@ struct SearchEventView: View {
                     .listStyle(.plain)
                     .navigationTitle("Search Events")
             } else {
-                List(events) { event in
-                  /*NavigationLink(destination:
-                    EventView(event: event))
-                   */
-                    Text("Name: \(event.name ?? "") in Calendar: \(event.calendar?.name ?? "No Calendar")")
+                ZStack{
+                    NavigationView {
+                        List {
+                            ForEach((0..<events.count), id: \.self) { index in
+                                if (index < events.count) {
+                                    NavigationLink(
+                                        destination: ShowEventView(event: events[index]).navigationBarBackButtonHidden(true)
+                                    ) {
+                                        Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
-                .listStyle(.plain)
-                .navigationTitle("Search Events")
             }
             if self.query != "" {
                 Button(action: {

@@ -14,6 +14,10 @@ struct EventCardView: View {
     
     @State var showShowEvent = false
     
+    @State var showConfirmation = false
+    
+    @State var saveEvent = false
+    
     var body: some View {
         VStack{
             HStack{
@@ -41,7 +45,10 @@ struct EventCardView: View {
                         showShowEvent = true
                     }, label: {
                         // TODO: should later directly link to Edit instead of "Show"
-                        Text("Show")
+                        /*Text("Show")
+                            .foregroundColor(.white)
+                            .padding(10)*/
+                        Text("Edit")
                             .foregroundColor(.white)
                             .padding(10)
                     })
@@ -69,8 +76,11 @@ struct EventCardView: View {
         }
         .background(getColorFromString(stringColor: event.calendar?.color))
         .frame(maxWidth: .infinity, maxHeight: 200)
-        .sheet(isPresented: $showShowEvent){
+        /*.sheet(isPresented: $showShowEvent){
             ShowEventView(event: event)
+        }*/
+        .sheet(isPresented: $showShowEvent){
+            EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation)
         }
     }
 }

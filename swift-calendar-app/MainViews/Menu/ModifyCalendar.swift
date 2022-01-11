@@ -22,8 +22,9 @@ struct ModifyCalendar: View {
     var body: some View {
         Form{
             Section{
-                TextField("Name", text: $name).padding()
-                    .navigationTitle("Reconfigure calendar")
+                TextField("Name", text: self.$mcalendar.name ?? "")
+                    .padding()
+                    .navigationTitle("Configure Calendar")
             }
             Section{
                 Picker("Color", selection: $color) {
@@ -39,7 +40,6 @@ struct ModifyCalendar: View {
             }
         }
         .navigationBarItems(leading: Button(action : {
-            mcalendar.setValue(name,forKey: "name")
             mcalendar.setValue(colorStrings[color],forKey:"color")
             
             try? moc.save()
@@ -58,11 +58,10 @@ struct ModifyCalendar: View {
             HStack{
                 Image(systemName: "chevron.left")
                     .font(Font.headline.weight(.bold))
-                Text("Your Calendars")
+                Text("All Events")
             }
         })
         .onAppear {
-            name = mcalendar.name!
             color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
         }
     }
