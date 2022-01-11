@@ -7,6 +7,7 @@
 
 import WidgetKit
 import SwiftUI
+import swift_calendar_app
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -40,9 +41,11 @@ struct SimpleEntry: TimelineEntry {
 
 struct CalendarWidgetEntryView : View {
     var entry: Provider.Entry
+    
+    @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
-        Text(entry.date, style: .time)
+        DailyOverviewView()
     }
 }
 
@@ -54,8 +57,8 @@ struct CalendarWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             CalendarWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Daily Overview")
+        .description("This widget keeps you updated with your events today.")
     }
 }
 
@@ -63,5 +66,9 @@ struct CalendarWidget_Previews: PreviewProvider {
     static var previews: some View {
         CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
+        CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
+            .previewContext(WidgetPreviewContext(family: .systemMedium))
+        CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
+            .previewContext(WidgetPreviewContext(family: .systemLarge))
     }
 }
