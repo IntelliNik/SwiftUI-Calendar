@@ -12,6 +12,9 @@ struct SearchEventView: View {
     
     @State var saveSucessful = true
     @State var showAddEventSheet = false
+    @State var confirmationShown = false
+    
+    @State var selectedEvent = 0
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
     private var events: FetchedResults<Event>
@@ -23,17 +26,23 @@ struct SearchEventView: View {
                     .listStyle(.plain)
                     .navigationTitle("Search Events")
             } else {
-                ZStack{
-                    NavigationView {
-                        List {
-                            ForEach((0..<events.count), id: \.self) { index in
-                                if (index < events.count) {
-                                    NavigationLink(
-                                        destination: ShowEventView(event: events[index]).navigationBarBackButtonHidden(true)
-                                    ) {
-                                        Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
-                                    }
-                                }
+                List {
+                    ForEach((0..<events.count), id: \.self) { index in
+                        if (index < events.count) {
+                           /* NavigationLink(
+                                destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
+                            ) {
+                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                            }
+                             */
+                            Button(action: {confirmationShown = true
+                                selectedEvent = events.firstIndex {$0 == events[index] }!
+                            }){
+                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                                    .foregroundColor(Color(getAccentColorString()))
+                            }
+                            .sheet(isPresented: $confirmationShown) {
+                                ShowEventView(event:events[selectedEvent])
                             }
                         }
                     }

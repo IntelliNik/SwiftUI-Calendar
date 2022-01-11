@@ -28,6 +28,7 @@ struct EditEventView: View {
     @State private var endRepetitionDate = Date()
     
     @State private var location: String = "None"
+    @State private var locationBool: Bool = false
     @State private var locationSearch = ""
     @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
@@ -279,12 +280,71 @@ struct EditEventView: View {
                             .autocapitalization(.none)
                             .padding()
                     }
-                    TextField("Notes", text: $notes)
+                    TextField("Notes", text: self.$event.notes ?? "")
                         .autocapitalization(.none)
                         .padding()
                 }
             }
             .navigationBarItems(leading: Button(action : {
+                event.setValue(wholeDay,forKey:"wholeDay")
+                event.setValue(startDate,forKey:"startdate")
+                event.setValue(endDate,forKey:"enddate")
+                
+                if(urlString != ""){
+                    event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                }
+                
+                if (location == "Current"){
+                    event.setValue(true, forKey: "location")
+                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                } else if (location == "Custom")
+                {
+                    event.setValue(true, forKey: "location")
+                    event.setValue(customRegion.center.latitude, forKey: "latitude")
+                    event.setValue(customRegion.center.longitude, forKey: "longitude")
+                    event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                    event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                    // TODO: save the name of the location somehow in event.locationName
+                } else {
+                    event.setValue(false, forKey: "location")
+                }
+                
+                if repetition {
+                    event.repetition = true
+                    event.repetitionUntil = repeatUntil
+                    event.repetitionInterval = repetitionInterval
+                    if(repeatUntil == "Repetitions"){
+                        event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
+                    }
+                    if(repeatUntil == "End Date"){
+                        event.repetitionEndDate = endRepetitionDate
+                    }
+                    event.repetitionSkip = false
+                    // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                    event.repetitionNext = "Test"
+                } else {
+                    event.repetition = false
+                    
+                    //TODO: Check whether it breaks something to have items as nil
+                    // event.nextRepetition = ""
+                }
+                
+                if notification {
+                    event.setValue(true,forKey:"notification")
+                    if(!wholeDay){
+                        event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                    } else {
+                        event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                    }
+
+                } else{
+                    event.setValue(false,forKey:"notification")
+                }
+                
+                calendars[calendar].addToEvents(event)
                 
                 try? moc.save()
                 
@@ -302,21 +362,49 @@ struct EditEventView: View {
                 HStack{
                     Image(systemName: "chevron.left")
                         .font(Font.headline.weight(.bold))
-                    Text("All events")
+                    Text("Back")
                 }
             })
         }
         .onAppear {
-            name = event.name!
             calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
             wholeDay = event.wholeDay
-            //urlString = event.url!
             notification = event.notification
-            //notes = event.notes!
             startDate = event.startdate!
             endDate = event.enddate!
-            //endRepetitionDate = event.repetitionEndDate!
+            notification = event.notification
+            notificationMinutesBefore = Int(event.notificationMinutesBefore)
+            notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
+            urlString = event.url ?? ""
+            notes = event.notes ?? ""
+            endRepetitionDate = event.repetitionEndDate ?? Date()
+            locationBool = event.location
+            if locationBool{
+                location = "Custom"
+                customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+            }
+            repetition = event.repetition
+            if repetition{
+                repeatUntil = event.repetitionUntil!
+                repetitionInterval = event.repetitionInterval!
+                if(repeatUntil == "Repetitions"){
+                    amountOfRepetitions = String(event.repetitionAmount)
+                }
+                if(repeatUntil == "End Date"){
+                    endRepetitionDate = event.repetitionEndDate!
+                }
+            }
         }
+        
+        /*
+         
+        let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
+        @State private var repetitionInterval = "Daily"
+        let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
+        @State private var repeatUntil = "Forever"
+        @State private var amountOfRepetitions = "10"
+         */
     }
 }
 

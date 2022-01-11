@@ -309,24 +309,19 @@ struct AddEventView: View {
                         if (location == "Current"){
                             event.location = true
                             event.latitude = currentRegion.center.latitude
-                            event.longitude = currentRegion.center.latitude
+                            event.longitude = currentRegion.center.longitude
                             event.latitudeDelta = currentRegion.span.latitudeDelta
                             event.longitudeDelta = currentRegion.span.longitudeDelta
                         } else if (location == "Custom")
                         {
                             event.location = true
                             event.latitude = customRegion.center.latitude
-                            event.longitude = customRegion.center.latitude
+                            event.longitude = customRegion.center.longitude
                             event.latitudeDelta = customRegion.span.latitudeDelta
                             event.longitudeDelta = customRegion.span.longitudeDelta
                             // TODO: save the name of the location somehow in event.locationName
                         } else {
                             event.location = false
-                            //TODO: Check whether it breaks something to have items as nil
-                            //event.latitude = 0.0
-                            //event.longitude = 0.0
-                            //event.latitudeDelta = 0.0
-                            //event.longitudeDelta = 0.0
                         }
                         
                         if repetition {
