@@ -87,11 +87,6 @@ struct ShowEventView: View {
                 }.padding()
                 Section{
                     if(event.location){
-                        HStack{
-                            Image(systemName: "location.fill").padding()
-                            Spacer()
-                            Text(event.locationName ?? "Location Name").padding()
-                        }
                         let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
                         Map(coordinateRegion: .constant(region))
                             .frame(height: 200)

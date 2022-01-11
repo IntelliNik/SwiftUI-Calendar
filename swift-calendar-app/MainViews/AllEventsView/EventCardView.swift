@@ -93,11 +93,6 @@ struct ExtendedEventCard: View{
             EventCardView(event: event, editButton: true)
             if(event.location){
                 let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
-                HStack{
-                    Image(systemName: "location.fill").padding()
-                    Spacer()
-                    Text(event.locationName ?? "Location Name").padding()
-                }
                 Map(coordinateRegion: .constant(region))
                     .frame(height: 200)
                     .padding([.bottom, .leading, .trailing])
