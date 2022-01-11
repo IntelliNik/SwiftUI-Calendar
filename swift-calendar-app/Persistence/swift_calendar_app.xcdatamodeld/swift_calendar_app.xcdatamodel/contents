@@ -6,7 +6,6 @@
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="location" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="locationName" optional="YES" attributeType="String"/>
         <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="longitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
@@ -34,7 +33,7 @@
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="389"/>
+        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="374"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="104"/>
     </elements>
 </model>
