@@ -20,6 +20,8 @@ struct ShowEventView: View {
     
     @State var confirmationShown = false
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         NavigationView{
             Form{
@@ -128,6 +130,25 @@ struct ShowEventView: View {
             }
             .navigationTitle(event.name != nil ? "Event: \(event.name!)" : "Show Event")
             .toolbar{
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    /*
+                     NavigationView{
+                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
+                    }.foregroundColor(Color(getAccentColorString()))
+                     */
+                    
+                    Button(action: {dismiss()}){
+                        HStack{
+                            Image(systemName: "chevron.left")
+                                .font(Font.headline.weight(.bold))
+                                .foregroundColor(Color(getAccentColorString()))
+                            Text("Back")
+                                .foregroundColor(Color(getAccentColorString()))
+                        }
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     /*
                      NavigationView{
