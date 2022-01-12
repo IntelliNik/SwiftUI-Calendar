@@ -362,7 +362,9 @@ struct EditEventView: View {
                 HStack{
                     Image(systemName: "chevron.left")
                         .font(Font.headline.weight(.bold))
+                        .foregroundColor(Color(getAccentColorString()))
                     Text("Back")
+                        .foregroundColor(Color(getAccentColorString()))
                 }
             })
         }
