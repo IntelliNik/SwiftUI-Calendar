@@ -7,7 +7,6 @@
 
 import WidgetKit
 import SwiftUI
-import swift_calendar_app
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> SimpleEntry {
@@ -45,7 +44,9 @@ struct CalendarWidgetEntryView : View {
     @Environment(\.widgetFamily) var widgetFamily
 
     var body: some View {
-        DailyOverviewView()
+        if(widgetFamily == .systemSmall){
+            SmallDailyOverviewView()
+        }
     }
 }
 
