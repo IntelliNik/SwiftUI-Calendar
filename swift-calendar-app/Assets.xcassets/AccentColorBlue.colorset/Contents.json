@@ -2,8 +2,8 @@
   "colors" : [
     {
       "color" : {
-        "platform" : "universal",
-        "reference" : "systemBlueColor"
+        "platform" : "tvos",
+        "reference" : "systemTealColor"
       },
       "idiom" : "universal"
     },
@@ -15,13 +15,8 @@
         }
       ],
       "color" : {
-        "color-space" : "display-p3",
-        "components" : {
-          "alpha" : "1.000",
-          "blue" : "0.421",
-          "green" : "0.222",
-          "red" : "0.097"
-        }
+        "platform" : "tvos",
+        "reference" : "systemTealColor"
       },
       "idiom" : "universal"
     }
