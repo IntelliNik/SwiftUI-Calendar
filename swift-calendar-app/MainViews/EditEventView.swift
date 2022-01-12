@@ -313,22 +313,20 @@ struct EditEventView: View {
                 }
                 
                 if repetition {
-                    event.repetition = true
-                    event.repetitionUntil = repeatUntil
-                    event.repetitionInterval = repetitionInterval
+                    event.setValue(true, forKey: "repetition")
+                    event.setValue(repeatUntil, forKey: "repetitionUntil")
+                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
                     if(repeatUntil == "Repetitions"){
-                        event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
+                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
                     }
                     if(repeatUntil == "End Date"){
-                        event.repetitionEndDate = endRepetitionDate
+                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
                     }
                     event.repetitionSkip = false
                     // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
                     event.repetitionNext = "Test"
                 } else {
-                    event.repetition = false
-                    
-                    //TODO: Check whether it breaks something to have items as nil
+                    event.setValue(false, forKey: "repetition")
                     // event.nextRepetition = ""
                 }
                 
@@ -398,15 +396,6 @@ struct EditEventView: View {
                 }
             }
         }
-        
-        /*
-         
-        let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
-        @State private var repetitionInterval = "Daily"
-        let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
-        @State private var repeatUntil = "Forever"
-        @State private var amountOfRepetitions = "10"
-         */
     }
 }
 
