@@ -12,6 +12,8 @@ struct WeekViewWeekAndYear: View {
 
     var body: some View {
         HStack(alignment: .bottom) {
+            Spacer()
+                .frame(width: 10, alignment: .leading)
             VStack(alignment: .leading) { //button and month
                 TodayButton()
                 Text("W" + String(dateComponents.weekOfYear!))
@@ -26,6 +28,8 @@ struct WeekViewWeekAndYear: View {
                 Text(String(dateComponents.year!))
             }.font(.system(size: 30, weight: .bold,
                            design: .monospaced))
+            Spacer()
+                .frame(width: 10, alignment: .trailing)
         }
     }
 }

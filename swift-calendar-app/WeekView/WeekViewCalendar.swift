@@ -24,11 +24,10 @@ struct WeekViewCalendar: View {
                             NavigationLink {
                                 MonthView(dateComponents: addMonthToComponents(components: dateComponents, month: dayofweek + 0)!)
                             } label: {
-                                WeekViewDayBox(day: daylist[dayofweek + row-1], height: height/4.2, width: width/2.1)
-                            .padding(.all, 1)
+                                WeekViewDayBox(day: daylist[dayofweek + row-1], height: height/4.2, width: width/2.2)
+                                    .padding(.all, 1)
                             }
                         }
-                        //.padding(.all, 5)
                     }
                 }
             }

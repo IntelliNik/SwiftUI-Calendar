@@ -17,7 +17,13 @@ struct WeekView: View {
             WeekViewWeekAndYear(dateComponents: $dateComponents)
             Spacer()
             GeometryReader { geo in
-                WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width)
+                HStack {
+                    Spacer()
+                        .frame(width: 10, alignment: .leading)
+                    WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width)
+                    Spacer()
+                        .frame(width: 10, alignment: .trailing)
+                }
             }
         }
     }
