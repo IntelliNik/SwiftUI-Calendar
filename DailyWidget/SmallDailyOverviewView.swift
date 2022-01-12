@@ -8,18 +8,15 @@
 import SwiftUI
 
 struct SmallDailyOverviewView: View {
-    /*
     @FetchRequest(
         entity: Event.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
         ]
     ) var events: FetchedResults<Event>
-     */
     
     var body: some View {
-        //Text(events[0].name ?? "")
-        Text("")
+        Text(events[0].name ?? "AAAA")
     }
 }
 

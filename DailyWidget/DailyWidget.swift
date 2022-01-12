@@ -1,6 +1,6 @@
 //
-//  CalendarWidget.swift
-//  CalendarWidget
+//  DailyWidget.swift
+//  DailyWidget
 //
 //  Created by Schulte, Niklas on 08.01.22.
 //
@@ -38,14 +38,16 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
 }
 
-struct CalendarWidgetEntryView : View {
+struct DailyWidgetEntryView : View {
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var widgetFamily
+    
+    @StateObject private var dataController = DataController()
 
     var body: some View {
         if(widgetFamily == .systemSmall){
-            SmallDailyOverviewView()
+            SmallDailyOverviewView()                            .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }
@@ -56,7 +58,7 @@ struct CalendarWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            CalendarWidgetEntryView(entry: entry)
+            DailyWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("Daily Overview")
         .description("This widget keeps you updated with your events today.")
@@ -65,11 +67,11 @@ struct CalendarWidget: Widget {
 
 struct CalendarWidget_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
+        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
-        CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
+        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemMedium))
-        CalendarWidgetEntryView(entry: SimpleEntry(date: Date()))
+        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemLarge))
     }
 }
