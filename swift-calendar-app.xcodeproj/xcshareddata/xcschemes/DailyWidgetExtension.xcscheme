@@ -30,7 +30,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "77F466A12768FF6F0034C68B"
-               BuildableName = "swift-calendar-app.app"
+               BuildableName = "Calendar.app"
                BlueprintName = "swift-calendar-app"
                ReferencedContainer = "container:swift-calendar-app.xcodeproj">
             </BuildableReference>
@@ -72,7 +72,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "77F466A12768FF6F0034C68B"
-            BuildableName = "swift-calendar-app.app"
+            BuildableName = "Calendar.app"
             BlueprintName = "swift-calendar-app"
             ReferencedContainer = "container:swift-calendar-app.xcodeproj">
          </BuildableReference>
@@ -107,7 +107,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "77F466A12768FF6F0034C68B"
-            BuildableName = "swift-calendar-app.app"
+            BuildableName = "Calendar.app"
             BlueprintName = "swift-calendar-app"
             ReferencedContainer = "container:swift-calendar-app.xcodeproj">
          </BuildableReference>
