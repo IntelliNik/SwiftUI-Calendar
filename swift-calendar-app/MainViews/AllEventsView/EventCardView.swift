@@ -11,12 +11,23 @@ import MapKit
 struct EventCardView: View {
     @State var event: Event
     @State var editButton: Bool
+    @State var deleteButton: Bool
     
     @State var showShowEvent = false
     
     @State var showConfirmation = false
     
     @State var saveEvent = false
+    
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.name, ascending: true),
+        ]
+    ) var events: FetchedResults<Event>
     
     var body: some View {
         VStack{
@@ -55,6 +66,21 @@ struct EventCardView: View {
                         .background(Color(getAccentColorString()))
                         .cornerRadius(45)
                 }
+                if(deleteButton){
+                    Button(action: {
+                        deleteEvent(id: event.key!)
+                    }, label: {
+                        // TODO: should later directly link to Edit instead of "Show"
+                        /*Text("Show")
+                            .foregroundColor(.white)
+                            .padding(10)*/
+                        Text("-")
+                            .foregroundColor(.white)
+                            .padding(10)
+                    })
+                        .background(Color(getAccentColorString()))
+                        .cornerRadius(45)
+                }
             }.padding()
             Spacer()
             HStack{
@@ -83,6 +109,15 @@ struct EventCardView: View {
             EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation)
         }
     }
+    
+    func deleteEvent(id: UUID)  {
+        events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
+        
+        for event in events {
+            moc.delete(event)
+        }
+        try? moc.save()
+    }
 }
 
 struct ExtendedEventCard: View{
@@ -100,7 +135,7 @@ struct ExtendedEventCard: View{
     
     var body: some View{
         VStack{
-            EventCardView(event: event, editButton: true)
+            EventCardView(event: event, editButton: true, deleteButton: true)
             if(event.location){
                 let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
                 HStack{

@@ -14,6 +14,8 @@ struct AllEventsView: View {
     @State private var showMenu = false
     @State private var showAddEventSheet = true
     
+    @State private var refreshID = UUID()
+    
     @State var currentlyExtended: Event?
     
     @FetchRequest(
@@ -42,15 +44,30 @@ struct AllEventsView: View {
                                     }
                                 }
                                 .transition(.slide)
+                                .onAppear {
+                                    self.refreshID = UUID()
+                                }
+                                /*.onChange(of: event) { newValue in
+                                    self.refreshID = UUID()
+                                 }*/
                             } else{
-                                EventCardView(event: event, editButton: false).onTapGesture(){
+                                EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
                                     withAnimation{
                                         currentlyExtended = event
                                     }
                                 }
                                 .transition(.slide)
+                                .onAppear {
+                                    self.refreshID = UUID()
+                                }
+                                /*.onChange(of: event) { newValue in
+                                    self.refreshID = UUID()
+                                 }*/
                             }
                         }
+                        .onChange(of: refreshID) { newValue in
+                            
+                         }
                     }.navigationTitle("All Events")
                 }
                 .onChange(of: scrollTargetTodayButton) { target in
@@ -62,7 +79,13 @@ struct AllEventsView: View {
                         }
                     }
                 }
+                .onChange(of: refreshID) { newValue in
+                    
+                 }
             }
+            .onChange(of: refreshID) { newValue in
+                
+             }
         }
     }
     
