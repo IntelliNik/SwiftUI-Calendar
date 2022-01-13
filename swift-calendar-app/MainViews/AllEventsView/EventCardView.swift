@@ -59,7 +59,7 @@ struct EventCardView: View {
                     }, label: {
                         Image(systemName: "pencil.circle.fill")
                             .font(.system(size: 40))
-                            .foregroundColor(Color(getAccentColorString()))
+                            .foregroundColor(Color("AccentColorGreen"))
                     }).padding(.leading, 5)
                 }
                 if(deleteButton){
@@ -68,7 +68,7 @@ struct EventCardView: View {
                     }, label: {
                         Image(systemName: "x.circle.fill")
                             .font(.system(size: 40))
-                            .foregroundColor(.red)
+                            .foregroundColor(Color("AccentColorRed"))
                     })
                 }
             }.padding()
