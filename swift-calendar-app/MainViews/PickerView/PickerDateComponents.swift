@@ -19,6 +19,12 @@ public func getNextOrPreviousYear(components: DateComponents, next: Bool) -> Dat
     return Calendar.current.dateComponents([.year], from: nextDate)
 }
 
+public func getNextOrPreviousWeek(components: DateComponents, next: Bool) -> DateComponents?{
+    guard let date = Calendar.current.date(from: components) else {return nil}
+    guard let nextDate = Calendar.current.date(byAdding: .weekOfYear, value: next ? 1 : -1, to: date) else {return nil}
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: nextDate)
+}
+
 public func addMonthToComponents(components: DateComponents, month: Int) -> DateComponents?{
     var newComponents = DateComponents()
     newComponents.month = month

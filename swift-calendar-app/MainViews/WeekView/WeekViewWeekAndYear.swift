@@ -14,20 +14,20 @@ struct WeekViewWeekAndYear: View {
         HStack(alignment: .bottom) {
             Spacer()
                 .frame(width: 10, alignment: .leading)
-            VStack(alignment: .leading) { //button and month
+            //VStack(alignment: .leading) { //button and month
                 TodayButton(dateComponents: $dateComponents)
+                Spacer()
                 Text("W" + String(dateComponents.weekOfYear!))
                     .font(.system(size: 30, weight: .bold, design: .monospaced))
-            }
+           // }
             
             Spacer()
             
-            VStack(alignment: .trailing, spacing: 0) {
+            //VStack(alignment: .trailing, spacing: 0) {
                 //Text(String(dateComponents.year!).prefix(2))
                 //Text(String(dateComponents.year!).suffix(2))
-                Text(String(dateComponents.year!))
-            }.font(.system(size: 30, weight: .bold,
-                           design: .monospaced))
+                Text(String(dateComponents.year!)).font(.system(size: 30, weight: .bold, design: .monospaced))
+            //}
             Spacer()
                 .frame(width: 10, alignment: .trailing)
         }
