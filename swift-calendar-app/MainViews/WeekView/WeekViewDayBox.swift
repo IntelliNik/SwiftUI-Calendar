@@ -7,54 +7,103 @@
 
 import SwiftUI
 
+let daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 struct WeekViewDayBox: View {
-    var day: String
+    @State var dateComponents: DateComponents
+    var todo: Bool
     var height: CGFloat
     var width: CGFloat
     
     var body: some View {
         
         ZStack {
-            WeekViewRoundedRectangleTop(day: day, height: height, width: width)
-            WeekViewRoundedRectangleBottom(height: height, width: width)
+            WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
+            if todo {
+                WeekViewRoundedRectangleTopTodo(height: height, width: width)
+            } else {
+                WeekViewRoundedRectangleTop(dateComponents: dateComponents, height: height, width: width)
+            }
         }
     }
 }
 
 struct WeekViewRoundedRectangleTop: View {
-    var day: String
+    @State var dateComponents: DateComponents
     var height: CGFloat
     var width: CGFloat
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(.thinMaterial)
-            .frame(width: width, height: 20)
-            .overlay(Text(day).fontWeight(.heavy))
-            .offset(x:0 , y: -((height - 20)/2))
-            .foregroundColor(.gray)
+        ZStack {
+            RoundedRectangle(cornerRadius: 0, style: .continuous)
+                .fill(.thinMaterial)
+                .frame(width: width, height: 10)
+                .offset(x:0 , y: -((height - 20)/2) + 5)
+                .foregroundColor(.gray)
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(.thinMaterial)
+                .frame(width: width, height: 20)
+                .overlay(Text(daylist[transformWeekdayToGermanStandard(day: dateComponents.weekday ?? 1) - 1]).fontWeight(.heavy))
+                .offset(x:0 , y: -((height - 20)/2))
+                .foregroundColor(.gray)
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .foregroundColor(.gray)
+                .frame(width: width, height: 1)
+                .offset(x:0 , y: -((height - 20)/2) + 10)
+        }
+            
     }
 }
 
 struct WeekViewRoundedRectangleBottom: View {
+    @State var dateComponents: DateComponents
     var height: CGFloat
     var width: CGFloat
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
                 .frame(width: width, height: height)
-        
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .frame(width: width, height: 1)
-            .offset(x:0 , y: -((height - 20)/2)+10)
-            .foregroundColor(.gray)
+        }
     }
 }
 
+struct WeekViewRoundedRectangleTopTodo: View {
+    var height: CGFloat
+    var width: CGFloat
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 0, style: .continuous)
+                .fill(.thinMaterial)
+                .frame(width: width, height: 10)
+                .offset(x:0 , y: -((height - 20)/2) + 5)
+                .foregroundColor(.gray)
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(.thinMaterial)
+                .frame(width: width, height: 20)
+                .overlay(Text("todo").fontWeight(.heavy))
+                .offset(x:0 , y: -((height - 20)/2))
+                .foregroundColor(.gray)
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .foregroundColor(.gray)
+                .frame(width: width, height: 1)
+                .offset(x:0 , y: -((height - 20)/2) + 10)
+        }
+    }
+}
 
 struct WeekViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
-        WeekViewDayBox(day: "Monday", height: 220, width: 220)
+        Group {
+            WeekViewDayBox(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), todo: false, height: 220, width: 220)
+            WeekViewRoundedRectangleTop(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now) , height: 220, width: 220)
+            WeekViewRoundedRectangleBottom(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
+        }
     }
 }

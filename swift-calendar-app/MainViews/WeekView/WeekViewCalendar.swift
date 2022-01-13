@@ -7,12 +7,17 @@
 
 import SwiftUI
 
+func checkTodo(position: Int) -> Bool{
+    if position > 7 {return true}
+    return false
+}
+
 struct WeekViewCalendar: View {
     @State var dateComponents: DateComponents
     var height: CGFloat
     var width: CGFloat
     
-    let daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "todo"]
+    //let daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "todo"]
 
     var body: some View {
         VStack {
@@ -26,8 +31,9 @@ struct WeekViewCalendar: View {
                                 // TODO fix this problem with the $ binding somehow
                                 //dateComponents = addMonthToComponents(components: dateComponents, month: dayofweek + 0)!
                             } label: {
-                                WeekViewDayBox(day: daylist[dayofweek + row-1], height: height/4.2, width: width/2.2)
-                                    .padding(.all, 1)
+                                let newComponent = getDayInWeek(of: dateComponents, day: dayofweek + row) ?? dateComponents
+                                WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: height/4.2, width: width/2.2)
+                                .padding(.all, 1)
                             }
                         }
                     }
