@@ -65,7 +65,7 @@ struct AllEventsView: View {
                                  }*/
                             }
                         }
-                        .onChange(of: refreshID) { newValue in
+                        .onChange(of: refreshID) { _ in
                             
                          }
                     }.navigationTitle("All Events")
@@ -79,11 +79,11 @@ struct AllEventsView: View {
                         }
                     }
                 }
-                .onChange(of: refreshID) { newValue in
+                .onChange(of: refreshID) { _ in
                     
                  }
             }
-            .onChange(of: refreshID) { newValue in
+            .onChange(of: refreshID) { _ in
                 
              }
         }
