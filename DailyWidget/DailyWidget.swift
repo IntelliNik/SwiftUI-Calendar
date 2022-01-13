@@ -50,11 +50,13 @@ struct DailyWidgetEntryView : View {
             SmallDailyOverviewView(dateComponents: Calendar.current.dateComponents([.day], from: Date.now))
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         } else if (widgetFamily == .systemMedium){
-            MediumDailyOverviewView()
-                .environment(\.managedObjectContext, dataController.container.viewContext)
+            // TODO fetch here is not working properly, app crashes
+            //MediumDailyOverviewView()
+                //.environment(\.managedObjectContext, dataController.container.viewContext)
         } else{
-            LargeDailyOverviewView()
-                .environment(\.managedObjectContext, dataController.container.viewContext)
+            // TODO fetch here is not working properly, app crashes
+            //LargeDailyOverviewView()
+                //.environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }
