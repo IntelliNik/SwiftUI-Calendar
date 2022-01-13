@@ -45,6 +45,7 @@
 		77F466AA2768FF720034C68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
 		77F466AF2768FF720034C68B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466AE2768FF720034C68B /* Persistence.swift */; };
 		77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */; };
+		A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DED9722790A8C1001AE9EF /* WeekEventView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		77F466B12768FF720034C68B /* swift_calendar_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = swift_calendar_app.xcdatamodel; sourceTree = "<group>"; };
 		77F466B72768FF730034C68B /* swift-calendar-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F466C12768FF730034C68B /* swift-calendar-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A0DED9722790A8C1001AE9EF /* WeekEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -221,6 +223,7 @@
 				7727CC53278F523500C9B7FE /* WeekView.swift */,
 				7727CC52278F523500C9B7FE /* WeekViewCalendar.swift */,
 				7727CC51278F523500C9B7FE /* WeekViewDayBox.swift */,
+				A0DED9722790A8C1001AE9EF /* WeekEventView.swift */,
 				7727CC54278F523500C9B7FE /* WeekViewWeekAndYear.swift */,
 			);
 			path = WeekView;
@@ -415,6 +418,7 @@
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,
 				77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */,
 				3562DEFD277EFB340054F096 /* DataController.swift in Sources */,
+				A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */,
 				35FC5CBE2779C6E7009033C5 /* YearViewCalendar.swift in Sources */,
 				35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */,
 				77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */,

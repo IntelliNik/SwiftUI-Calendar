@@ -64,6 +64,10 @@ struct WeekViewRoundedRectangleBottom: View {
     
     var body: some View {
         ZStack {
+            WeekEventView(dateComponents: dateComponents)
+                .frame(width: width - 5, height: height - 30, alignment: .top)
+                .offset(x: 0, y: 10)
+            
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
                 .frame(width: width, height: height)
