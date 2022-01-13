@@ -12,34 +12,42 @@ struct YearView: View {
     //    var month : Int
     //    var year : Int
     //}
-    @Binding var dateComponents: DateComponents
+    @Binding var displayedYear: DateComponents
     @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
+    @ObservedObject var viewModel: YearViewModel
     
     var body: some View {
         
         VStack {
-            YearViewYearAndToday(dateComponents: $dateComponents)
+            YearViewYearAndToday(dateComponents: $displayedYear)
             Spacer()
-            YearViewCalendar(dateComponents: $dateComponents, updateView: $updateView)
+            YearViewCalendar(dateComponents: $displayedYear, updateView: $updateView)
             Spacer()
             Picker("", selection: $pickerSelection) {
-                let next = getNextOrPreviousYear(components: dateComponents, next: true)
-                let previous = getNextOrPreviousYear(components: dateComponents, next: false)
-                Text("\(previous!.year!)").tag(PickerSelection.previous)
-                Text("\(dateComponents.year!)").tag(PickerSelection.current)
-                Text("\(next!.year!)").tag(PickerSelection.next)
+                Text(String((viewModel.previousYear?.year!)! as Int)).tag(PickerSelection.previous)
+                Text(String((viewModel.displayedYear?.year!)! as Int)).tag(PickerSelection.current)
+                Text(String((viewModel.nextYear?.year!)! as Int)).tag(PickerSelection.next)
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    dateComponents = getNextOrPreviousYear(components: dateComponents, next: false)!
+                    viewModel.moveBackwards()
+                    displayedYear = viewModel.displayedYear!
                 }
                 if(pickerSelection == .next){
-                    dateComponents = getNextOrPreviousYear(components: dateComponents, next: true)!
+                    viewModel.moveForward()
+                    displayedYear = viewModel.displayedYear!
                 }
                 // reset picker
                 pickerSelection = .current
             }
+            
+            .onAppear {
+                //viewModel.initYears()
+                displayedYear = viewModel.displayedYear!
+                print(displayedYear)
+            }
+            
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString()))
             .padding()
@@ -60,6 +68,6 @@ struct YearView: View {
 
 struct YearView_Previews: PreviewProvider {
     static var previews: some View {
-        YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year], from: Date.now)), updateView: .constant(false))
+        YearView(displayedYear: .constant(Calendar.current.dateComponents([.day, .month, .year], from: Date.now)), updateView: .constant(false), viewModel: YearViewModel())
     }
 }

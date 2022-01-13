@@ -41,6 +41,7 @@
 		77F466AA2768FF720034C68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
 		77F466AF2768FF720034C68B /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F466AE2768FF720034C68B /* Persistence.swift */; };
 		77F466B22768FF720034C68B /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77F466B02768FF720034C68B /* swift_calendar_app.xcdatamodeld */; };
+		D63A0454278DABAE00C002FE /* YearViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D63A0453278DABAE00C002FE /* YearViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +97,7 @@
 		77F466B12768FF720034C68B /* swift_calendar_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = swift_calendar_app.xcdatamodel; sourceTree = "<group>"; };
 		77F466B72768FF730034C68B /* swift-calendar-appTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F466C12768FF730034C68B /* swift-calendar-appUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "swift-calendar-appUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D63A0453278DABAE00C002FE /* YearViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -237,12 +239,21 @@
 		77F466A42768FF6F0034C68B /* swift-calendar-app */ = {
 			isa = PBXGroup;
 			children = (
+				D63A0452278DAB9500C002FE /* ViewModels */,
 				7706517727847E93008390EC /* MainViews */,
 				77046DC2278455FF001DA0DA /* Helpers */,
 				7706517827847F7F008390EC /* Persistence */,
 				77F466A92768FF720034C68B /* Assets.xcassets */,
 			);
 			path = "swift-calendar-app";
+			sourceTree = "<group>";
+		};
+		D63A0452278DAB9500C002FE /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D63A0453278DABAE00C002FE /* YearViewModel.swift */,
+			);
+			path = ViewModels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -400,6 +411,7 @@
 				35BC03732784DC810041F097 /* ModifyCalendar.swift in Sources */,
 				77F466A82768FF6F0034C68B /* (null) in Sources */,
 				77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */,
+				D63A0454278DABAE00C002FE /* YearViewModel.swift in Sources */,
 				35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */,
 				77F466A62768FF6F0034C68B /* (null) in Sources */,
 				77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */,
@@ -563,7 +575,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = JRBV77H953;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
@@ -577,7 +589,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-ap";
+				PRODUCT_BUNDLE_IDENTIFIER = "oe.calendar.swift-calendar-ap";
 				PRODUCT_NAME = "swift-calendar-app";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -592,7 +604,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = JRBV77H953;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
@@ -606,7 +618,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.calendar.swift-calendar-ap";
+				PRODUCT_BUNDLE_IDENTIFIER = "oe.calendar.swift-calendar-ap";
 				PRODUCT_NAME = "swift-calendar-app";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

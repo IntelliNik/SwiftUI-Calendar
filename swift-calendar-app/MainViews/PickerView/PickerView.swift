@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum PickerSelection{
-    case current
     case previous
+    case current
     case next
 }

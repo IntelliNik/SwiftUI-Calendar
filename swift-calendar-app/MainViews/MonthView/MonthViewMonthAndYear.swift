@@ -11,7 +11,7 @@ struct MonthViewMonthAndYear: View {
     @Binding var dateComponents: DateComponents
 
     var body: some View {
-        HStack(alignment: .bottom) {
+        HStack(alignment: .bottom, spacing: 0) {
             VStack(alignment: .leading) { //button and month
                 TodayButton(dateComponents: $dateComponents)
                 Text(Month[dateComponents.month!-1])
@@ -20,12 +20,12 @@ struct MonthViewMonthAndYear: View {
             
             Spacer()
             
-            VStack(alignment: .trailing, spacing: 0) {
+            VStack(alignment: .leading, spacing: 0) {
                 Text(String(dateComponents.year!).prefix(2))
                 Text(String(dateComponents.year!).suffix(2))
-            }.font(.system(size: 80, weight: .bold,
-                           design: .monospaced))
+            }.font(.system(size: 80, weight: .bold, design: .monospaced))
         }
+
     }
 }
 

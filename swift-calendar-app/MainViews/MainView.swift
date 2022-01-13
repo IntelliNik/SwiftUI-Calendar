@@ -33,7 +33,8 @@ struct MainView: View {
             MonthView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .year:
-            YearView(dateComponents: $dateComponents, updateView: $updateView)
+            //YearView(dateComponents: $dateComponents, updateView: $updateView, viewModel: YearViewModel())
+            YearView(displayedYear: $dateComponents, updateView: $updateView, viewModel: YearViewModel())
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
                 .onChange(of: updateView){_ in
                     if dateComponents.month != nil{

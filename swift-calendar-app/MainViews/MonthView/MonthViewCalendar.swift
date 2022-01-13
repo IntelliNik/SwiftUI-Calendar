@@ -10,15 +10,13 @@ import SwiftUI
 struct MonthViewCalendar: View {
     var body: some View {
         VStack {
-            HStack(alignment: .center) { //#warning: in case of localization, change!
-                
+            HStack { //#warning: in case of localization, change!
                 ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
                     Spacer()
                     Text(weekday)
                         .font(.subheadline)
                     Spacer()
                 }
-                
             }
             
             VStack {
@@ -29,7 +27,7 @@ struct MonthViewCalendar: View {
                                 Text("Open Day View for the Day here!")
                             } label: {
                                 MonthViewDayBox(date: dayofweek + row, width: 45, length: 45)
-                            .padding(1)
+                            
                             }
                         }
                     }
