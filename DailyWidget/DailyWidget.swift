@@ -47,7 +47,14 @@ struct DailyWidgetEntryView : View {
 
     var body: some View {
         if(widgetFamily == .systemSmall){
-            SmallDailyOverviewView()                            .environment(\.managedObjectContext, dataController.container.viewContext)
+            SmallDailyOverviewView(dateComponents: Calendar.current.dateComponents([.day], from: Date.now))
+                .environment(\.managedObjectContext, dataController.container.viewContext)
+        } else if (widgetFamily == .systemMedium){
+            MediumDailyOverviewView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
+        } else{
+            LargeDailyOverviewView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }

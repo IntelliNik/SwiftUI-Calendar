@@ -10,18 +10,23 @@ import SwiftUI
 struct MonthViewDayBox: View {
     var date : Int //Todo: replace with actual day
     
-    var width, length: Int
+    @State var width: CGFloat
+    @State var length: CGFloat
+    @State var fontSize: CGFloat?
+    @State var rectangle: Bool?
+    @State var markToday: Bool?
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: rectangle ?? false ? 3 : 10, style: .continuous)
                 .stroke(.gray)
-                .frame(width: 45, height: 45)
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .frame(width: width, height: length)
+            RoundedRectangle(cornerRadius: rectangle ?? false ? 3 : 10, style: .continuous)
                 .fill(.thinMaterial)
-                .frame(width: 45, height: 45)
-                .overlay(Text(String(date)).foregroundColor(Color(getAccentColorString())))
-
+                .frame(width: width, height: length)
+                .overlay(Text(String(date))
+                            .foregroundColor(Color(getAccentColorString()))
+                            .font(.system(size: fontSize ?? 20)))
         }
     }
 }
