@@ -66,6 +66,13 @@ struct EditEventView: View {
         ]
     ) var calendars: FetchedResults<MCalendar>
     
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+        ]
+    ) var events: FetchedResults<Event>
+    
     var body: some View {
         NavigationView{
             Form{
@@ -84,7 +91,6 @@ struct EditEventView: View {
                 Section{
                     TextField("Name", text: self.$event.name ?? "")
                         .padding()
-                        .navigationTitle("Edit Event")
                 }
                 Section{
                     Toggle("Whole Day", isOn: $wholeDay)
@@ -178,8 +184,8 @@ struct EditEventView: View {
                         
                         Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
                             annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
+                            marker.location
+                        }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                             .onAppear(){
                                 let annotationCurrent = MKPointAnnotation()
@@ -195,7 +201,7 @@ struct EditEventView: View {
                                 .padding()
                             if locationService.status == .isSearching {
                                 Image(systemName: "clock")
-                                .foregroundColor(Color.gray)
+                                    .foregroundColor(Color.gray)
                             }
                             if self.locationSearch != "" {
                                 Button(action: {
@@ -203,37 +209,37 @@ struct EditEventView: View {
                                 })
                                 {
                                     Image(systemName: "multiply.circle")
-                                    .foregroundColor(Color.gray)
+                                        .foregroundColor(Color.gray)
                                 }
                             }
                         }
                         .onChange(of: locationSearch) { newValue in
                             locationService.queryFragment = locationSearch
-                         }
+                        }
                         /*Section(header: Text("Search")) {
-                            ZStack(alignment: .trailing) {
-                                TextField("Search", text: $locationService.queryFragment)
-                                
-                                // while user is typing input it sends the current query to the location service
-                                // which in turns sets its status to searching; when searching status is set on
-                                // searching then a clock symbol will be shown beside the search box
-                                if locationService.status == .isSearching {
-                                    Image(systemName: "clock")
-                                    .foregroundColor(Color.gray)
-                                }
-                            }
-                        }*/
+                         ZStack(alignment: .trailing) {
+                         TextField("Search", text: $locationService.queryFragment)
+                         
+                         // while user is typing input it sends the current query to the location service
+                         // which in turns sets its status to searching; when searching status is set on
+                         // searching then a clock symbol will be shown beside the search box
+                         if locationService.status == .isSearching {
+                         Image(systemName: "clock")
+                         .foregroundColor(Color.gray)
+                         }
+                         }
+                         }*/
                         
                         Section() {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
-                                        case .noResults: return AnyView(Text("No Results"))
-                                        case .error(let description): return AnyView(Text("Error: \(description)"))
-                                        default: return AnyView(EmptyView())
-                                        }
+                                    case .noResults: return AnyView(Text("No Results"))
+                                    case .error(let description): return AnyView(Text("Error: \(description)"))
+                                    default: return AnyView(EmptyView())
+                                    }
                                 }.foregroundColor(Color.gray)
-                                               
+                                
                                 // display the results as a list
                                 ForEach(locationService.searchResults, id: \.self) {
                                     completionResult in
@@ -245,7 +251,7 @@ struct EditEventView: View {
                                             
                                             for item in response.mapItems {
                                                 if let name = item.name,
-                                                    let location = item.placemark.location {
+                                                   let location = item.placemark.location {
                                                     print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
                                                     customRegion.center.latitude = location.coordinate.latitude
                                                     customRegion.center.longitude = location.coordinate.longitude
@@ -259,9 +265,9 @@ struct EditEventView: View {
                                             self.locationService.queryFragment = ""
                                             self.locationService.clear()
                                         }
-                                            }) {
-                                                Text(completionResult.title + ", " + completionResult.subtitle)
-                                            }
+                                    }) {
+                                        Text(completionResult.title + ", " + completionResult.subtitle)
+                                    }
                                     
                                     //Text(completionResult.title)
                                 }
@@ -269,8 +275,8 @@ struct EditEventView: View {
                         }
                         Map(coordinateRegion: $customRegion,
                             annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
+                            marker.location
+                        }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                     }
                 }
@@ -283,6 +289,23 @@ struct EditEventView: View {
                     TextField("Notes", text: self.$event.notes ?? "")
                         .autocapitalization(.none)
                         .padding()
+                }
+            }
+            .navigationTitle("Edit Event")
+            .toolbar {
+                Button("Delete") {
+                    confirmationShown = true
+                }
+                .padding(.trailing, 5)
+                .foregroundColor(Color("AccentColorRed"))
+            }
+            .confirmationDialog(
+                "Are you sure?",
+                isPresented: $confirmationShown
+            ) {
+                Button("Delete event"){
+                    deleteEvent(id: event.key!)
+                    dismiss()
                 }
             }
             .navigationBarItems(leading: Button(action : {
@@ -337,7 +360,7 @@ struct EditEventView: View {
                     } else {
                         event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
                     }
-
+                    
                 } else{
                     event.setValue(false,forKey:"notification")
                 }
@@ -396,6 +419,14 @@ struct EditEventView: View {
                 }
             }
         }
+    }
+    func deleteEvent(id: UUID)  {
+        events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
+        
+        for event in events {
+            moc.delete(event)
+        }
+        try? moc.save()
     }
 }
 

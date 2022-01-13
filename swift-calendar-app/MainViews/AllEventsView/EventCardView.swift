@@ -57,32 +57,19 @@ struct EventCardView: View {
                     Button(action: {
                         showShowEvent = true
                     }, label: {
-                        // TODO: should later directly link to Edit instead of "Show"
-                        /*Text("Show")
-                            .foregroundColor(.white)
-                            .padding(10)*/
-                        Text("Edit")
-                            .foregroundColor(.white)
-                            .padding(10)
-                    })
-                        .background(Color(getAccentColorString()))
-                        .cornerRadius(45)
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(Color(getAccentColorString()))
+                    }).padding(.leading, 5)
                 }
                 if(deleteButton){
                     Button(action: {
                         self.showingAlert = true
-                        //deleteEvent(id: event.key!)
                     }, label: {
-                        // TODO: should later directly link to Edit instead of "Show"
-                        /*Text("Show")
-                            .foregroundColor(.white)
-                            .padding(10)*/
-                        Text("-")
-                            .foregroundColor(.white)
-                            .padding(10)
+                        Image(systemName: "x.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.red)
                     })
-                        .background(Color(getAccentColorString()))
-                        .cornerRadius(45)
                 }
             }.padding()
             Spacer()
