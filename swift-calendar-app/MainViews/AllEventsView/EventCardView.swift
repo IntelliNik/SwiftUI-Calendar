@@ -19,6 +19,8 @@ struct EventCardView: View {
     
     @State var saveEvent = false
     
+    @State private var showingAlert = false
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
@@ -68,7 +70,8 @@ struct EventCardView: View {
                 }
                 if(deleteButton){
                     Button(action: {
-                        deleteEvent(id: event.key!)
+                        self.showingAlert = true
+                        //deleteEvent(id: event.key!)
                     }, label: {
                         // TODO: should later directly link to Edit instead of "Show"
                         /*Text("Show")
@@ -84,19 +87,19 @@ struct EventCardView: View {
             }.padding()
             Spacer()
             HStack{
-                Text(event.startdate!, style: .date)
+                Text(event.startdate ?? Date.now, style: .date)
                 Spacer()
                 Image(systemName: "arrow.forward")
                 Spacer()
-                Text(event.enddate!, style: .date)
+                Text(event.enddate ?? Date.now, style: .date)
             }.padding()
             if(!event.wholeDay){
                 HStack{
-                    Text(event.startdate!, style: .time)
+                    Text(event.startdate ?? Date.now, style: .time)
                     Spacer()
                     Image(systemName: "clock.fill")
                     Spacer()
-                    Text(event.enddate!, style: .time)
+                    Text(event.enddate ?? Date.now, style: .time)
                 }.padding()
             }
         }
@@ -108,6 +111,21 @@ struct EventCardView: View {
         .sheet(isPresented: $showShowEvent){
             EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation)
         }
+        .alert(isPresented: self.$showingAlert) {
+            return Alert(
+                title: Text(event.name!),
+                   message: Text("Delete event?"),
+                   primaryButton:
+                        .cancel(),
+                   secondaryButton: .destructive(
+                       Text("Delete"),
+                       action: {
+                           deleteEvent(id: event.key!)
+                           dismiss()
+                       }
+                   )
+                )
+            }
     }
     
     func deleteEvent(id: UUID)  {
