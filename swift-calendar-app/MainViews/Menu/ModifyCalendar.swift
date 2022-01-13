@@ -13,65 +13,63 @@ struct ModifyCalendar: View {
     @State private var name: String = ""
     @State private var color: Int = 0
     
+    @Binding var showConfirmation: Bool
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
-    
-    @Binding var saveCalendar: Bool
+    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
     var body: some View {
-        NavigationView{
-            Form{
-                Section{
-                    TextField("Name", text: $name).padding()
-                        .navigationTitle("Reconfigure calendar")
-                        .toolbar {
-                            ToolbarItem(placement: .navigation) {
-                                Button("Discard"){
-                                    confirmationShown = true
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            ToolbarItem(placement: .primaryAction) {
-                                Button("Save calendar"){
-                                    
-                                    mcalendar.setValue(name,forKey: "name")
-                                    mcalendar.setValue(colorStrings[color],forKey:"color")
-                                    
-                                    try? moc.save()
-
-                                    saveCalendar = true
-                                    dismiss()
-                                }.foregroundColor(Color(getAccentColorString()))
-                            }
-                        }
-                        .confirmationDialog(
-                            "Are you sure?",
-                             isPresented: $confirmationShown
-                        ) {
-                            Button("Discard calendar"){
-                                saveCalendar = false
-                                dismiss()
-                            }
-                        }
-                }
-                Section{
-                    Picker("Color", selection: $color) {
-                        ForEach((0..<colorStrings.count)) { index in
-                            HStack{
-                                Image(systemName: "square.fill")
-                                    .foregroundColor( getColorFromString(stringColor: colorStrings[index]) )
-                                    .imageScale(.large)
-                                Text("\(colorStrings[index])")
-                            }.tag(index)
-                        }
-                    }.padding()
-                }
+        Form{
+            Section{
+                TextField("Name", text: $name).padding()
+                    .navigationTitle("Reconfigure calendar")
+                    .onAppear {
+                        name = mcalendar.name!
+                        color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
+                    }
+            }
+            Section{
+                Picker("Color", selection: $color) {
+                    ForEach((0..<colorStrings.count)) { index in
+                        HStack{
+                            Image(systemName: "square.fill")
+                                .foregroundColor( getColorFromString(stringColor: colorStrings[index]) )
+                                .imageScale(.large)
+                            Text("\(colorStrings[index])")
+                        }.tag(index)
+                    }
+                }.padding()
             }
         }
-        .onAppear {
-            name = mcalendar.name!
-            color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
-        }
+        .navigationBarItems(leading: Button(action : {
+            mcalendar.setValue(name,forKey: "name")
+            mcalendar.setValue(colorStrings[color],forKey:"color")
+            
+            try? moc.save()
+            
+            withAnimation{
+                showConfirmation = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                withAnimation{
+                    showConfirmation = false
+                }
+            }
+            
+            self.mode.wrappedValue.dismiss()
+        }){
+            HStack{
+                Image(systemName: "chevron.left")
+                    .font(Font.headline.weight(.bold))
+                Text("Your Calendars")
+            }
+        })
     }
-    
+}
+
+struct ModifyCalendar_Previews: PreviewProvider {
+    static var previews: some View {
+        ModifyCalendar(mcalendar: MCalendar(), showConfirmation: .constant(true))
+    }
 }
