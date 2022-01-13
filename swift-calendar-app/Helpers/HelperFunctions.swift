@@ -66,5 +66,5 @@ func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
 }
 
 func getToday() -> DateComponents{
-    return Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
 }
