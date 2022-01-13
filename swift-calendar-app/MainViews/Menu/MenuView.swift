@@ -27,6 +27,7 @@ struct MenuView: View {
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         VStack(alignment: .leading){

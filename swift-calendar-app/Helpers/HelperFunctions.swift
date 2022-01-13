@@ -65,6 +65,8 @@ func getBeginningOfDay(date: Date) -> Date{
 
 func getEndOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
+}
+
 func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
