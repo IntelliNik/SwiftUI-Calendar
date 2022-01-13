@@ -98,6 +98,16 @@ struct WeekViewRoundedRectangleTopTodo: View {
                 .foregroundColor(.gray)
                 .frame(width: width, height: 1)
                 .offset(x:0 , y: -((height - 20)/2) + 10)
+
+            ScrollView{
+                Text("AAA")
+                Text("AAA")
+                Text("AAA")
+                Text("AAA")
+            }
+            .padding(.top, 30)
+            .padding(.bottom, 10)
+
         }
     }
 }

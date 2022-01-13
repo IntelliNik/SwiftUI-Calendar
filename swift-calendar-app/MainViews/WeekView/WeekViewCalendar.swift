@@ -26,14 +26,15 @@ struct WeekViewCalendar: View {
                 ForEach([0,2,4,6], id:\.self)  { row in
                     HStack {
                         ForEach([1,2], id:\.self) { dayofweek in
+                            let newComponent = getDayInWeek(of: dateComponents, day: dayofweek + row) ?? dateComponents
+                            WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: height/4.2, width: width/2.2)
+                            .padding(.all, 1)
+                            
+                            // TODO: navigationLink breaks underlying ScrollView
                             NavigationLink {
                                 MonthView(dateComponents: $dateComponents)
-                                // TODO fix this problem with the $ binding somehow
-                                //dateComponents = addMonthToComponents(components: dateComponents, month: dayofweek + 0)!
                             } label: {
-                                let newComponent = getDayInWeek(of: dateComponents, day: dayofweek + row) ?? dateComponents
-                                WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: height/4.2, width: width/2.2)
-                                .padding(.all, 1)
+   
                             }
                         }
                     }
