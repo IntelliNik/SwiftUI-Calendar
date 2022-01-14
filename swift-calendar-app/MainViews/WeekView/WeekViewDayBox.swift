@@ -10,10 +10,10 @@ import SwiftUI
 let daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 struct WeekViewDayBox: View {
-    @State var dateComponents: DateComponents
-    var todo: Bool
-    var height: CGFloat
-    var width: CGFloat
+    let dateComponents: DateComponents
+    let todo: Bool
+    let height: CGFloat
+    let width: CGFloat
     
     var body: some View {
         
@@ -30,9 +30,9 @@ struct WeekViewDayBox: View {
 }
 
 struct WeekViewRoundedRectangleTop: View {
-    @State var dateComponents: DateComponents
-    var height: CGFloat
-    var width: CGFloat
+    let dateComponents: DateComponents
+    let height: CGFloat
+    let width: CGFloat
     
     var body: some View {
         ZStack {
@@ -45,7 +45,10 @@ struct WeekViewRoundedRectangleTop: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.thinMaterial)
                 .frame(width: width, height: 20)
-                .overlay(Text(daylist[transformWeekdayToGermanStandard(day: dateComponents.weekday ?? 1) - 1]).fontWeight(.heavy))
+                .overlay(Text("\(daylist[transformWeekdayToGermanStandard(day: dateComponents.weekday ?? 1) - 1])").fontWeight(.heavy))
+            /*
+             , \(Calendar.current.date(from: dateComponents)!.formatted(.dateTime))
+             */
                 .offset(x:0 , y: -((height - 20)/2))
                 .foregroundColor(.gray)
             
@@ -54,18 +57,18 @@ struct WeekViewRoundedRectangleTop: View {
                 .frame(width: width, height: 1)
                 .offset(x:0 , y: -((height - 20)/2) + 10)
         }
-            
     }
 }
 
 struct WeekViewRoundedRectangleBottom: View {
-    @State var dateComponents: DateComponents
-    var height: CGFloat
-    var width: CGFloat
+    let dateComponents: DateComponents
+    let height: CGFloat
+    let width: CGFloat
     
     var body: some View {
         ZStack {
-            WeekEventView(dateComponents: dateComponents)
+            // Fore unwrap here might not be the best idea
+            WeekEventView(filter: dateComponents)
                 .frame(width: width - 5, height: height - 30, alignment: .top)
                 .offset(x: 0, y: 10)
             
@@ -77,8 +80,8 @@ struct WeekViewRoundedRectangleBottom: View {
 }
 
 struct WeekViewRoundedRectangleTopTodo: View {
-    var height: CGFloat
-    var width: CGFloat
+    let height: CGFloat
+    let width: CGFloat
     
     var body: some View {
         ZStack {
@@ -99,26 +102,17 @@ struct WeekViewRoundedRectangleTopTodo: View {
                 .foregroundColor(.gray)
                 .frame(width: width, height: 1)
                 .offset(x:0 , y: -((height - 20)/2) + 10)
-
-            //ScrollView{
-                
-            //}
         }
     }
 }
 
 struct WeekViewRoundedRectangleBottomTodo: View {
-    @State var dateComponents: DateComponents
-    var height: CGFloat
-    var width: CGFloat
+    let dateComponents: DateComponents
+    let height: CGFloat
+    let width: CGFloat
     
     var body: some View {
         ZStack {
-            /*WeekEventView(dateComponents: dateComponents)
-                .frame(width: width - 5, height: height - 30, alignment: .top)
-                .offset(x: 0, y: 10)
-             */
-            
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
                 .frame(width: width, height: height)

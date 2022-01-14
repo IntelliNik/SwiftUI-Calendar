@@ -77,3 +77,19 @@ func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
 func getToday() -> DateComponents{
     return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
 }
+
+public func getDateForStartdateComparison(from: DateComponents) -> Date?{
+    var newComponents = from
+    newComponents.hour = 23
+    newComponents.minute = 59
+    newComponents.second = 59
+    return Calendar.current.date(from: newComponents)
+}
+
+public func getDateForEnddateComparison(from: DateComponents) -> Date?{
+    var newComponents = from
+    newComponents.hour = 0
+    newComponents.minute = 0
+    newComponents.second = 0
+    return Calendar.current.date(from: newComponents)
+}

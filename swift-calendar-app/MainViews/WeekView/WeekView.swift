@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WeekView: View {
     
-    @State var dateComponents: DateComponents
+    @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
     
     var body: some View {
@@ -67,7 +67,7 @@ struct WeekView_Previews: PreviewProvider {
         Group {
             //WeekView(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now))
               //  .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
-            WeekView(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now))
+            WeekView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
                 .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro"))
         }
     }

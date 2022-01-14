@@ -13,9 +13,9 @@ func checkTodo(position: Int) -> Bool{
 }
 
 struct WeekViewCalendar: View {
-    @State var dateComponents: DateComponents
-    var height: CGFloat
-    var width: CGFloat
+    let dateComponents: DateComponents
+    let height: CGFloat
+    let width: CGFloat
 
     var body: some View {
         VStack {
@@ -33,11 +33,11 @@ struct WeekViewCalendar: View {
                             
                             
                             // TODO: navigationLink breaks underlying ScrollView
-                            NavigationLink {
-                                MonthView(dateComponents: $dateComponents)
+                            /*NavigationLink {
+                                MonthView(dateComponents: dateComponents)
                             } label: {
    
-                            }
+                            }*/
                         }
                     }
                     if row < 6 {

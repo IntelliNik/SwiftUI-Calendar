@@ -27,7 +27,7 @@ struct MainView: View {
             Text("TODO")
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
-            WeekView(dateComponents: dateComponents)
+            WeekView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .month:
             MonthView(dateComponents: $dateComponents)
