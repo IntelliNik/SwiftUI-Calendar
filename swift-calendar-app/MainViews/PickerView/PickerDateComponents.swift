@@ -14,13 +14,13 @@ public enum Weekday: CaseIterable {
 public func getNextOrPreviousMonth(components: DateComponents, next: Bool) -> DateComponents?{
     guard let date = Calendar.current.date(from: components) else {return nil}
     guard let nextDate = Calendar.current.date(byAdding: .month, value: next ? 1 : -1, to: date) else {return nil}
-    return Calendar.current.dateComponents([.month, .year], from: nextDate)
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: nextDate)
 }
 
 public func getNextOrPreviousYear(components: DateComponents, next: Bool) -> DateComponents?{
     guard let date = Calendar.current.date(from: components) else {return nil}
     guard let nextDate = Calendar.current.date(byAdding: .year, value: next ? 1 : -1, to: date) else {return nil}
-    return Calendar.current.dateComponents([.year], from: nextDate)
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: nextDate)
 }
 
 public func getNextOrPreviousWeek(components: DateComponents, next: Bool) -> DateComponents?{

@@ -56,7 +56,16 @@ func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
     newDateComponents.month = month
-    return newDateComponents
+    //set the DateComponent representing the month as the first day of this month
+    newDateComponents.day = 1
+    let tempDate = Calendar.current.date(from: newDateComponents)
+    guard let unwrappedTempDate = tempDate
+    else {
+        print("setMonth didnt work, couldn't create tempDate, is nil")
+        return newDateComponents
+    }
+    let resComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: unwrappedTempDate)
+    return resComponents
 }
 
 func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
