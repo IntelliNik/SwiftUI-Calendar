@@ -20,7 +20,7 @@ struct WeekView: View {
                 HStack {
                     Spacer()
                         .frame(width: 10, alignment: .leading)
-                    WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width)
+                    WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width - 20)
                     Spacer()
                         .frame(width: 10, alignment: .trailing)
                 }

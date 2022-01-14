@@ -16,8 +16,6 @@ struct WeekViewCalendar: View {
     @State var dateComponents: DateComponents
     var height: CGFloat
     var width: CGFloat
-    
-    //let daylist = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "todo"]
 
     var body: some View {
         VStack {
@@ -27,8 +25,12 @@ struct WeekViewCalendar: View {
                     HStack {
                         ForEach([1,2], id:\.self) { dayofweek in
                             let newComponent = getDayInWeek(of: dateComponents, day: dayofweek + row) ?? dateComponents
-                            WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: height/4.2, width: width/2.2)
-                            .padding(.all, 1)
+                            WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: (height - 30)/4, width: (width - 10)/2)
+                            if dayofweek == 1 {
+                               Spacer()
+                                    .frame(width: 10, alignment: .trailing)
+                            }
+                            
                             
                             // TODO: navigationLink breaks underlying ScrollView
                             NavigationLink {
@@ -37,6 +39,10 @@ struct WeekViewCalendar: View {
    
                             }
                         }
+                    }
+                    if row < 6 {
+                        Spacer()
+                            .frame(height: 10)
                     }
                 }
             }

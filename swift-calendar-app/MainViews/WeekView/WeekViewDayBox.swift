@@ -18,10 +18,11 @@ struct WeekViewDayBox: View {
     var body: some View {
         
         ZStack {
-            WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
             if todo {
+                WeekViewRoundedRectangleBottomTodo(dateComponents: dateComponents, height: height, width: width)
                 WeekViewRoundedRectangleTopTodo(height: height, width: width)
             } else {
+                WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
                 WeekViewRoundedRectangleTop(dateComponents: dateComponents, height: height, width: width)
             }
         }
@@ -99,15 +100,28 @@ struct WeekViewRoundedRectangleTopTodo: View {
                 .frame(width: width, height: 1)
                 .offset(x:0 , y: -((height - 20)/2) + 10)
 
-            ScrollView{
-                Text("AAA")
-                Text("AAA")
-                Text("AAA")
-                Text("AAA")
-            }
-            .padding(.top, 30)
-            .padding(.bottom, 10)
+            //ScrollView{
+                
+            //}
+        }
+    }
+}
 
+struct WeekViewRoundedRectangleBottomTodo: View {
+    @State var dateComponents: DateComponents
+    var height: CGFloat
+    var width: CGFloat
+    
+    var body: some View {
+        ZStack {
+            /*WeekEventView(dateComponents: dateComponents)
+                .frame(width: width - 5, height: height - 30, alignment: .top)
+                .offset(x: 0, y: 10)
+             */
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(.gray)
+                .frame(width: width, height: height)
         }
     }
 }
@@ -116,6 +130,10 @@ struct WeekViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             WeekViewDayBox(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), todo: false, height: 220, width: 220)
+            ZStack {
+                WeekViewRoundedRectangleBottomTodo(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
+                WeekViewRoundedRectangleTopTodo(height: 220, width: 220)
+            }
             WeekViewRoundedRectangleTop(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now) , height: 220, width: 220)
             WeekViewRoundedRectangleBottom(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
         }
