@@ -59,6 +59,14 @@ func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
     return newDateComponents
 }
 
+func getBeginningOfDay(date: Date) -> Date{
+    return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+}
+
+func getEndOfDay(date: Date) -> Date{
+    return Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
+}
+
 func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
