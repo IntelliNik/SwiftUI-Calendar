@@ -1,19 +1,21 @@
 //
-//  AddEventView.swift
+//  EditEventView.swift
 //  swift-calendar-app
 //
-//  Created by Schulte, Niklas on 24.12.21.
+//  Created by Daniel Rademacher on 11.01.22.
 //
 
 import SwiftUI
 import MapKit
-import Combine
 
-struct AddEventView: View {
+struct EditEventView: View {
     
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
+    @State var event: Event
+    @State var confirmationShown = false
     @State private var name: String = ""
+    
     @State private var urlString: String = ""
     let urlPrefixes = ["http://", "https://"]
     
@@ -26,6 +28,7 @@ struct AddEventView: View {
     @State private var endRepetitionDate = Date()
     
     @State private var location: String = "None"
+    @State private var locationBool: Bool = false
     @State private var locationSearch = ""
     @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
@@ -46,14 +49,15 @@ struct AddEventView: View {
     @State private var currentRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     @State private var customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
     
-    @State var confirmationShown = false
-    
     @ObservedObject var locationService: LocationService
     
     @Binding var saveEvent: Bool
     
+    @Binding var showConfirmation: Bool
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
+    @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
     @FetchRequest(
         entity: MCalendar.entity(),
@@ -61,7 +65,14 @@ struct AddEventView: View {
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
         ]
     ) var calendars: FetchedResults<MCalendar>
-        
+    
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+        ]
+    ) var events: FetchedResults<Event>
+    
     var body: some View {
         NavigationView{
             Form{
@@ -78,7 +89,8 @@ struct AddEventView: View {
                     }.padding()
                 }
                 Section{
-                    TextField("Name", text: $name).padding()
+                    TextField("Name", text: self.$event.name ?? "")
+                        .padding()
                 }
                 Section{
                     Toggle("Whole Day", isOn: $wholeDay)
@@ -172,8 +184,8 @@ struct AddEventView: View {
                         
                         Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
                             annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
+                            marker.location
+                        }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                             .onAppear(){
                                 let annotationCurrent = MKPointAnnotation()
@@ -189,7 +201,7 @@ struct AddEventView: View {
                                 .padding()
                             if locationService.status == .isSearching {
                                 Image(systemName: "clock")
-                                .foregroundColor(Color.gray)
+                                    .foregroundColor(Color.gray)
                             }
                             if self.locationSearch != "" {
                                 Button(action: {
@@ -197,37 +209,37 @@ struct AddEventView: View {
                                 })
                                 {
                                     Image(systemName: "multiply.circle")
-                                    .foregroundColor(Color.gray)
+                                        .foregroundColor(Color.gray)
                                 }
                             }
                         }
                         .onChange(of: locationSearch) { newValue in
                             locationService.queryFragment = locationSearch
-                         }
+                        }
                         /*Section(header: Text("Search")) {
-                            ZStack(alignment: .trailing) {
-                                TextField("Search", text: $locationService.queryFragment)
-                                
-                                // while user is typing input it sends the current query to the location service
-                                // which in turns sets its status to searching; when searching status is set on
-                                // searching then a clock symbol will be shown beside the search box
-                                if locationService.status == .isSearching {
-                                    Image(systemName: "clock")
-                                    .foregroundColor(Color.gray)
-                                }
-                            }
-                        }*/
+                         ZStack(alignment: .trailing) {
+                         TextField("Search", text: $locationService.queryFragment)
+                         
+                         // while user is typing input it sends the current query to the location service
+                         // which in turns sets its status to searching; when searching status is set on
+                         // searching then a clock symbol will be shown beside the search box
+                         if locationService.status == .isSearching {
+                         Image(systemName: "clock")
+                         .foregroundColor(Color.gray)
+                         }
+                         }
+                         }*/
                         
                         Section() {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
-                                        case .noResults: return AnyView(Text("No Results"))
-                                        case .error(let description): return AnyView(Text("Error: \(description)"))
-                                        default: return AnyView(EmptyView())
-                                        }
+                                    case .noResults: return AnyView(Text("No Results"))
+                                    case .error(let description): return AnyView(Text("Error: \(description)"))
+                                    default: return AnyView(EmptyView())
+                                    }
                                 }.foregroundColor(Color.gray)
-                                               
+                                
                                 // display the results as a list
                                 ForEach(locationService.searchResults, id: \.self) {
                                     completionResult in
@@ -239,7 +251,7 @@ struct AddEventView: View {
                                             
                                             for item in response.mapItems {
                                                 if let name = item.name,
-                                                    let location = item.placemark.location {
+                                                   let location = item.placemark.location {
                                                     print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
                                                     customRegion.center.latitude = location.coordinate.latitude
                                                     customRegion.center.longitude = location.coordinate.longitude
@@ -253,9 +265,9 @@ struct AddEventView: View {
                                             self.locationService.queryFragment = ""
                                             self.locationService.clear()
                                         }
-                                            }) {
-                                                Text(completionResult.title + ", " + completionResult.subtitle)
-                                            }
+                                    }) {
+                                        Text(completionResult.title + ", " + completionResult.subtitle)
+                                    }
                                     
                                     //Text(completionResult.title)
                                 }
@@ -263,8 +275,8 @@ struct AddEventView: View {
                         }
                         Map(coordinateRegion: $customRegion,
                             annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
+                            marker.location
+                        }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                     }
                 }
@@ -274,189 +286,152 @@ struct AddEventView: View {
                             .autocapitalization(.none)
                             .padding()
                     }
-                    TextField("Notes", text: $notes)
+                    TextField("Notes", text: self.$event.notes ?? "")
                         .autocapitalization(.none)
                         .padding()
                 }
             }
+            .navigationTitle("Edit Event")
             .toolbar {
-                ToolbarItem(placement: .navigation) {
-                    Button("Discard"){
-                        confirmationShown = true
-                    }
-                    .foregroundColor(.gray)
+                Button("Delete") {
+                    confirmationShown = true
                 }
-                ToolbarItem(placement: .primaryAction) {
-                    Button("Save event"){
-                        saveEvent = true
-                        
-                        let event = Event(context: moc)
-                        event.key = UUID()
-                        if name != ""{
-                            event.name = name
-                        }
-                        event.startdate = startDate
-                        event.enddate = endDate
-                        event.wholeDay = wholeDay
-                        // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
-                        if(urlString != ""){
-                            event.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
-
-                        }
-                        if(notes != ""){
-                            event.notes = notes
-                        }
-                        if (location == "Current"){
-                            event.location = true
-                            event.latitude = currentRegion.center.latitude
-                            event.longitude = currentRegion.center.longitude
-                            event.latitudeDelta = currentRegion.span.latitudeDelta
-                            event.longitudeDelta = currentRegion.span.longitudeDelta
-                        } else if (location == "Custom")
-                        {
-                            event.location = true
-                            event.latitude = customRegion.center.latitude
-                            event.longitude = customRegion.center.longitude
-                            event.latitudeDelta = customRegion.span.latitudeDelta
-                            event.longitudeDelta = customRegion.span.longitudeDelta
-                            // TODO: save the name of the location somehow in event.locationName
-                        } else {
-                            event.location = false
-                        }
-                        
-                        if repetition {
-                            event.repetition = true
-                            event.repetitionUntil = repeatUntil
-                            event.repetitionInterval = repetitionInterval
-                            if(repeatUntil == "Repetitions"){
-                                event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
-                            }
-                            if(repeatUntil == "End Date"){
-                                event.repetitionEndDate = endRepetitionDate
-                            }
-                            event.repetitionSkip = false
-                            // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                            event.repetitionNext = "Test"
-                        } else {
-                            event.repetition = false
-                            
-                            //TODO: Check whether it breaks something to have items as nil
-                            // event.nextRepetition = ""
-                        }
-
-                        if notification {
-                            event.notification = true
-                            if(!wholeDay){
-                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                            } else {
-                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                            }
-
-                        }
-                        calendars[calendar].addToEvents(event)
-                        
-                        try? moc.save()
-                        
-                        dismiss()
-                    }.foregroundColor(Color(getAccentColorString()))
-                    .navigationTitle("Add event")
-                    .confirmationDialog(
-                        "Are you sure?",
-                        isPresented: $confirmationShown
-                    ) {
-                        Button("Discard event"){
-                            saveEvent = false
-                            dismiss()
-                        }
+                .padding(.trailing, 5)
+                .foregroundColor(Color("AccentColorRed"))
+            }
+            .confirmationDialog(
+                "Are you sure?",
+                isPresented: $confirmationShown
+            ) {
+                Button("Delete event"){
+                    deleteEvent(id: event.key!)
+                    dismiss()
+                }
+            }
+            .navigationBarItems(leading: Button(action : {
+                event.setValue(wholeDay,forKey:"wholeDay")
+                event.setValue(startDate,forKey:"startdate")
+                event.setValue(endDate,forKey:"enddate")
+                
+                if(urlString != ""){
+                    event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                }
+                
+                if (location == "Current"){
+                    event.setValue(true, forKey: "location")
+                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                } else if (location == "Custom")
+                {
+                    event.setValue(true, forKey: "location")
+                    event.setValue(customRegion.center.latitude, forKey: "latitude")
+                    event.setValue(customRegion.center.longitude, forKey: "longitude")
+                    event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                    event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                    // TODO: save the name of the location somehow in event.locationName
+                } else {
+                    event.setValue(false, forKey: "location")
+                }
+                
+                if repetition {
+                    event.setValue(true, forKey: "repetition")
+                    event.setValue(repeatUntil, forKey: "repetitionUntil")
+                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                    if(repeatUntil == "Repetitions"){
+                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
                     }
+                    if(repeatUntil == "End Date"){
+                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                    }
+                    event.repetitionSkip = false
+                    // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
+                    event.repetitionNext = "Test"
+                } else {
+                    event.setValue(false, forKey: "repetition")
+                    // event.nextRepetition = ""
+                }
+                
+                if notification {
+                    event.setValue(true,forKey:"notification")
+                    if(!wholeDay){
+                        event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                    } else {
+                        event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                    }
+                    
+                } else{
+                    event.setValue(false,forKey:"notification")
+                }
+                
+                calendars[calendar].addToEvents(event)
+                
+                try? moc.save()
+                
+                withAnimation{
+                    showConfirmation = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation{
+                        showConfirmation = false
+                    }
+                }
+                
+                self.mode.wrappedValue.dismiss()
+            }){
+                HStack{
+                    Image(systemName: "chevron.left")
+                        .font(Font.headline.weight(.bold))
+                        .foregroundColor(Color(getAccentColorString()))
+                    Text("Back")
+                        .foregroundColor(Color(getAccentColorString()))
+                }
+            })
+        }
+        .onAppear {
+            calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
+            wholeDay = event.wholeDay
+            notification = event.notification
+            startDate = event.startdate!
+            endDate = event.enddate!
+            notification = event.notification
+            notificationMinutesBefore = Int(event.notificationMinutesBefore)
+            notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
+            urlString = event.url ?? ""
+            notes = event.notes ?? ""
+            endRepetitionDate = event.repetitionEndDate ?? Date()
+            locationBool = event.location
+            if locationBool{
+                location = "Custom"
+                customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+            }
+            repetition = event.repetition
+            if repetition{
+                repeatUntil = event.repetitionUntil!
+                repetitionInterval = event.repetitionInterval!
+                if(repeatUntil == "Repetitions"){
+                    amountOfRepetitions = String(event.repetitionAmount)
+                }
+                if(repeatUntil == "End Date"){
+                    endRepetitionDate = event.repetitionEndDate!
                 }
             }
         }
     }
-}
-
-// This part is from the MapKit presentation of the seminar
-// MapKit Code starts here
-
-class LocationService: NSObject, ObservableObject {
-    
-    // Different search states
-    enum LocationStatus: Equatable {
-        case idle
-        case noResults
-        case isSearching
-        case error(String)
-        case result
-    }
-    
-    // queryFragment used in view gets updated every time the user types something
-    // default status is idle
-    // searchResults contains all the results from the queries
-    @Published var queryFragment: String = ""
-    @Published private(set) var status: LocationStatus = .idle
-    @Published private(set) var searchResults: [MKLocalSearchCompletion] = []
-    
-    private var queryCancellable: AnyCancellable?
-    private let searchCompleter: MKLocalSearchCompleter!
-    
-    // initiate the search completer, set the delegate on self
-    init(searchCompleter: MKLocalSearchCompleter = MKLocalSearchCompleter()) {
-        self.searchCompleter = searchCompleter
-        super.init()
-        self.searchCompleter.delegate = self
-        self.searchCompleter.region = MKCoordinateRegion(.world)
-        self.searchCompleter.resultTypes = MKLocalSearchCompleter.ResultType([.address, .pointOfInterest])
-
+    func deleteEvent(id: UUID)  {
+        events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
         
-        // receive a stream from the queryFragment in the view
-        // debounce (wait) for 500 milliseconds before pushing the event further
-        // sink returns the updated string after waiting the specified amount of time
-        queryCancellable = $queryFragment
-            .receive(on: DispatchQueue.main)
-            .debounce(for: .milliseconds(500), scheduler: RunLoop.main, options: nil)
-            .sink(receiveValue: { fragment in
-                
-                // if fragment isn't empty then set the queryFrament to the current updated string
-                self.status = .isSearching
-                if !fragment.isEmpty {
-                    self.searchCompleter.queryFragment = fragment
-                } else {
-                    self.status = .idle
-                    self.searchResults = []
-                }
-        })
+        for event in events {
+            moc.delete(event)
+        }
+        try? moc.save()
     }
 }
 
-// every time the queryFragment gets updated these functions get called
-extension LocationService: MKLocalSearchCompleterDelegate {
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        // query the current input, filter out the results that have subtitles
-        // results with no subtitles are usually countries and cities
-        // remove filter if you want to get points of interest as well
-        //self.searchResults = completer.results.filter({ $0.subtitle != "" })
-        self.searchResults = completer.results
-        self.status = completer.results.isEmpty ? .noResults : .result
-    }
-    
-    func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        self.status = .error(error.localizedDescription)
-    }
-    
-    func clear() {
-        self.searchResults = []
-    }
-}
-
-// MapKit Code ends here
-
-struct Marker: Identifiable {
-    let id = UUID()
-    var location: MapMarker
-}
-
-struct AddEventView_Previews: PreviewProvider {
+struct EditEventView_Previews: PreviewProvider {
     static var previews: some View {
-        AddEventView(locationService: LocationService(), saveEvent: .constant(true))
+        EditEventView(event: Event(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
     }
 }

@@ -9,6 +9,13 @@ import SwiftUI
 
 struct SearchEventView: View {    
     @State private var query = ""
+    
+    @State var saveSucessful = true
+    @State var showAddEventSheet = false
+    @State var confirmationShown = false
+    
+    @State var selectedEvent = 0
+    @State var saveEvent = 0
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
     private var events: FetchedResults<Event>
@@ -20,14 +27,24 @@ struct SearchEventView: View {
                     .listStyle(.plain)
                     .navigationTitle("Search Events")
             } else {
-                List(events) { event in
-                  /*NavigationLink(destination:
-                    EventView(event: event))
-                   */
-                    Text("Name: \(event.name ?? "") in Calendar: \(event.calendar?.name ?? "No Calendar")")
+                List {
+                    ForEach((0..<events.count), id: \.self) { index in
+                        if (index < events.count) {
+                           /* NavigationLink(
+                                destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
+                            ) {
+                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                            }
+                             */
+                            Button(action: {confirmationShown = true
+                                selectedEvent = events.firstIndex {$0 == events[index] }!
+                            }){
+                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                                    .foregroundColor(Color(getAccentColorString()))
+                            }
+                        }
+                    }
                 }
-                .listStyle(.plain)
-                .navigationTitle("Search Events")
             }
             if self.query != "" {
                 Button(action: {
@@ -38,6 +55,9 @@ struct SearchEventView: View {
                     .foregroundColor(Color.gray)
                 }
             }
+        }
+        .sheet(isPresented: $confirmationShown) {
+            ShowEventView(event:events[selectedEvent])
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Search events")
         .onChange(of: query) { newValue in
