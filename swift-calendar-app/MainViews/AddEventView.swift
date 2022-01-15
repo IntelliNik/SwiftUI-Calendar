@@ -29,6 +29,8 @@ struct AddEventView: View {
     @State private var locationSearch = ""
     @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
+    private let locationManager = CLLocationManager()
+    @State private var saveCurrentLocation: Bool = false
     
     @State private var wholeDay = false
     
@@ -170,16 +172,47 @@ struct AddEventView: View {
                     }
                     if(location == "Current"){
                         
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                            annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
-                            .onAppear(){
-                                let annotationCurrent = MKPointAnnotation()
-                                annotationCurrent.coordinate = currentRegion.center
-                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                        if CLLocationManager.locationServicesEnabled() {
+                            switch locationManager.authorizationStatus {
+                                case .notDetermined, .restricted, .denied:
+                                    Text("Please allow accurate location services in the settings to use this feature.")
+                                    .padding()
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .onAppear(){                                  saveCurrentLocation = false}
+                                case .authorizedAlways, .authorizedWhenInUse:
+                                    switch locationManager.accuracyAuthorization {
+                                            case .fullAccuracy:
+                                                Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                                                annotationItems: markers) { marker in
+                                                  marker.location
+                                              }.edgesIgnoringSafeArea(.all)
+                                                .frame(minHeight: 200)
+                                                .onAppear(){
+                                                    saveCurrentLocation = true
+                                                    let annotationCurrent = MKPointAnnotation()
+                                                    annotationCurrent.coordinate = currentRegion.center
+                                                    markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                                                }
+                                            case .reducedAccuracy:
+                                                Text("Please allow accurate location services in the settings to use this feature.")
+                                                .padding()
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .onAppear(){                                  saveCurrentLocation = false}
+                                            default:
+                                                Text("Error: This should not happen")
+                                                .padding()
+                                                .onAppear(){                                  saveCurrentLocation = false}
+                                        }
+                                @unknown default:
+                                    Text("Error: This should not happen")
+                                    .padding()
+                                    .onAppear(){                                  saveCurrentLocation = false}
                             }
+                        } else {
+                            Text("Location services are not enabled")
+                                .padding()
+                                .onAppear(){                                  saveCurrentLocation = false}
+                        }
                     }
                     if(location == "Custom"){
                         HStack{
@@ -307,11 +340,13 @@ struct AddEventView: View {
                             event.notes = notes
                         }
                         if (location == "Current"){
-                            event.location = true
-                            event.latitude = currentRegion.center.latitude
-                            event.longitude = currentRegion.center.longitude
-                            event.latitudeDelta = currentRegion.span.latitudeDelta
-                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                            if saveCurrentLocation{
+                                event.location = true
+                                event.latitude = currentRegion.center.latitude
+                                event.longitude = currentRegion.center.longitude
+                                event.latitudeDelta = currentRegion.span.latitudeDelta
+                                event.longitudeDelta = currentRegion.span.longitudeDelta
+                            }
                         } else if (location == "Custom")
                         {
                             event.location = true
