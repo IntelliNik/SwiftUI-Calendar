@@ -52,6 +52,14 @@ struct AddEventView: View {
     
     @Binding var saveEvent: Bool
     
+    var userLatitude: Double {
+        return locationService.lastLocation?.coordinate.latitude ?? 0.0
+       }
+       
+    var userLongitude: Double {
+        return locationService.lastLocation?.coordinate.longitude ?? 0.0
+       }
+    
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
@@ -176,6 +184,8 @@ struct AddEventView: View {
                           }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
                             .onAppear(){
+                                currentRegion.center.latitude = userLatitude
+                                currentRegion.center.longitude = userLongitude
                                 let annotationCurrent = MKPointAnnotation()
                                 annotationCurrent.coordinate = currentRegion.center
                                 markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
@@ -395,6 +405,9 @@ class LocationService: NSObject, ObservableObject {
     @Published var queryFragment: String = ""
     @Published private(set) var status: LocationStatus = .idle
     @Published private(set) var searchResults: [MKLocalSearchCompletion] = []
+    
+    @Published var locationStatus: CLAuthorizationStatus?
+    @Published var lastLocation: CLLocation?
     
     private var queryCancellable: AnyCancellable?
     private let searchCompleter: MKLocalSearchCompleter!
