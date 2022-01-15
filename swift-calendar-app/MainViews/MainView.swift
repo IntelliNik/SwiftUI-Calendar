@@ -50,5 +50,6 @@ struct MainView: View {
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
         MainView(containedView: .constant(.year))
+            .environmentObject(CurrentColorScheme(.red))
     }
 }

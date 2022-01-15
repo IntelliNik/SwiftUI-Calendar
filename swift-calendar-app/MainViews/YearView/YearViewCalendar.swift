@@ -69,5 +69,6 @@ struct YearViewCalendar: View {
 struct YearViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
         YearViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
+            .environmentObject(CurrentColorScheme(.red))
     }
 }

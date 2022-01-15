@@ -76,6 +76,7 @@ struct AddCalendarView: View {
 struct AddCalendarView_Previews: PreviewProvider {
     static var previews: some View {
         AddCalendarView(saveCalendar: .constant(true))
+            .environmentObject(CurrentColorScheme(.red))
     }
 }
 

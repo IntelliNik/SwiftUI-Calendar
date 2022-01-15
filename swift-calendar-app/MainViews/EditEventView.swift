@@ -433,5 +433,6 @@ struct EditEventView: View {
 struct EditEventView_Previews: PreviewProvider {
     static var previews: some View {
         EditEventView(event: Event(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+            .environmentObject(CurrentColorScheme(.red))
     }
 }

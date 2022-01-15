@@ -17,6 +17,7 @@ struct NavigationBarView: View {
     @State var fontSize = 20.0
     
     @Environment(\.managedObjectContext) var moc
+    @EnvironmentObject var currColorScheme: CurrentColorScheme
     
     var body: some View {
         HStack(){
@@ -26,7 +27,7 @@ struct NavigationBarView: View {
                 }
             }) {
                 Image(systemName: "line.horizontal.3")
-                    .foregroundColor(Color(getAccentColorString()))
+                    .foregroundColor(Color(currColorScheme))
                     .font(.system(size: fontSize))
             }.padding()
             Spacer()
@@ -37,12 +38,12 @@ struct NavigationBarView: View {
             Spacer()
             Button(action: {self.showSearchView.toggle()}) {
                 Image(systemName: "magnifyingglass")
-                    .foregroundColor(Color(getAccentColorString()))
+                    .foregroundColor(Color(currColorScheme))
                     .font(.system(size: fontSize))
             }.padding()
             Button(action: {self.showAddEventSheet.toggle()}) {
                 Image(systemName: "plus")
-                    .foregroundColor(Color(getAccentColorString()))
+                    .foregroundColor(Color(currColorScheme))
                     .font(.system(size: fontSize))
             }.padding()
         }
@@ -64,5 +65,6 @@ struct NavigationBarView: View {
 struct NavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false), title: "Preview")
+            .environmentObject(CurrentColorScheme(.blue))
     }
 }

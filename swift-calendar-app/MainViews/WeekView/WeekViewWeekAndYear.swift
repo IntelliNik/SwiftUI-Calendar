@@ -32,5 +32,6 @@ struct WeekViewWeekAndYear: View {
 struct WeekViewWeekAndYear_Previews: PreviewProvider {
     static var previews: some View {
         WeekViewWeekAndYear(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
+            .environmentObject(CurrentColorScheme(.red))
     }
 }

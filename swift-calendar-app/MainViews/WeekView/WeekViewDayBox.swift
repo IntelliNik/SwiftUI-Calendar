@@ -131,5 +131,6 @@ struct WeekViewDayBox_Previews: PreviewProvider {
             WeekViewRoundedRectangleTop(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now) , height: 220, width: 220)
             WeekViewRoundedRectangleBottom(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
         }
+        .environmentObject(CurrentColorScheme(.red))
     }
 }

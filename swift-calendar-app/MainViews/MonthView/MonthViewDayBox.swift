@@ -16,6 +16,8 @@ struct MonthViewDayBox: View {
     @State var rectangle: Bool?
     @State var markToday: Bool?
     
+    @EnvironmentObject var currColorScheme: CurrentColorScheme
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: rectangle ?? false ? 3 : 10, style: .continuous)
@@ -25,7 +27,7 @@ struct MonthViewDayBox: View {
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
                 .overlay(Text(String(date))
-                            .foregroundColor(Color(getAccentColorString()))
+                            .foregroundColor(Color(currColorScheme))
                             .font(.system(size: fontSize ?? 20)))
         }
     }
@@ -34,5 +36,6 @@ struct MonthViewDayBox: View {
 struct MonthViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
         MonthViewDayBox(date: 1, width: 45, length: 45)
+            .environmentObject(CurrentColorScheme(.green))
     }
 }

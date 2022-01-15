@@ -93,6 +93,7 @@ struct AllEventsView: View {
     struct AllEventsView_Previews: PreviewProvider {
         static var previews: some View {
             AllEventsView()
+                .environmentObject(CurrentColorScheme(.red))
         }
     }
 }

@@ -9,12 +9,14 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    @State var accentColor = getAccentColorString()
+    //@State var accentColor = getAccentColorString()
+    @EnvironmentObject var curColorScheme: CurrentColorScheme
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
     @Binding var title: String
+    @Binding var pickerState: String
     
     @State var calendarEditMode = false
     
@@ -137,30 +139,35 @@ struct MenuView: View {
                 Text("Color scheme")
                     .font(.headline)
                     .foregroundColor(.white)
-                Picker(selection: $accentColor, label: Text("Color Scheme")) {                        Image(systemName: "flame").tag("AccentColorRed")
+                Picker(selection: $pickerState, label: Text("Color Scheme")) {
+                    Image(systemName: "flame").tag("AccentColorRed")
                     Image(systemName: "leaf").tag("AccentColorGreen")
                     Image(systemName: "drop").tag("AccentColorBlue")
                     
                 }
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)
-                .onChange(of: accentColor){color in
-                    setAccentColor(colorScheme: color)
+                .onChange(of: pickerState){color in
+                    curColorScheme.set(colorScheme: color)
                 }
                 .padding()
             }
-        }.padding()
+        }
+            .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+            .background(Color(curColorScheme))
+        
+            
     }
 }
 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         GeometryReader{ geometry in
-            MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false), menuOpen: .constant(true), title: .constant("Title"))
+            MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false), menuOpen: .constant(true), title: .constant("Title"), pickerState: .constant("AccentColorRed"))
                 .frame(width: geometry.size.width/2)
         }
+        .environmentObject(CurrentColorScheme(.red))
     }
 }

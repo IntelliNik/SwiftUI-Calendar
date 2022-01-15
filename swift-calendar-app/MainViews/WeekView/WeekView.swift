@@ -11,6 +11,7 @@ struct WeekView: View {
     
     @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
+    @EnvironmentObject var currColorScheme: CurrentColorScheme
     
     var body: some View {
         VStack{
@@ -46,7 +47,7 @@ struct WeekView: View {
             }
             .padding()
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
+            .colorMultiply(Color(currColorScheme))
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
@@ -70,5 +71,6 @@ struct WeekView_Previews: PreviewProvider {
             WeekView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
                 .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro"))
         }
+        .environmentObject(CurrentColorScheme(.red))
     }
 }
