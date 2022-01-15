@@ -20,7 +20,6 @@ struct MainView: View {
     @State var updateView = false
     @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
     
-    
     var body: some View {
         switch containedView{
         case .day:

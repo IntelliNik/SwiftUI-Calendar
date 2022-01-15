@@ -13,18 +13,18 @@ public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red"
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
-        case "Yellow": return .yellow
-        case "Green": return .green
-        case "Blue": return .blue
-        case "Pink": return .pink
-        case "Purple": return .purple
-        case "Black": return .black
-        case "Red": return .red
-        case "Orange": return .orange
-        case "Brown": return .brown
-        case "Cyan": return .cyan
-        case "Indigo": return .indigo
-        default: return .gray
+    case "Yellow": return .yellow
+    case "Green": return .green
+    case "Blue": return .blue
+    case "Pink": return .pink
+    case "Purple": return .purple
+    case "Black": return .black
+    case "Red": return .red
+    case "Orange": return .orange
+    case "Brown": return .brown
+    case "Cyan": return .cyan
+    case "Indigo": return .indigo
+    default: return .gray
     }
 }
 
@@ -35,7 +35,17 @@ func setAccentColor(colorScheme: String){
 
 func getAccentColorString() -> String{
     let defaults = UserDefaults.standard
-    return defaults.string(forKey: "ColorScheme") ?? "AccentColorRed"
+    
+    switch defaults.string(forKey: "colorScheme"){
+    case "red":
+        return "AccentColorRed"
+    case "green":
+        return "AccentColorGreen"
+    case "blue":
+        return "AccentColorBlue"
+    default:
+        return "AccentColorRed"
+    }
 }
 
 // Location
