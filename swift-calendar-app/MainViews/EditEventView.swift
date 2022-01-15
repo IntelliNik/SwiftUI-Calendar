@@ -197,12 +197,23 @@ struct EditEventView: View {
                         if CLLocationManager.locationServicesEnabled() {
                             switch locationManager.authorizationStatus {
                                 case .notDetermined, .restricted, .denied:
-                                    Text("Please allow accurate location services in the settings to use this feature.")
+                                HStack{
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .padding()
+                                        .foregroundColor(.yellow)
+                                    Text("Please allow accurate location services in the settings to use this feature. You can change this here.")
                                     .padding()
+                                    .foregroundColor(.blue)
                                     .fixedSize(horizontal: false, vertical: true)
-                                    .onAppear(){
-                                        saveCurrentLocation = false
-                                    }
+                                    .onAppear(){                                  saveCurrentLocation = false}
+                                    Button(action: {
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                        }) {
+                                Image(systemName: "gear")
+                                    .foregroundColor(.blue)
+                                    .imageScale(.large)
+                                        }
+                                }
                                 case .authorizedAlways, .authorizedWhenInUse:
                                     switch locationManager.accuracyAuthorization {
                                             case .fullAccuracy:
@@ -218,12 +229,23 @@ struct EditEventView: View {
                                                     markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
                                                 }
                                             case .reducedAccuracy:
-                                                Text("Please allow accurate location services in the settings to use this feature.")
+                                        HStack{
+                                            Image(systemName: "exclamationmark.triangle.fill")
                                                 .padding()
-                                                .fixedSize(horizontal: false, vertical: true)
-                                                .onAppear(){
-                                                    saveCurrentLocation = false
+                                                .foregroundColor(.yellow)
+                                            Text("Please allow accurate location services in the settings to use this feature. You can change this here.")
+                                            .padding()
+                                            .foregroundColor(.blue)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .onAppear(){                                  saveCurrentLocation = false}
+                                            Button(action: {
+                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                                }) {
+                                        Image(systemName: "gear")
+                                            .foregroundColor(.blue)
+                                            .imageScale(.large)
                                                 }
+                                        }
                                             default:
                                                 Text("Error: This should not happen")
                                                 .padding()
@@ -287,8 +309,8 @@ struct EditEventView: View {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
-                                    case .noResults: return AnyView(Text("No Results"))
-                                    case .error(let description): return AnyView(Text("Error: \(description)"))
+                                    case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
+                                    case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
                                     default: return AnyView(EmptyView())
                                     }
                                 }.foregroundColor(Color.gray)
@@ -319,7 +341,7 @@ struct EditEventView: View {
                                             self.locationService.clear()
                                         }
                                     }) {
-                                        Text(completionResult.title + ", " + completionResult.subtitle)
+                                        Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
                                     }
                                     
                                     //Text(completionResult.title)
