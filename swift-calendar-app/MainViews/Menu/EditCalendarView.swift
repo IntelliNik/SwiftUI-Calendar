@@ -33,7 +33,7 @@ struct EditCalendarView: View {
                     ForEach((0..<calendars.count), id: \.self) { index in
                         if (index < calendars.count) {
                             NavigationLink(
-                                destination: ModifyCalendar(mcalendar: calendars[index], showConfirmation: $showConfirmation).navigationBarBackButtonHidden(true)
+                                destination: ModifyCalendar(mcalendar: calendars[index], color: colorStrings.firstIndex(where: {$0 == calendars[index].color!})!, showConfirmation: $showConfirmation).navigationBarBackButtonHidden(true)
                             ) {
                                 Text("Calendar Name: \(calendars[index].name ?? "")")
                             }

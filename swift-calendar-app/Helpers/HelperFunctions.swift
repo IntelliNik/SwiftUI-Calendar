@@ -68,6 +68,14 @@ func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
     return resComponents
 }
 
+func getBeginningOfDay(date: Date) -> Date{
+    return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
+}
+
+func getEndOfDay(date: Date) -> Date{
+    return Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
+}
+
 func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
@@ -92,4 +100,11 @@ public func getDateForEnddateComparison(from: DateComponents) -> Date?{
     newComponents.minute = 0
     newComponents.second = 0
     return Calendar.current.date(from: newComponents)
+}
+
+func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
+    Binding(
+        get: { lhs.wrappedValue ?? rhs },
+        set: { lhs.wrappedValue = $0 }
+    )
 }

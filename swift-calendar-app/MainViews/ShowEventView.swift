@@ -9,7 +9,18 @@ import SwiftUI
 import MapKit
 
 struct ShowEventView: View {
+    
     @State var event: Event
+    
+    @State var showShowEvent = false
+    
+    @State var showConfirmation = false
+    
+    @State var saveEvent = false
+    
+    @State var confirmationShown = false
+    
+    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationView{
@@ -114,10 +125,38 @@ struct ShowEventView: View {
             }
             .navigationTitle(event.name != nil ? "Event: \(event.name!)" : "Show Event")
             .toolbar{
+                
+                ToolbarItem(placement: .navigationBarLeading) {
+                    /*
+                     NavigationView{
+                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
+                    }.foregroundColor(Color(getAccentColorString()))
+                     */
+                    
+                    Button(action: {dismiss()}){
+                        HStack{
+                            Image(systemName: "chevron.left")
+                                .font(Font.headline.weight(.bold))
+                                .foregroundColor(Color(getAccentColorString()))
+                            Text("Back")
+                                .foregroundColor(Color(getAccentColorString()))
+                        }
+                    }
+                }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {}){
+                    /*
+                     NavigationView{
+                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
+                    }.foregroundColor(Color(getAccentColorString()))
+                     */
+                    
+                    Button(action: {confirmationShown = true}){
                         Text("Edit")
                             .foregroundColor(Color(getAccentColorString()))
+                    }
+                    .sheet(isPresented: $confirmationShown) {
+                        EditEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
                     }
                 }
             }
