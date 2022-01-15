@@ -77,6 +77,20 @@ func addWeekday(dateComponents: DateComponents) -> DateComponents{
     return newDateComponents
 }
 
+func addWeekOfYear(dateComponents: DateComponents) -> DateComponents{
+    let date = Calendar.current.date(from: dateComponents)
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = dateComponents.month
+    newDateComponents.day = dateComponents.day
+    newDateComponents.weekOfYear = Calendar.current.component(.weekOfYear, from: date!)
+    return newDateComponents
+}
+
+func getToday() -> DateComponents{
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .hour], from: Date.now)
+}
+
 func getBeginningOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
 }

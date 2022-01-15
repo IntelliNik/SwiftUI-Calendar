@@ -48,6 +48,7 @@
 		B49960612789A7650055CAF9 /* DayViewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960602789A7650055CAF9 /* DayViewTime.swift */; };
 		B49960632789B4F70055CAF9 /* Month_short.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960622789B4F70055CAF9 /* Month_short.swift */; };
 		B49960652789B9EA0055CAF9 /* Hour.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960642789B9EA0055CAF9 /* Hour.swift */; };
+		B499606B27933C930055CAF9 /* CurHourMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B499606A27933C930055CAF9 /* CurHourMarker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +111,7 @@
 		B49960602789A7650055CAF9 /* DayViewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
 		B49960622789B4F70055CAF9 /* Month_short.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month_short.swift; sourceTree = "<group>"; };
 		B49960642789B9EA0055CAF9 /* Hour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hour.swift; sourceTree = "<group>"; };
+		B499606A27933C930055CAF9 /* CurHourMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurHourMarker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -286,6 +288,7 @@
 				B49960602789A7650055CAF9 /* DayViewTime.swift */,
 				771780FC278B4973002AAC74 /* EventView.swift */,
 				B499605A27899F910055CAF9 /* DayViewHeader.swift */,
+				B499606A27933C930055CAF9 /* CurHourMarker.swift */,
 			);
 			path = View_Helpers;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 				7719874B2773C3C80061CF34 /* MenuView.swift in Sources */,
 				7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */,
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
+				B499606B27933C930055CAF9 /* CurHourMarker.swift in Sources */,
 				77046DC1278455FC001DA0DA /* HelperFunctions.swift in Sources */,
 				77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */,
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,

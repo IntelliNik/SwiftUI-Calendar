@@ -12,8 +12,7 @@ struct TodayButton: View {
 
     var body: some View {
         Button(action: {
-            let cur_date = Calendar.current.dateComponents([.weekday, .day, .month, .year], from: Date.now)
-            dateComponents = cur_date
+            dateComponents = getToday()
         }, label: {
             Text("Today")
                 .foregroundColor(.white)
