@@ -62,7 +62,7 @@ struct CalendarApp: App {
                                     showMenu = false
                                 }
                             }
-                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu, title: $title, pickerState: $colorSchemePickerState)
+                        MenuView(currentlySelectedView: $selectedView, showAddCalendar: $showAddCalendar, menuOpen: $showMenu, title: $title)
                             .frame(width: geometry.size.width/2)
                             .transition(.move(edge: .leading))
                             .environment(\.managedObjectContext, dataController.container.viewContext)

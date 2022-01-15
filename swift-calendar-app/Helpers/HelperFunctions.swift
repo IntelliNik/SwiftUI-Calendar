@@ -79,7 +79,6 @@ class CurrentColorScheme: ObservableObject {
         let defaults = UserDefaults.standard
         defaults.set(colorScheme, forKey: "ColorScheme")
         self.currentColor = getColorScheme(from: colorScheme)
-        print(self.currentColor)
     }
 }
 
@@ -99,6 +98,20 @@ extension Color {
 func setAccentColor(colorScheme: String){
     let defaults = UserDefaults.standard
     defaults.set(colorScheme, forKey: "ColorScheme")
+}
+
+func getAccentColorString(from: String) -> String{
+    
+    switch from{
+    case "red":
+        return "AccentColorRed"
+    case "green":
+        return "AccentColorGreen"
+    case "blue":
+        return "AccentColorBlue"
+    default:
+        return "AccentColorRed"
+    }
 }
 
 func getAccentColorString() -> String{

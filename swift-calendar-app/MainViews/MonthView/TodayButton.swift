@@ -10,7 +10,8 @@ import SwiftUI
 
 struct TodayButton: View {
     @Binding var dateComponents: DateComponents
-    @EnvironmentObject var currColorScheme: CurrentColorScheme
+    //@EnvironmentObject var currColorScheme: CurrentColorScheme
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         Button(action: {
@@ -24,11 +25,11 @@ struct TodayButton: View {
         .frame(height: 40)
         .frame(maxWidth: 90)
         .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(currColorScheme))
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString()))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color(currColorScheme), lineWidth: 1)
+                .strokeBorder(Color(getAccentColorString(from: colorScheme)), lineWidth: 1)
         )
         
     }
