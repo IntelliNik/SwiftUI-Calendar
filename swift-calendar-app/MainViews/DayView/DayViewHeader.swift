@@ -24,12 +24,13 @@ struct DayViewHeader: View {
                 //weekday is Int from 1 - 7 with 1 is Sun
                 let weekday = Weekday[addWeekday(dateComponents: dateComponents).weekday!-1]
                 let month = Month_short[dateComponents.month!-1]
-
+                let year = dateComponents.year!
+                let year_formatted = formatYear(year: String(year))
                 VStack(alignment: .leading, spacing: 0) {
                     Text("\(weekday)")
                     HStack{
                         Text("\(month)")
-                        formatYear()
+                        Text("\(year_formatted)")
                     }
                 }.padding()
             }
@@ -37,15 +38,13 @@ struct DayViewHeader: View {
     }
 }
 
-func formatYear() -> some View {
-    let today  = Date()
-    let formatter = DateFormatter()
-
-    formatter.dateFormat = "yyyy"
-
-    return Text(formatter.string(from: today))
-
+func formatYear(year: String) -> String{
+    var str = year
+    let removeCharacters: Set<Character> = ["'"]
+    str.removeAll(where: { removeCharacters.contains($0) } )
+    return str
 }
+
 
 struct DayViewHeader_Previews: PreviewProvider {
     static var previews: some View {
