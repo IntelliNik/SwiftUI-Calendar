@@ -10,16 +10,16 @@ import SwiftUI
 struct MonthViewDayBox: View {
     var date : Int //Todo: replace with actual day
     
-    var width, length: Int
+    var width, length: CGFloat?
     
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
-                .frame(width: 45, height: 45)
+                .frame(width: self.width, height: self.length)
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.thinMaterial)
-                .frame(width: 45, height: 45)
+                .frame(width: self.width, height: self.length)
                 .overlay(Text(String(date)).foregroundColor(Color(getAccentColorString())))
 
         }

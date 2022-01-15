@@ -30,7 +30,7 @@ struct MainView: View {
             Text("TODO")
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .month:
-            MonthView(dateComponents: $dateComponents)
+            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel())
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .year:
             YearView(dateComponents: $dateComponents, updateView: $updateView)
