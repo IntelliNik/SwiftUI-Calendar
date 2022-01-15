@@ -141,7 +141,6 @@
 			isa = PBXGroup;
 			children = (
 				35B6832E277A182E00D9EBAC /* MonthViewCalendar.swift */,
-				35B6832F277A182E00D9EBAC /* TodayButton.swift */,
 				35B68330277A182E00D9EBAC /* MonthView.swift */,
 				35B68331277A182E00D9EBAC /* MonthViewMonthAndYear.swift */,
 				35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */,
@@ -199,6 +198,7 @@
 				35FC5CAB2779C56E009033C5 /* YearView */,
 				77046DBF27844568001DA0DA /* PickerView */,
 				7706517627847E6E008390EC /* Menu */,
+				35B6832F277A182E00D9EBAC /* TodayButton.swift */,
 				770FB6AB276F485200D38A07 /* CalendarApp.swift */,
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
@@ -263,15 +263,31 @@
 		B499605927899EB30055CAF9 /* DayView */ = {
 			isa = PBXGroup;
 			children = (
-				B499605A27899F910055CAF9 /* DayViewHeader.swift */,
-				B499605C2789A1A40055CAF9 /* Weekday.swift */,
+				B4996069279332D70055CAF9 /* View_Helpers */,
+				B4996068279332960055CAF9 /* Date_Helpers */,
 				B499605E2789A7460055CAF9 /* DayView.swift */,
-				B49960602789A7650055CAF9 /* DayViewTime.swift */,
-				771780FC278B4973002AAC74 /* EventView.swift */,
-				B49960622789B4F70055CAF9 /* Month_short.swift */,
-				B49960642789B9EA0055CAF9 /* Hour.swift */,
 			);
 			path = DayView;
+			sourceTree = "<group>";
+		};
+		B4996068279332960055CAF9 /* Date_Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B499605C2789A1A40055CAF9 /* Weekday.swift */,
+				B49960642789B9EA0055CAF9 /* Hour.swift */,
+				B49960622789B4F70055CAF9 /* Month_short.swift */,
+			);
+			path = Date_Helpers;
+			sourceTree = "<group>";
+		};
+		B4996069279332D70055CAF9 /* View_Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B49960602789A7650055CAF9 /* DayViewTime.swift */,
+				771780FC278B4973002AAC74 /* EventView.swift */,
+				B499605A27899F910055CAF9 /* DayViewHeader.swift */,
+			);
+			path = View_Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -14,7 +14,7 @@ struct DayViewHeader: View {
         
         HStack(alignment: .center) {
             VStack(alignment: .leading) { //button
-                TodayButton()
+                TodayButton(dateComponents: $dateComponents)
             }.padding()
             
             Spacer()

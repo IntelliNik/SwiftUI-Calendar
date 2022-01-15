@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct TodayButton: View {
+    @Binding var dateComponents: DateComponents
+
     var body: some View {
         Button(action: {
+            let cur_date = Calendar.current.dateComponents([.weekday, .day, .month, .year], from: Date.now)
+            dateComponents = cur_date
         }, label: {
             Text("Today")
                 .foregroundColor(.white)
@@ -31,6 +35,6 @@ struct TodayButton: View {
 
 struct TodayButton_Previews: PreviewProvider {
     static var previews: some View {
-        TodayButton()
+        TodayButton(dateComponents: .constant(Calendar.current.dateComponents([.weekday, .day, .month, .year], from: Date.now))).previewInterfaceOrientation(.portrait)
     }
 }

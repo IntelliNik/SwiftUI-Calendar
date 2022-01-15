@@ -13,7 +13,7 @@ struct MonthViewMonthAndYear: View {
     var body: some View {
         HStack(alignment: .bottom) {
             VStack(alignment: .leading) { //button and month
-                TodayButton()
+                TodayButton(dateComponents: $dateComponents)
                 Text(Month[dateComponents.month!-1])
                     .font(.system(size: 45, weight: .bold, design: .monospaced))
             }

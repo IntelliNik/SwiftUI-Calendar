@@ -13,7 +13,7 @@ struct YearViewYearAndToday: View {
     var body: some View {
         HStack(alignment: .bottom, spacing: 160) {
             VStack(alignment: .leading) { //button
-                TodayButton()
+                TodayButton(dateComponents: $dateComponents)
             }
             
             VStack(alignment: .leading, spacing: 170) { //Year
