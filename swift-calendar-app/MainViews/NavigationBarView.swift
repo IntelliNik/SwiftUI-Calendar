@@ -16,6 +16,8 @@ struct NavigationBarView: View {
     @State var title = "XXX"
     @State var fontSize = 20.0
     
+    @Environment(\.managedObjectContext) var moc
+    
     var body: some View {
         HStack(){
             Button(action: {
@@ -43,6 +45,17 @@ struct NavigationBarView: View {
                     .foregroundColor(Color(getAccentColorString()))
                     .font(.system(size: fontSize))
             }.padding()
+        }
+        .onAppear(){
+            if(!isAppAlreadyLaunchedOnce()){
+                let calendar = MCalendar(context: moc)
+                calendar.key = UUID()
+                calendar.name = "Default"
+                calendar.color = "Yellow"
+                calendar.defaultCalendar = true
+                
+                try? moc.save()
+            }
         }
         Spacer()
     }

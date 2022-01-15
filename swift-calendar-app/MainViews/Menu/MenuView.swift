@@ -153,17 +153,6 @@ struct MenuView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
-            .onAppear(){
-                if(!isAppAlreadyLaunchedOnce()){
-                    let calendar = MCalendar(context: moc)
-                    calendar.key = UUID()
-                    calendar.name = "Default"
-                    calendar.color = "Yellow"
-                    calendar.defaultCalendar = true
-                    
-                    try? moc.save()
-                }
-            }
     }
 }
 
