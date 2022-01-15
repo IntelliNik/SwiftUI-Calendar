@@ -51,7 +51,6 @@
 		77EA32EF278F62D400093312 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E8278F605B00093312 /* Persistence.swift */; };
 		77EA32F0278F62D600093312 /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E9278F605B00093312 /* swift_calendar_app.xcdatamodeld */; };
 		77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10DD277CEB4D00206E60 /* PickerView.swift */; };
-		77EB10E0277CF49200206E60 /* Month.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10DF277CF49200206E60 /* Month.swift */; };
 		77EB10E2277CFB7C00206E60 /* PickerDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10E1277CFB7C00206E60 /* PickerDateComponents.swift */; };
 		77F2742C27901B760021AC42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
 		77F2742F27901E9E0021AC42 /* MediumDailyOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F2742D27901E4B0021AC42 /* MediumDailyOverviewView.swift */; };
@@ -133,7 +132,6 @@
 		77EA32E8278F605B00093312 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		77EA32EA278F605B00093312 /* swift_calendar_app.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = swift_calendar_app.xcdatamodel; sourceTree = "<group>"; };
 		77EB10DD277CEB4D00206E60 /* PickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerView.swift; sourceTree = "<group>"; };
-		77EB10DF277CF49200206E60 /* Month.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Month.swift; sourceTree = "<group>"; };
 		77EB10E1277CFB7C00206E60 /* PickerDateComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerDateComponents.swift; sourceTree = "<group>"; };
 		77F2742D27901E4B0021AC42 /* MediumDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumDailyOverviewView.swift; sourceTree = "<group>"; };
 		77F2743027901EBA0021AC42 /* LargeDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeDailyOverviewView.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 				35B68330277A182E00D9EBAC /* MonthView.swift */,
 				35B68331277A182E00D9EBAC /* MonthViewMonthAndYear.swift */,
 				35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */,
-				77EB10DF277CF49200206E60 /* Month.swift */,
 			);
 			name = MonthView;
 			path = "swift-calendar-app/MainViews/MonthView";
@@ -474,7 +471,6 @@
 			files = (
 				35B68336277A182E00D9EBAC /* MonthView.swift in Sources */,
 				35B68337277A182E00D9EBAC /* MonthViewMonthAndYear.swift in Sources */,
-				77EB10E0277CF49200206E60 /* Month.swift in Sources */,
 				779BF16D2781B42000DCFBEB /* EventCardView.swift in Sources */,
 				7706517527847ADF008390EC /* EditCalendarView.swift in Sources */,
 				7719874B2773C3C80061CF34 /* MenuView.swift in Sources */,
