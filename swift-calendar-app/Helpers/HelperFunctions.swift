@@ -66,7 +66,16 @@ func setMonth(dateComponents: DateComponents, month: Int) -> DateComponents{
     var newDateComponents = DateComponents()
     newDateComponents.year = dateComponents.year
     newDateComponents.month = month
-    return newDateComponents
+    //set the DateComponent representing the month as the first day of this month
+    newDateComponents.day = 1
+    let tempDate = Calendar.current.date(from: newDateComponents)
+    guard let unwrappedTempDate = tempDate
+    else {
+        print("setMonth didnt work, couldn't create tempDate, is nil")
+        return newDateComponents
+    }
+    let resComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: unwrappedTempDate)
+    return resComponents
 }
 
 func getBeginningOfDay(date: Date) -> Date{
@@ -84,7 +93,23 @@ func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
 }
 
 func getToday() -> DateComponents{
-    return Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
+    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
+}
+
+public func getDateForStartdateComparison(from: DateComponents) -> Date?{
+    var newComponents = from
+    newComponents.hour = 23
+    newComponents.minute = 59
+    newComponents.second = 59
+    return Calendar.current.date(from: newComponents)
+}
+
+public func getDateForEnddateComparison(from: DateComponents) -> Date?{
+    var newComponents = from
+    newComponents.hour = 0
+    newComponents.minute = 0
+    newComponents.second = 0
+    return Calendar.current.date(from: newComponents)
 }
 
 func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
