@@ -17,7 +17,6 @@ struct YearView: View {
     @State var pickerSelection: PickerSelection = .current
     
     var body: some View {
-        
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
             Spacer()
@@ -43,6 +42,7 @@ struct YearView: View {
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString()))
             .padding()
+        }.padding()
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
@@ -54,7 +54,7 @@ struct YearView: View {
                         }
                     }
             )
-        }.padding()
+
     }
 }
 

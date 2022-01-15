@@ -47,17 +47,17 @@ struct WeekView: View {
             .padding()
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString()))
-            .gesture(
-                DragGesture()
-                    .onEnded(){gesture in
-                        if(gesture.translation.width < 0){
-                            pickerSelection = .previous
-                        } else if(gesture.translation.width > 0){
-                            pickerSelection = .next
-                        }
-                    }
-            )
         }
+        .gesture(
+            DragGesture()
+                .onEnded(){gesture in
+                    if(gesture.translation.width < 0){
+                        pickerSelection = .previous
+                    } else if(gesture.translation.width > 0){
+                        pickerSelection = .next
+                    }
+                }
+        )
     }
 }
     
