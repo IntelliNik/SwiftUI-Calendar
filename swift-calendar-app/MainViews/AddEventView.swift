@@ -94,6 +94,7 @@ struct AddEventView: View {
                             }
                         }
                         .padding()
+                    Text("Start")
                     DatePicker(selection: $startDate, displayedComponents: datePickerComponents) {
                         Text("Start")
                     }.padding()

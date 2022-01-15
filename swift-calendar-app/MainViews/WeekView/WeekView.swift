@@ -15,7 +15,7 @@ struct WeekView: View {
     var body: some View {
         VStack{
             WeekViewWeekAndYear(dateComponents: $dateComponents)
-            Spacer()
+            .padding(.bottom)
             GeometryReader { geo in
                 HStack {
                     Spacer()

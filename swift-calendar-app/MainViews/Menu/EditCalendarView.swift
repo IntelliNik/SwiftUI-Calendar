@@ -51,6 +51,7 @@ struct EditCalendarView: View {
                     }
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         EditButton()
+                            .foregroundColor(.gray)
                     }
                 }
                 .navigationTitle("Your Calendars")
