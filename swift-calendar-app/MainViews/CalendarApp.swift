@@ -72,7 +72,6 @@ struct CalendarApp: App {
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
-                            .onAppear(perform: requestPermissions)
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
@@ -107,24 +106,6 @@ struct CalendarApp: App {
             .animation(.easeInOut, value: showConfirmationBox)
         }
     }
-}
-
-
-func requestPermissions(){
-    // request notification access
-    let center = UNUserNotificationCenter.current()
-    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-        if let error = error {
-            // TODO: Handle the error here.
-        }
-        // TODO: Enable or disable features based on the authorization.
-    }
-    
-    // request location access
-    let locationManager = CLLocationManager()
-    locationManager.requestWhenInUseAuthorization()
-    
-
 }
 
 func isAppAlreadyLaunchedOnce() -> Bool {
