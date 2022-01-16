@@ -28,77 +28,12 @@ func getColorFromString(stringColor: String?) -> Color{
     }
 }
 
-// enum representing the three possible accent color choices
-enum ColorScheme {
-    case red, green, blue
-}
-
-// class representing the currently choosen accent color
-// it is observable so we can use it as environment object
-// it manages setting and storing the user.defaults
-class CurrentColorScheme: ObservableObject {
-    @Published var currentColor: ColorScheme = .red
-    
-    // during intitalisation we set the accent color choosen in the settings
-    init() {
-        let defaults = UserDefaults.standard
-        switch defaults.string(forKey: "colorScheme"){
-        case "red":
-            self.currentColor = .red
-        case "green":
-            self.currentColor = .green
-        case "blue":
-            self.currentColor = .blue
-        default:
-            self.currentColor = .red
-        }
-    }
-    
-    // this is only used to provide an environment object to the previews
-    init(_ color: ColorScheme){
-        self.currentColor = color
-    }
-    
-    // helper function to retrieve enum type from string
-    private func getColorScheme(from: String) -> ColorScheme{
-        switch from {
-        case "AccentColorRed", "red":
-            return .red
-        case "AccentColorGreen", "green":
-            return .green
-        case "AccentColorBlue", "blue":
-            return .blue
-        default:
-            return .red
-        }
-    }
-    
-    // is called when colorScheme changes, sets choosen color in UserDefaults
-    // and publishes new value by setting currentColor accordingly
-    func set(colorScheme: String){
-        let defaults = UserDefaults.standard
-        defaults.set(colorScheme, forKey: "ColorScheme")
-        self.currentColor = getColorScheme(from: colorScheme)
-    }
-}
-
-extension Color {
-    init(_ color: CurrentColorScheme){
-        switch color.currentColor{
-        case .red:
-            self.init("AccentColorRed")
-        case .green:
-            self.init("AccentColorGreen")
-        case .blue:
-            self.init("AccentColorBlue")
-        }
-    }
-}
-
+/* propably not needed anymore
 func setAccentColor(colorScheme: String){
     let defaults = UserDefaults.standard
     defaults.set(colorScheme, forKey: "ColorScheme")
 }
+ */
 
 func getAccentColorString(from: String) -> String{
     

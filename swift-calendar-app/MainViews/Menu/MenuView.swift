@@ -148,7 +148,6 @@ struct MenuView: View {
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)
                 .onChange(of: colorScheme){color in
-                    //curColorScheme.set(colorScheme: color)
                     colorScheme = color
                 }
                 .padding()

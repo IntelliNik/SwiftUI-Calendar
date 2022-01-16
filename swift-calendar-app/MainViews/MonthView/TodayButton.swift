@@ -25,7 +25,7 @@ struct TodayButton: View {
         .frame(height: 40)
         .frame(maxWidth: 90)
         .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString()))
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString(from: colorScheme)))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
