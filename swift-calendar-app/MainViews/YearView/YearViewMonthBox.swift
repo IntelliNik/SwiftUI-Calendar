@@ -124,6 +124,5 @@ struct YearViewMonthBox: View {
 struct YearViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
         YearViewMonthBox(month: "Jan.", width: 45, height: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

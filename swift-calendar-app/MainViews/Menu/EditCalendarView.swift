@@ -84,6 +84,5 @@ struct EditCalendarView: View {
 struct CalendarEditView_Previews: PreviewProvider {
     static var previews: some View {
         EditCalendarView()
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

@@ -78,6 +78,5 @@ struct ModifyCalendar: View {
 struct ModifyCalendar_Previews: PreviewProvider {
     static var previews: some View {
         ModifyCalendar(mcalendar: MCalendar(), color:0, showConfirmation: .constant(true))
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

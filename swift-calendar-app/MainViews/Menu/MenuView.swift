@@ -9,15 +9,13 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    //@State var accentColor = getAccentColorString()
-    //@EnvironmentObject var curColorScheme: CurrentColorScheme
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
     @Binding var title: String
-    //@Binding var pickerState: String
     
     @State var calendarEditMode = false
     
@@ -171,6 +169,5 @@ struct MenuView_Previews: PreviewProvider {
             MenuView(currentlySelectedView: .constant(.allEvents), showAddCalendar: .constant(false), menuOpen: .constant(true), title: .constant("Title"))
                 .frame(width: geometry.size.width/2)
         }
-        .environmentObject(CurrentColorScheme(.red))
     }
 }

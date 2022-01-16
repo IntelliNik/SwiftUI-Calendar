@@ -53,6 +53,5 @@ struct WeekViewCalendar: View {
 struct WeekViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
         WeekViewCalendar(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now), height: 763, width: 390)
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TodayButton: View {
     @Binding var dateComponents: DateComponents
-    //@EnvironmentObject var currColorScheme: CurrentColorScheme
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -38,6 +38,5 @@ struct TodayButton: View {
 struct TodayButton_Previews: PreviewProvider {
     static var previews: some View {
         TodayButton(dateComponents: .constant(DateComponents()))
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

@@ -24,13 +24,7 @@ struct CalendarApp: App {
     @State var selectedView: ContainedView = .week
     @State var title = "All Events"
     
-    // This is ony used for the color picker in the MenuView
-    // everything else gets the current color scheme
-    @State private var colorSchemePickerState = getAccentColorString()
-    
     @StateObject private var dataController = DataController()
-    // loads the accent color from UserDefaults
-    @StateObject var currentColorScheme = CurrentColorScheme()
     
     // TODO: Remove next lines when everything is done
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
@@ -109,7 +103,6 @@ struct CalendarApp: App {
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
-            .environmentObject(currentColorScheme)
         }
     }
 }

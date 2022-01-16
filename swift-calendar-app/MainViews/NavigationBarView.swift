@@ -17,7 +17,6 @@ struct NavigationBarView: View {
     @State var fontSize = 20.0
     
     @Environment(\.managedObjectContext) var moc
-    //@EnvironmentObject var currColorScheme: CurrentColorScheme
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
@@ -67,6 +66,5 @@ struct NavigationBarView: View {
 struct NavigationBarView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBarView(showMenu: .constant(false), showShowEvent: .constant(false), showAddEventSheet: .constant(false), showSearchView: .constant(false), title: "Preview")
-            .environmentObject(CurrentColorScheme(.blue))
     }
 }

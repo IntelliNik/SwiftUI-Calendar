@@ -32,6 +32,5 @@ struct MonthViewMonthAndYear: View {
 struct MonthViewMonthAndYear_Previews: PreviewProvider {
     static var previews: some View {
         MonthViewMonthAndYear(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

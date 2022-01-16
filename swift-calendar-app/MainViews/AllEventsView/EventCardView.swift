@@ -185,6 +185,5 @@ struct ExtendedEventCard: View{
                  ExtendedEventCard(calendarColor: .blue, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true, location: true, locationRegion: region,  url: "https:/apple.com", notes: "Hi Mom")
                  */
             }.padding()
-                .environmentObject(CurrentColorScheme(.red))
         }
     }

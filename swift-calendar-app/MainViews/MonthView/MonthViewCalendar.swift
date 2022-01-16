@@ -43,6 +43,5 @@ struct MonthViewCalendar: View {
 struct MonthViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
         MonthViewCalendar()
-            .environmentObject(CurrentColorScheme(.red))
     }
 }

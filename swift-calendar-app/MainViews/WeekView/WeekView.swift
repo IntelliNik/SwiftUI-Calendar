@@ -11,7 +11,7 @@ struct WeekView: View {
     
     @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
-    //@EnvironmentObject var currColorScheme: CurrentColorScheme
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -72,6 +72,5 @@ struct WeekView_Previews: PreviewProvider {
             WeekView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
                 .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro"))
         }
-        .environmentObject(CurrentColorScheme(.red))
     }
 }

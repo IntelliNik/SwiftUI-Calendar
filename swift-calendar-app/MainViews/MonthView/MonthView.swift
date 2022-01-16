@@ -14,7 +14,7 @@ struct MonthView: View {
     //}
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
-    //@EnvironmentObject var currColorScheme: CurrentColorScheme
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -61,6 +61,5 @@ struct MonthView: View {
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
         MonthView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
-            .environmentObject(CurrentColorScheme(.blue))
     }
 }

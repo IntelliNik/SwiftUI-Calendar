@@ -15,7 +15,7 @@ struct YearView: View {
     @Binding var dateComponents: DateComponents
     @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
-    //@EnvironmentObject var currColorScheme: CurrentColorScheme
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -63,6 +63,5 @@ struct YearView: View {
 struct YearView_Previews: PreviewProvider {
     static var previews: some View {
         YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
-            .environmentObject(CurrentColorScheme(.green))
     }
 }
