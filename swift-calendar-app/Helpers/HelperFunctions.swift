@@ -28,13 +28,6 @@ func getColorFromString(stringColor: String?) -> Color{
     }
 }
 
-/* propably not needed anymore
-func setAccentColor(colorScheme: String){
-    let defaults = UserDefaults.standard
-    defaults.set(colorScheme, forKey: "ColorScheme")
-}
- */
-
 // helper function to translate the string representing the current color scheme
 // as stored in UserDefaults to the string needed to initialize Color correctly
 func getAccentColorString(from: String) -> String{
