@@ -29,6 +29,8 @@ struct AddEventView: View {
     @State private var locationSearch = ""
     @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
+    private let locationManager = CLLocationManager()
+    @State private var saveCurrentLocation: Bool = false
     
     @State private var wholeDay = false
     
@@ -172,16 +174,73 @@ struct AddEventView: View {
                     }
                     if(location == "Current"){
                         
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                            annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
-                            .onAppear(){
-                                let annotationCurrent = MKPointAnnotation()
-                                annotationCurrent.coordinate = currentRegion.center
-                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                        if CLLocationManager.locationServicesEnabled() {
+                            switch locationManager.authorizationStatus {
+                                case .notDetermined, .restricted, .denied:
+                                HStack{
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .padding()
+                                        .foregroundColor(.yellow)
+                                    Text("Please allow accurate location services in the settings to use this feature.")
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                    .onAppear(){                                  saveCurrentLocation = false}
+                                    Button(action: {
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                        }) {
+                                Image(systemName: "gear")
+                                    .foregroundColor(.blue)
+                                    .imageScale(.large)
+                                        }
+                                }
+                                case .authorizedAlways, .authorizedWhenInUse:
+                                    switch locationManager.accuracyAuthorization {
+                                            case .fullAccuracy:
+                                                Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                                                annotationItems: markers) { marker in
+                                                  marker.location
+                                              }.edgesIgnoringSafeArea(.all)
+                                                .frame(minHeight: 200)
+                                                .onAppear(){
+                                                    saveCurrentLocation = true
+                                                    let annotationCurrent = MKPointAnnotation()
+                                                    annotationCurrent.coordinate = currentRegion.center
+                                                    markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                                                }
+                                            case .reducedAccuracy:
+                                        HStack{
+                                            Image(systemName: "exclamationmark.triangle.fill")
+                                                .padding()
+                                                .foregroundColor(.yellow)
+                                            Text("Please allow accurate location services in the settings to use this feature.")
+                                            .padding()
+                                            .foregroundColor(.blue)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .onAppear(){                                  saveCurrentLocation = false}
+                                            Button(action: {
+                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                                }) {
+                                        Image(systemName: "gear")
+                                            .foregroundColor(.blue)
+                                            .imageScale(.large)
+                                                }
+                                        }
+                                            default:
+                                                Text("Error: This should not happen")
+                                                .padding()
+                                                .onAppear(){                                  saveCurrentLocation = false}
+                                        }
+                                @unknown default:
+                                    Text("Error: This should not happen")
+                                    .padding()
+                                    .onAppear(){                                  saveCurrentLocation = false}
                             }
+                        } else {
+                            Text("Location services are not enabled")
+                                .padding()
+                                .onAppear(){                                  saveCurrentLocation = false}
+                        }
                     }
                     if(location == "Custom"){
                         HStack{
@@ -224,11 +283,11 @@ struct AddEventView: View {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
-                                        case .noResults: return AnyView(Text("No Results"))
-                                        case .error(let description): return AnyView(Text("Error: \(description)"))
+                                        case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
+                                        case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
                                         default: return AnyView(EmptyView())
                                         }
-                                }.foregroundColor(Color.gray)
+                                }.foregroundColor(Color(getAccentColorString()))
                                                
                                 // display the results as a list
                                 ForEach(locationService.searchResults, id: \.self) {
@@ -257,6 +316,7 @@ struct AddEventView: View {
                                         }
                                             }) {
                                                 Text(completionResult.title + ", " + completionResult.subtitle)
+                                                    .foregroundColor(Color(getAccentColorString()))
                                             }
                                     
                                     //Text(completionResult.title)
@@ -309,11 +369,13 @@ struct AddEventView: View {
                             event.notes = notes
                         }
                         if (location == "Current"){
-                            event.location = true
-                            event.latitude = currentRegion.center.latitude
-                            event.longitude = currentRegion.center.longitude
-                            event.latitudeDelta = currentRegion.span.latitudeDelta
-                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                            if saveCurrentLocation{
+                                event.location = true
+                                event.latitude = currentRegion.center.latitude
+                                event.longitude = currentRegion.center.longitude
+                                event.latitudeDelta = currentRegion.span.latitudeDelta
+                                event.longitudeDelta = currentRegion.span.longitudeDelta
+                            }
                         } else if (location == "Custom")
                         {
                             event.location = true
