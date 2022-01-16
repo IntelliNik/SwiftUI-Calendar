@@ -11,6 +11,8 @@ import SwiftUI
 struct TodayButton: View {
     @Binding var dateComponents: DateComponents
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         Button(action: {
             dateComponents = getToday()
@@ -22,11 +24,11 @@ struct TodayButton: View {
         })
         .padding(5)
         .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString()))
+            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString(from: colorScheme)))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color(getAccentColorString()), lineWidth: 1)
+                .strokeBorder(Color(getAccentColorString(from: colorScheme)), lineWidth: 1)
         )
         
     }

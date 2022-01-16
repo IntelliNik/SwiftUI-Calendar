@@ -22,6 +22,7 @@ struct EditCalendarView: View {
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.managedObjectContext) var moc
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         ZStack{
@@ -45,7 +46,7 @@ struct EditCalendarView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {showAddEventSheet.toggle()}) {
                             Image(systemName: "plus")
-                                .foregroundColor(Color(getAccentColorString()))
+                                .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                                 .font(.system(size: 16))
                         }
                     }

@@ -12,6 +12,8 @@ struct WeekView: View {
     @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         VStack{
             WeekViewWeekAndYear(dateComponents: $dateComponents)
@@ -46,7 +48,7 @@ struct WeekView: View {
             }
             .padding()
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
+            .colorMultiply(Color(getAccentColorString(from: colorScheme)))
         }
         .gesture(
             DragGesture()

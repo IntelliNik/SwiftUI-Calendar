@@ -16,6 +16,8 @@ struct MonthViewDayBox: View {
     @State var rectangle: Bool?
     @State var markToday: Bool?
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: rectangle ?? false ? 3 : 10, style: .continuous)
@@ -25,7 +27,7 @@ struct MonthViewDayBox: View {
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
                 .overlay(Text(String(date))
-                            .foregroundColor(Color(getAccentColorString()))
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             .font(.system(size: fontSize ?? 20)))
         }
     }

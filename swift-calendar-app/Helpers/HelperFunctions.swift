@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 // Color
-public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red","Orange","Brown","Cyan","Indigo"]
+public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red","Orange","Brown","Indigo"]
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
@@ -22,17 +22,27 @@ func getColorFromString(stringColor: String?) -> Color{
     case "Red": return .red
     case "Orange": return .orange
     case "Brown": return .brown
-    case "Cyan": return .cyan
     case "Indigo": return .indigo
     default: return .gray
     }
 }
 
-func setAccentColor(colorScheme: String){
-    let defaults = UserDefaults.standard
-    defaults.set(colorScheme, forKey: "ColorScheme")
+// helper function to translate the string representing the current color scheme
+// as stored in UserDefaults to the string needed to initialize Color correctly
+func getAccentColorString(from: String) -> String{
+    switch from{
+    case "red":
+        return "AccentColorRed"
+    case "green":
+        return "AccentColorGreen"
+    case "blue":
+        return "AccentColorBlue"
+    default:
+        return "AccentColorRed"
+    }
 }
 
+// this is now only used in the widgets
 func getAccentColorString() -> String{
     let defaults = UserDefaults.standard
     

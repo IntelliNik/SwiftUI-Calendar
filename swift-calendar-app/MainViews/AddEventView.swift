@@ -55,6 +55,8 @@ struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
@@ -358,7 +360,7 @@ struct AddEventView: View {
                         try? moc.save()
                         
                         dismiss()
-                    }.foregroundColor(Color(getAccentColorString()))
+                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
                     .navigationTitle("Add event")
                     .confirmationDialog(
                         "Are you sure?",

@@ -16,6 +16,8 @@ struct YearView: View {
     @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
@@ -40,7 +42,7 @@ struct YearView: View {
                 pickerSelection = .current
             }
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
+            .colorMultiply(Color(getAccentColorString(from: colorScheme)))
             .padding()
         }.padding()
             .gesture(

@@ -16,6 +16,8 @@ struct SearchEventView: View {
     
     @State var selectedEvent = 0
     @State var saveEvent = 0
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
     private var events: FetchedResults<Event>
@@ -40,7 +42,7 @@ struct SearchEventView: View {
                                 selectedEvent = events.firstIndex {$0 == events[index] }!
                             }){
                                 Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
-                                    .foregroundColor(Color(getAccentColorString()))
+                                    .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             }
                         }
                     }
