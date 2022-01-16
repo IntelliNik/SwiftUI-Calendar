@@ -100,7 +100,7 @@ struct EventCardView: View {
         }
         .alert(isPresented: self.$showingAlert) {
             return Alert(
-                title: Text(event.name!),
+                title: Text(event.name ?? ""),
                    message: Text("Delete event?"),
                    primaryButton:
                         .cancel(),

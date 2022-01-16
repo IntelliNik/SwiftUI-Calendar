@@ -22,7 +22,7 @@ struct AddEventView: View {
     @State private var calendar = 0
     
     @State private var startDate = Date()
-    @State private var endDate = Date()
+    @State private var endDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date.now)!
     @State private var endRepetitionDate = Date()
     
     @State private var location: String = "None"
@@ -356,6 +356,8 @@ struct AddEventView: View {
                         event.key = UUID()
                         if name != ""{
                             event.name = name
+                        } else {
+                            event.name = "Event"
                         }
                         event.startdate = startDate
                         event.enddate = endDate
