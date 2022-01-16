@@ -156,7 +156,7 @@ struct MenuView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
             .edgesIgnoringSafeArea(.all)
-            .background(Color(getAccentColorString()))
+            .background(Color(getAccentColorString(from: colorScheme)))
         
             
     }

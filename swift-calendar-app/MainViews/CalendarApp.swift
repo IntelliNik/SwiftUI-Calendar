@@ -26,6 +26,8 @@ struct CalendarApp: App {
     
     @StateObject private var dataController = DataController()
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     // TODO: Remove next lines when everything is done
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
     // Fetch Request only where we need a request?
@@ -49,7 +51,7 @@ struct CalendarApp: App {
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color(getAccentColorString()))
+                            .background(Color(getAccentColorString(from: colorScheme)))
                             .opacity(0.05)
                             .onTapGesture {
                                 withAnimation{

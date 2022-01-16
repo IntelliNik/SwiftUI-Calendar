@@ -15,6 +15,8 @@ struct AddCalendarView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     @Binding var saveCalendar: Bool
     
     var body: some View {
@@ -43,7 +45,7 @@ struct AddCalendarView: View {
 
                                     saveCalendar = true
                                     dismiss()
-                                }.foregroundColor(Color(getAccentColorString()))
+                                }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             }
                         }
                         .confirmationDialog(

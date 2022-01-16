@@ -22,6 +22,8 @@ struct ShowEventView: View {
     
     @Environment(\.dismiss) var dismiss
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         NavigationView{
             Form{
@@ -130,16 +132,16 @@ struct ShowEventView: View {
                     /*
                      NavigationView{
                         NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString()))
+                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
                      */
                     
                     Button(action: {dismiss()}){
                         HStack{
                             Image(systemName: "chevron.left")
                                 .font(Font.headline.weight(.bold))
-                                .foregroundColor(Color(getAccentColorString()))
+                                .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             Text("Back")
-                                .foregroundColor(Color(getAccentColorString()))
+                                .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                         }
                     }
                 }
@@ -148,12 +150,12 @@ struct ShowEventView: View {
                     /*
                      NavigationView{
                         NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString()))
+                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
                      */
                     
                     Button(action: {confirmationShown = true}){
                         Text("Edit")
-                            .foregroundColor(Color(getAccentColorString()))
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                     }
                     .sheet(isPresented: $confirmationShown) {
                         EditEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))

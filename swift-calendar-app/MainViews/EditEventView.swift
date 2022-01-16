@@ -59,6 +59,8 @@ struct EditEventView: View {
     @Environment(\.managedObjectContext) var moc
     @Environment(\.presentationMode) var mode: Binding<PresentationMode>
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
@@ -383,9 +385,9 @@ struct EditEventView: View {
                 HStack{
                     Image(systemName: "chevron.left")
                         .font(Font.headline.weight(.bold))
-                        .foregroundColor(Color(getAccentColorString()))
+                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                     Text("Back")
-                        .foregroundColor(Color(getAccentColorString()))
+                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                 }
             })
         }

@@ -35,8 +35,9 @@ func setAccentColor(colorScheme: String){
 }
  */
 
+// helper function to translate the string representing the current color scheme
+// as stored in UserDefaults to the string needed to initialize Color correctly
 func getAccentColorString(from: String) -> String{
-    
     switch from{
     case "red":
         return "AccentColorRed"
@@ -49,6 +50,7 @@ func getAccentColorString(from: String) -> String{
     }
 }
 
+// this is now only used in the widgets
 func getAccentColorString() -> String{
     let defaults = UserDefaults.standard
     
