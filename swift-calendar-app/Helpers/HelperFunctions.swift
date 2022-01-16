@@ -128,3 +128,5 @@ func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
         set: { lhs.wrappedValue = $0 }
     )
 }
+
+let Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]

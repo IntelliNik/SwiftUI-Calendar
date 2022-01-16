@@ -22,8 +22,7 @@ struct TodayButton: View {
                 .font(.custom("MyToday", size: 25))
                 .fontWeight(.heavy)
         })
-        .frame(height: 40)
-        .frame(maxWidth: 90)
+        .padding(5)
         .background(
             RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString(from: colorScheme)))
         )

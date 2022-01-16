@@ -13,7 +13,8 @@ struct NavigationBarView: View {
     @Binding var showAddEventSheet: Bool
     @Binding var showSearchView: Bool
     
-    @State var title = "XXX"
+    var title = ""
+
     @State var fontSize = 20.0
     
     @Environment(\.managedObjectContext) var moc

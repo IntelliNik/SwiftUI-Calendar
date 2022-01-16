@@ -19,7 +19,6 @@ struct YearView: View {
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
-        
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
             Spacer()
@@ -45,6 +44,7 @@ struct YearView: View {
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString(from: colorScheme)))
             .padding()
+        }.padding()
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
@@ -56,7 +56,7 @@ struct YearView: View {
                         }
                     }
             )
-        }.padding()
+
     }
 }
 

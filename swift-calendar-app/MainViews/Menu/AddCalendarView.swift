@@ -10,7 +10,7 @@ import SwiftUI
 struct AddCalendarView: View {
     @State var confirmationShown = false
     @State private var name: String = ""
-    @State private var color = 0
+    @State private var color = 1
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc

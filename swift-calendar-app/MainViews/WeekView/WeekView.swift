@@ -17,7 +17,7 @@ struct WeekView: View {
     var body: some View {
         VStack{
             WeekViewWeekAndYear(dateComponents: $dateComponents)
-            Spacer()
+            .padding(.bottom)
             GeometryReader { geo in
                 HStack {
                     Spacer()
@@ -49,17 +49,17 @@ struct WeekView: View {
             .padding()
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString(from: colorScheme)))
-            .gesture(
-                DragGesture()
-                    .onEnded(){gesture in
-                        if(gesture.translation.width < 0){
-                            pickerSelection = .previous
-                        } else if(gesture.translation.width > 0){
-                            pickerSelection = .next
-                        }
-                    }
-            )
         }
+        .gesture(
+            DragGesture()
+                .onEnded(){gesture in
+                    if(gesture.translation.width < 0){
+                        pickerSelection = .previous
+                    } else if(gesture.translation.width > 0){
+                        pickerSelection = .next
+                    }
+                }
+        )
     }
 }
     
