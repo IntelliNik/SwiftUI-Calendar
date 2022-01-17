@@ -274,6 +274,7 @@ struct AddEventView: View {
                                                 saveCurrentLocation = false
                                             }
                                         Button(action: {
+                                            location = "None"
                                             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                         }) {
                                             Image(systemName: "gear")
