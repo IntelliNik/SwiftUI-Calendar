@@ -57,9 +57,11 @@ struct EventCardView: View {
                     Button(action: {
                         showShowEvent = true
                     }, label: {
-                        Image(systemName: "pencil.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundColor(Color("AccentColorGreen"))
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.system(size: 40))
+                                .foregroundColor(.green)
+                                .background(.white)
+                                .clipShape(Circle())
                     }).padding(.leading, 5)
                 }
                 if(deleteButton){
@@ -68,7 +70,9 @@ struct EventCardView: View {
                     }, label: {
                         Image(systemName: "x.circle.fill")
                             .font(.system(size: 40))
-                            .foregroundColor(Color("AccentColorRed"))
+                            .foregroundColor(.pink)
+                            .background(.white)
+                            .clipShape(Circle())
                     })
                 }
             }.padding()

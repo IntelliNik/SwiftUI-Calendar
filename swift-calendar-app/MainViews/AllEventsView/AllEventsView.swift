@@ -47,9 +47,6 @@ struct AllEventsView: View {
                                 .onAppear {
                                     self.refreshID = UUID()
                                 }
-                                /*.onChange(of: event) { newValue in
-                                    self.refreshID = UUID()
-                                 }*/
                             } else{
                                 EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
                                     withAnimation{
@@ -60,9 +57,6 @@ struct AllEventsView: View {
                                 .onAppear {
                                     self.refreshID = UUID()
                                 }
-                                /*.onChange(of: event) { newValue in
-                                    self.refreshID = UUID()
-                                 }*/
                             }
                         }
                         .onChange(of: refreshID) { _ in
