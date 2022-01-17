@@ -63,6 +63,11 @@
 		77FB1855278CDAB600C63286 /* AllEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770FB6B5276FA1C700D38A07 /* AllEventsView.swift */; };
 		A0CB453C2792E63800E6DBC9 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F6637C2791C47D007ACCC4 /* EditEventView.swift */; };
 		A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DED9722790A8C1001AE9EF /* WeekEventView.swift */; };
+		B499608B2795D1770055CAF9 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960822795D1770055CAF9 /* EventView.swift */; };
+		B499608C2795D1770055CAF9 /* CurHourMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960832795D1770055CAF9 /* CurHourMarker.swift */; };
+		B499608D2795D1770055CAF9 /* DayViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960842795D1770055CAF9 /* DayViewHeader.swift */; };
+		B499608E2795D1770055CAF9 /* DayViewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = B49960852795D1770055CAF9 /* DayViewTime.swift */; };
+		B49960922795D1770055CAF9 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B499608A2795D1770055CAF9 /* DayView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +146,11 @@
 		77F6637C2791C47D007ACCC4 /* EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallDailyOverviewView.swift; sourceTree = "<group>"; };
 		A0DED9722790A8C1001AE9EF /* WeekEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventView.swift; sourceTree = "<group>"; };
+		B49960822795D1770055CAF9 /* EventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
+		B49960832795D1770055CAF9 /* CurHourMarker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurHourMarker.swift; sourceTree = "<group>"; };
+		B49960842795D1770055CAF9 /* DayViewHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewHeader.swift; sourceTree = "<group>"; };
+		B49960852795D1770055CAF9 /* DayViewTime.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
+		B499608A2795D1770055CAF9 /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -219,6 +229,7 @@
 		7706517727847E93008390EC /* MainViews */ = {
 			isa = PBXGroup;
 			children = (
+				B49960802795D1770055CAF9 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
 				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
@@ -349,6 +360,27 @@
 			path = "swift-calendar-app";
 			sourceTree = "<group>";
 		};
+		B49960802795D1770055CAF9 /* DayView */ = {
+			isa = PBXGroup;
+			children = (
+				B49960812795D1770055CAF9 /* View_Helpers */,
+				B499608A2795D1770055CAF9 /* DayView.swift */,
+			);
+			name = DayView;
+			path = "../../../swift-calendar-app_alt/DayView";
+			sourceTree = "<group>";
+		};
+		B49960812795D1770055CAF9 /* View_Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				B49960822795D1770055CAF9 /* EventView.swift */,
+				B49960832795D1770055CAF9 /* CurHourMarker.swift */,
+				B49960842795D1770055CAF9 /* DayViewHeader.swift */,
+				B49960852795D1770055CAF9 /* DayViewTime.swift */,
+			);
+			path = View_Helpers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -472,11 +504,13 @@
 				35B68336277A182E00D9EBAC /* MonthView.swift in Sources */,
 				35B68337277A182E00D9EBAC /* MonthViewMonthAndYear.swift in Sources */,
 				779BF16D2781B42000DCFBEB /* EventCardView.swift in Sources */,
+				B49960922795D1770055CAF9 /* DayView.swift in Sources */,
 				7706517527847ADF008390EC /* EditCalendarView.swift in Sources */,
 				7719874B2773C3C80061CF34 /* MenuView.swift in Sources */,
 				7727CC56278F523500C9B7FE /* WeekViewCalendar.swift in Sources */,
 				7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */,
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
+				B499608C2795D1770055CAF9 /* CurHourMarker.swift in Sources */,
 				77046DC1278455FC001DA0DA /* HelperFunctions.swift in Sources */,
 				77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */,
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
@@ -484,6 +518,8 @@
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				3579ED9D278DA70400B46AD0 /* (null) in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,
+				B499608B2795D1770055CAF9 /* EventView.swift in Sources */,
+				B499608D2795D1770055CAF9 /* DayViewHeader.swift in Sources */,
 				35B68338277A182E00D9EBAC /* MonthViewDayBox.swift in Sources */,
 				35FC5CC12779C6E7009033C5 /* YearView.swift in Sources */,
 				77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */,
@@ -496,6 +532,7 @@
 				77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */,
 				35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */,
 				77F466A62768FF6F0034C68B /* (null) in Sources */,
+				B499608E2795D1770055CAF9 /* DayViewTime.swift in Sources */,
 				77EA32EB278F607900093312 /* DataController.swift in Sources */,
 				77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */,
 				77B3C96C2792102000571D8F /* SettingsBundleHelper.swift in Sources */,

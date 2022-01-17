@@ -23,7 +23,7 @@ struct MainView: View {
     var body: some View {
         switch containedView{
         case .day:
-            Text("TODO")
+            DayView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
             WeekView(dateComponents: $dateComponents)

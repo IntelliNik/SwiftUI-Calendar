@@ -103,7 +103,7 @@ func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
 }
 
 func getToday() -> DateComponents{
-    return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
+    return Calendar.current.dateComponents([.hour, .day, .month, .year, .weekOfYear], from: Date.now)
 }
 
 public func getDateForStartdateComparison(from: DateComponents) -> Date?{
@@ -130,3 +130,30 @@ func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
 }
 
 let Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+let Month_short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+let weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+let Hour = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00","07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00"]
+
+func addWeekday(dateComponents: DateComponents) -> DateComponents{
+    let date = Calendar.current.date(from: dateComponents)
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = dateComponents.month
+    newDateComponents.day = dateComponents.day
+    newDateComponents.weekday = Calendar.current.component(.weekday, from: date!)
+    return newDateComponents
+}
+
+func addWeekOfYear(dateComponents: DateComponents) -> DateComponents{
+    let date = Calendar.current.date(from: dateComponents)
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = dateComponents.month
+    newDateComponents.day = dateComponents.day
+    newDateComponents.weekOfYear = Calendar.current.component(.weekOfYear, from: date!)
+    return newDateComponents
+}
+
