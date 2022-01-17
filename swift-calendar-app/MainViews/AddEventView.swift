@@ -402,7 +402,13 @@ struct AddEventView: View {
                             event.name = "Event"
                         }
                         event.startdate = startDate
-                        event.enddate = endDate
+                        
+                        if(endDate < startDate){
+                            event.enddate = startDate
+                        } else{
+                            event.enddate = endDate
+                        }
+                        
                         event.wholeDay = wholeDay
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
