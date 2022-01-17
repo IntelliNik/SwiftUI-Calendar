@@ -146,6 +146,7 @@ struct AddEventView: View {
                                     .foregroundColor(.blue)
                                     .fixedSize(horizontal: false, vertical: true)
                                 Button(action: {
+                                    notification = false
                                     UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                 }) {
                                     Image(systemName: "gear")
@@ -224,6 +225,7 @@ struct AddEventView: View {
                             switch locationManager.authorizationStatus {
                             case .notDetermined:
                                 Text("").onAppear{
+                                    location = "None"
                                     locationManager.requestWhenInUseAuthorization()
                                 }
                             case .restricted, .denied:
@@ -237,6 +239,7 @@ struct AddEventView: View {
                                         .fixedSize(horizontal: false, vertical: true)
                                         .onAppear(){                                  saveCurrentLocation = false}
                                     Button(action: {
+                                        location = "None"
                                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                                     }) {
                                         Image(systemName: "gear")
@@ -317,20 +320,6 @@ struct AddEventView: View {
                         .onChange(of: locationSearch) { newValue in
                             locationService.queryFragment = locationSearch
                         }
-                        /*Section(header: Text("Search")) {
-                         ZStack(alignment: .trailing) {
-                         TextField("Search", text: $locationService.queryFragment)
-                         
-                         // while user is typing input it sends the current query to the location service
-                         // which in turns sets its status to searching; when searching status is set on
-                         // searching then a clock symbol will be shown beside the search box
-                         if locationService.status == .isSearching {
-                         Image(systemName: "clock")
-                         .foregroundColor(Color.gray)
-                         }
-                         }
-                         }*/
-                        
                         Section() {
                             List {
                                 Group { () -> AnyView in
@@ -370,16 +359,16 @@ struct AddEventView: View {
                                         Text(completionResult.title + ", " + completionResult.subtitle)
                                             .foregroundColor(Color(getAccentColorString()))
                                     }
-                                    
-                                    //Text(completionResult.title)
                                 }
                             }
                         }
+                        if(locationSearch != ""){
                         Map(coordinateRegion: $customRegion,
                             annotationItems: markers) { marker in
                             marker.location
                         }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
+                        }
                     }
                 }
                 Section{
@@ -492,6 +481,7 @@ struct AddEventView: View {
         }
         .onAppear{
             requestNotificationPermission()
+            locationManager.requestWhenInUseAuthorization()
         }
     }
 }
