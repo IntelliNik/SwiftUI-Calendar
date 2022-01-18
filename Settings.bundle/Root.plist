@@ -30,18 +30,16 @@
 			<key>Key</key>
 			<string>appIcon</string>
 			<key>DefaultValue</key>
-			<string>Icon 1</string>
+			<string>Light Icon</string>
 			<key>Titles</key>
 			<array>
-				<string>Icon 1</string>
-				<string>Icon 2</string>
-				<string>Icon 3</string>
+				<string>Light Icon</string>
+				<string>Dark Icon</string>
 			</array>
 			<key>Values</key>
 			<array>
-				<string>1</string>
-				<string>2</string>
-				<string>3</string>
+				<string>AppIcon-Light</string>
+				<string>AppIcon-Dark</string>
 			</array>
 		</dict>
 		<dict>
