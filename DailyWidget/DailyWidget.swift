@@ -51,12 +51,12 @@ struct DailyWidgetEntryView : View {
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         } else if (widgetFamily == .systemMedium){
             // TODO fetch here is not working properly, app crashes
-            //MediumDailyOverviewView()
-                //.environment(\.managedObjectContext, dataController.container.viewContext)
+            MediumDailyOverviewView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         } else{
             // TODO fetch here is not working properly, app crashes
-            //LargeDailyOverviewView()
-                //.environment(\.managedObjectContext, dataController.container.viewContext)
+            LargeDailyOverviewView()
+                .environment(\.managedObjectContext, dataController.container.viewContext)
         }
     }
 }

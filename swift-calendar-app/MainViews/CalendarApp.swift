@@ -67,7 +67,6 @@ struct CalendarApp: App {
                 // show menu on top
                 .zIndex(1)
                 VStack{
-                    // TODO: why is the title update not working ???
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView, title: title)
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){

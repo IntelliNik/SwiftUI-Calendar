@@ -46,10 +46,10 @@
 		77EA32E3278F5ECB00093312 /* DailyWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7752442E2789C89500FE7206 /* DailyWidget.swift */; };
 		77EA32E4278F5ECD00093312 /* SmallDailyOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */; };
 		77EA32EB278F607900093312 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E7278F605B00093312 /* DataController.swift */; };
-		77EA32ED278F607D00093312 /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E9278F605B00093312 /* swift_calendar_app.xcdatamodeld */; };
+		77EA32ED278F607D00093312 /* store.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E9278F605B00093312 /* store.xcdatamodeld */; };
 		77EA32EE278F62D200093312 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E7278F605B00093312 /* DataController.swift */; };
 		77EA32EF278F62D400093312 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E8278F605B00093312 /* Persistence.swift */; };
-		77EA32F0278F62D600093312 /* swift_calendar_app.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E9278F605B00093312 /* swift_calendar_app.xcdatamodeld */; };
+		77EA32F0278F62D600093312 /* store.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 77EA32E9278F605B00093312 /* store.xcdatamodeld */; };
 		77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10DD277CEB4D00206E60 /* PickerView.swift */; };
 		77EB10E2277CFB7C00206E60 /* PickerDateComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EB10E1277CFB7C00206E60 /* PickerDateComponents.swift */; };
 		77F2742C27901B760021AC42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
@@ -296,7 +296,7 @@
 			children = (
 				77EA32E7278F605B00093312 /* DataController.swift */,
 				77EA32E8278F605B00093312 /* Persistence.swift */,
-				77EA32E9278F605B00093312 /* swift_calendar_app.xcdatamodeld */,
+				77EA32E9278F605B00093312 /* store.xcdatamodeld */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -480,7 +480,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77EA32E3278F5ECB00093312 /* DailyWidget.swift in Sources */,
-				77EA32F0278F62D600093312 /* swift_calendar_app.xcdatamodeld in Sources */,
+				77EA32F0278F62D600093312 /* store.xcdatamodeld in Sources */,
 				77EA32EF278F62D400093312 /* Persistence.swift in Sources */,
 				77EA32EE278F62D200093312 /* DataController.swift in Sources */,
 				77F2742F27901E9E0021AC42 /* MediumDailyOverviewView.swift in Sources */,
@@ -534,7 +534,7 @@
 				35FC5CC32779C6E7009033C5 /* YearViewMonthBox.swift in Sources */,
 				7727CC57278F523500C9B7FE /* WeekView.swift in Sources */,
 				77EB10E2277CFB7C00206E60 /* PickerDateComponents.swift in Sources */,
-				77EA32ED278F607D00093312 /* swift_calendar_app.xcdatamodeld in Sources */,
+				77EA32ED278F607D00093312 /* store.xcdatamodeld in Sources */,
 				770FB6AC276F485200D38A07 /* CalendarApp.swift in Sources */,
 				7727CC58278F523500C9B7FE /* WeekViewWeekAndYear.swift in Sources */,
 				A0CB453C2792E63800E6DBC9 /* EditEventView.swift in Sources */,
@@ -561,7 +561,7 @@
 				CODE_SIGN_ENTITLEMENTS = DailyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Daily Overview";
@@ -573,7 +573,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -590,7 +590,7 @@
 				CODE_SIGN_ENTITLEMENTS = DailyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Daily Overview";
@@ -602,7 +602,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -737,7 +737,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
@@ -751,7 +751,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -770,7 +770,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
@@ -784,7 +784,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -826,13 +826,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		77EA32E9278F605B00093312 /* swift_calendar_app.xcdatamodeld */ = {
+		77EA32E9278F605B00093312 /* store.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				77EA32EA278F605B00093312 /* swift_calendar_app.xcdatamodel */,
 			);
 			currentVersion = 77EA32EA278F605B00093312 /* swift_calendar_app.xcdatamodel */;
-			path = swift_calendar_app.xcdatamodeld;
+			path = store.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

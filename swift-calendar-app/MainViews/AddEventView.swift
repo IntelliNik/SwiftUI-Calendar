@@ -466,10 +466,12 @@ struct AddEventView: View {
                                 event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
                             }
                             
+                        } else {
+                            event.notification = false
                         }
                         calendars[calendar].addToEvents(event)
                         
-                        try? moc.save()
+                        try! moc.save()
                         
                         dismiss()
                     }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
