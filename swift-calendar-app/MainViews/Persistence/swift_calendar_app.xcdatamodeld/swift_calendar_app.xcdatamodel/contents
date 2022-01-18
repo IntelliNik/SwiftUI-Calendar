@@ -25,6 +25,7 @@
         <relationship name="calendar" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MCalendar" inverseName="events" inverseEntity="MCalendar"/>
     </entity>
     <entity name="ForeverEvent" representedClassName="ForeverEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="enddate" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -53,6 +54,6 @@
     <elements>
         <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="359"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="119"/>
-        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="269"/>
+        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="284"/>
     </elements>
 </model>

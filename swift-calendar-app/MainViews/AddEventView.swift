@@ -521,6 +521,7 @@ struct AddEventView: View {
                                 let eventForever = ForeverEvent(context: moc)
                                 eventForever.key = UUID()
                                 eventForever.startdate = event.startdate!
+                                eventForever.enddate = event.enddate!
                                 eventForever.name = event.name
                                 eventForever.url = event.url
                                 eventForever.notes = event.notes
