@@ -130,3 +130,7 @@ func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
 }
 
 let Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+enum RepetitionInterval {
+    case daily, weekly, monthly, yearly
+}

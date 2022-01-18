@@ -16,14 +16,31 @@
         <attribute name="repetition" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="repetitionAmount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="repetitionEndDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="repetitionID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="repetitionInterval" optional="YES" attributeType="String"/>
-        <attribute name="repetitionNext" optional="YES" attributeType="String"/>
-        <attribute name="repetitionSkip" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="repetitionUntil" optional="YES" attributeType="String"/>
         <attribute name="startdate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="url" optional="YES" attributeType="String"/>
         <attribute name="wholeDay" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="calendar" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MCalendar" inverseName="events" inverseEntity="MCalendar"/>
+    </entity>
+    <entity name="ForeverEvent" representedClassName="ForeverEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="location" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notes" optional="YES" attributeType="String"/>
+        <attribute name="notification" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="notificationMinutesBefore" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="notificationTimeAtWholeDay" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="repetitionInterval" optional="YES" attributeType="String"/>
+        <attribute name="startdate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="url" optional="YES" attributeType="String"/>
+        <attribute name="wholeDay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <relationship name="calendar" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MCalendar" inverseName="foreverEvents" inverseEntity="MCalendar"/>
     </entity>
     <entity name="MCalendar" representedClassName="MCalendar" syncable="YES" codeGenerationType="class">
         <attribute name="color" optional="YES" attributeType="String"/>
@@ -31,9 +48,11 @@
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
+        <relationship name="foreverEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ForeverEvent" inverseName="calendar" inverseEntity="ForeverEvent"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="374"/>
-        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="104"/>
+        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="359"/>
+        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="119"/>
+        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="269"/>
     </elements>
 </model>
