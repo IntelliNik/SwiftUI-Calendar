@@ -25,7 +25,7 @@ struct MonthViewMonthAndYear: View {
             HStack() {
                 VStack(alignment: .leading) { //button and month
                     TodayButton(dateComponents: $dateComponents)
-                    Text(Month[dateComponents.month!-1])
+                    Text(Months[dateComponents.month!-1])
                         .font(.system(size: 45, weight: .bold, design: .monospaced))
                 }
                 Spacer()
