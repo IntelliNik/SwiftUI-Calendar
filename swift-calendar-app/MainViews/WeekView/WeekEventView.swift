@@ -22,9 +22,11 @@ struct WeekEventView: View {
                         .lineLimit(1)
                     Spacer()
                     if let date = event.startdate{
-                        Text(date, style: .time)
-                            .foregroundColor(.white)
-                            .lineLimit(1)
+                        if(!event.wholeDay){
+                            Text(date, style: .time)
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                        }
                     }
                 }
                 .onTapGesture{
