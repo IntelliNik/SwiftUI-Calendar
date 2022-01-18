@@ -30,7 +30,7 @@ struct DayViewTime: View {
         let cur_hour = getToday().hour
         let cur_day = getToday().day
         ScrollViewReader{ scroll in
-            ScrollView{
+            ScrollView(showsIndicators: false){
                 ZStack{
                     VStack(alignment: .leading, spacing: 25){
                         ForEach(0...23, id:\.self){ hour in
@@ -50,7 +50,7 @@ struct DayViewTime: View {
                                     ZStack{
                                         VStack(alignment: .leading){
                                             let eventsThisHour: [Event] = filterEventsForHour(hour: hour)
-                                            ScrollView(.horizontal){
+                                            ScrollView(.horizontal, showsIndicators: false){
                                                 HStack(){
                                                     ForEach(eventsThisHour, id:\.self){ event in
                                                         EventView(event: event).onTapGesture(){

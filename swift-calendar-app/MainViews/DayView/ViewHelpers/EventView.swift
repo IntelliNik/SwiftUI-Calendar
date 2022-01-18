@@ -18,11 +18,10 @@ struct EventView: View {
                 .overlay(
             VStack{
                 Text(event.name ?? "")
-                        .font(.system(size: 14, weight: .medium))
+                    .font(.headline)
                     .lineLimit(1)
                 HStack{
                     Text(event.startdate!, style: .time)
-                        .font(.system(size: 12))
                 }
             })
         }
