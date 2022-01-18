@@ -39,6 +39,7 @@
 		77B3C96D2792199E00571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
 		77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DAC8EE277CA0EC000D8BCD /* MainView.swift */; };
+		77E08BC42797295F00D4791A /* SyncCalendarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E08BC32797295F00D4791A /* SyncCalendarsView.swift */; };
 		77EA32D5278F5E9800093312 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775244292789C89500FE7206 /* WidgetKit.framework */; };
 		77EA32D6278F5E9800093312 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7752442B2789C89500FE7206 /* SwiftUI.framework */; };
 		77EA32DB278F5E9A00093312 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77EA32DA278F5E9A00093312 /* Assets.xcassets */; };
@@ -127,6 +128,7 @@
 		77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
 		77DAC8EA277C6C09000D8BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		77DAC8EE277CA0EC000D8BCD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		77E08BC32797295F00D4791A /* SyncCalendarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncCalendarsView.swift; sourceTree = "<group>"; };
 		77EA32BC278F5CC500093312 /* swift-calendar-app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "swift-calendar-app.entitlements"; sourceTree = "<group>"; };
 		77EA32D4278F5E9800093312 /* DailyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DailyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		77EA32DA278F5E9A00093312 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
 				77AD06962780AEAF00767504 /* ShowEventView.swift */,
+				77E08BC32797295F00D4791A /* SyncCalendarsView.swift */,
 				77AD06922780974B00767504 /* LinkPreviewProvider.swift */,
 				77EA32E6278F605B00093312 /* Persistence */,
 			);
@@ -518,6 +521,7 @@
 				77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */,
 				A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */,
 				35FC5CBE2779C6E7009033C5 /* YearViewCalendar.swift in Sources */,
+				77E08BC42797295F00D4791A /* SyncCalendarsView.swift in Sources */,
 				35B68334277A182E00D9EBAC /* MonthViewCalendar.swift in Sources */,
 				35BC03732784DC810041F097 /* ModifyCalendar.swift in Sources */,
 				77FB1855278CDAB600C63286 /* AllEventsView.swift in Sources */,

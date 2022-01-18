@@ -18,6 +18,7 @@ struct MenuView: View {
     @Binding var title: String
     
     @State var calendarEditMode = false
+    @State var showSyncSheet = false
     
     @FetchRequest(
         entity: MCalendar.entity(),
@@ -33,14 +34,26 @@ struct MenuView: View {
     var body: some View {
         VStack(alignment: .leading){
             VStack(alignment: .leading) {
-                Button(action: {
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                }) {
-                    Image(systemName: "gear")
-                        .foregroundColor(.white)
-                        .imageScale(.large)
-                        .padding(.top, 20)
-                        .padding()
+                HStack{
+                    Button(action: {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    }) {
+                        Image(systemName: "gear")
+                            .foregroundColor(.white)
+                            .imageScale(.large)
+                            .padding(.top, 20)
+                            .padding()
+                    }
+                    Spacer()
+                    Button(action: {
+                        showSyncSheet = true
+                    }) {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .foregroundColor(.white)
+                            .imageScale(.large)
+                            .padding(.top, 20)
+                            .padding()
+                    }
                 }
                 Spacer()
                 Button(action: {currentlySelectedView = .day; title = "Day View"; withAnimation{menuOpen = false}}) {
@@ -128,6 +141,9 @@ struct MenuView: View {
             }
             .sheet(isPresented: $calendarEditMode){
                 EditCalendarView()
+            }
+            .sheet(isPresented: $showSyncSheet){
+                SyncCalendarsView()
             }
             
             Rectangle()
