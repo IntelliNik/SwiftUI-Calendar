@@ -18,6 +18,8 @@ struct DayView: View {
         ],
         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
     ) var eventsToday: FetchedResults<Event>
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
 
     var body: some View {
         VStack{
@@ -48,7 +50,7 @@ struct DayView: View {
             }
             .padding()
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
+            .colorMultiply(Color(getAccentColorString(from: colorScheme)))
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in

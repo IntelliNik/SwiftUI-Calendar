@@ -14,6 +14,8 @@ struct DayViewTime: View {
     @State var showEventSheet = false
     @State var eventToShow: Event?
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     func filterEventsForHour(hour: Int) -> [Event]{
         var foundEvents: [Event] = []
         eventsToday.forEach{ event in
@@ -40,8 +42,8 @@ struct DayViewTime: View {
                                         if (cur_day == dateComponents.day){
                                             if (cur_hour == hour){
                                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                                    .stroke(Color(getAccentColorString()), lineWidth: 2.0)
-                                                    .frame(width: 50, height: 45)
+                                                    .stroke(Color(getAccentColorString(from: colorScheme)), lineWidth: 2.0)
+                                                    .frame(width: geometry.size.width * 0.175, height: 45)
                                             }
                                         }
                                     }
