@@ -229,7 +229,6 @@
 			children = (
 				A0D30B222796F1C700EB1F22 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
-				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
 				35B6832D277A182E00D9EBAC /* MonthView */,
 				35FC5CAB2779C56E009033C5 /* YearView */,
@@ -238,6 +237,7 @@
 				770FB6AB276F485200D38A07 /* CalendarApp.swift */,
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
+				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
 				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
@@ -361,20 +361,12 @@
 		A0D30B222796F1C700EB1F22 /* DayView */ = {
 			isa = PBXGroup;
 			children = (
-				A0D30B232796F1CF00EB1F22 /* ViewHelpers */,
-				A0D30B242796F1ED00EB1F22 /* DayView.swift */,
-			);
-			path = DayView;
-			sourceTree = "<group>";
-		};
-		A0D30B232796F1CF00EB1F22 /* ViewHelpers */ = {
-			isa = PBXGroup;
-			children = (
 				A0D30B262796F22200EB1F22 /* EventView.swift */,
 				A0D30B282796F26500EB1F22 /* DayViewTime.swift */,
 				A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */,
+				A0D30B242796F1ED00EB1F22 /* DayView.swift */,
 			);
-			path = ViewHelpers;
+			path = DayView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
