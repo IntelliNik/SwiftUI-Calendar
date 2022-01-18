@@ -128,16 +128,6 @@ struct EventCardView: View {
 struct ExtendedEventCard: View{
     @State var event: Event
     
-    func getURLwithoutProtocol(urlString: String) -> String{
-        if(urlString.hasPrefix("http://")){
-            return String(urlString.dropFirst(7))
-        }
-        if(urlString.hasPrefix("https://")){
-            return String(urlString.dropFirst(8))
-        }
-        return urlString
-    }
-    
     var body: some View{
         VStack{
             EventCardView(event: event, editButton: true, deleteButton: true)
