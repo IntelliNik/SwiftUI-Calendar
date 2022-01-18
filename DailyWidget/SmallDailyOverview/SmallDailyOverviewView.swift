@@ -10,17 +10,11 @@ import SwiftUI
 struct SmallDailyOverviewView: View {
     @State var dateComponents: DateComponents
     
-    @FetchRequest var eventsToday: FetchedResults<Event>
-    
-    init(dateComponents: DateComponents){
-        self._dateComponents = State(initialValue: dateComponents)
-        self._eventsToday = FetchRequest(entity: Event.entity(),
-                                         sortDescriptors: [
-                                            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-                                         ],
-                                         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-        )
-    }
+    @FetchRequest(entity: Event.entity(),
+                  sortDescriptors: [
+                     NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+                  ],
+                  predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event>
     
     var body: some View {
         VStack{

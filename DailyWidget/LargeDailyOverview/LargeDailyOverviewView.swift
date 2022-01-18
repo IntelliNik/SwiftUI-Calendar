@@ -8,16 +8,11 @@
 import SwiftUI
 
 struct LargeDailyOverviewView: View {
-    @FetchRequest var eventsToday: FetchedResults<Event>
-    
-    init(){
-        self._eventsToday = FetchRequest(entity: Event.entity(),
-                                         sortDescriptors: [
-                                            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-                                         ],
-                                         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-        )
-    }
+//    @FetchRequest(entity: Event.entity(),
+//                  sortDescriptors: [
+//                    NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+//                  ],
+//                  predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event>
     
     var body: some View {
         VStack{
@@ -29,17 +24,18 @@ struct LargeDailyOverviewView: View {
             }
             Spacer()
             ScrollView{
-                ForEach(eventsToday, id:\.self){ event in
-                    HStack{
-                        Text(event.name ?? "")
-                        Spacer()
-                        if let startDate = event.startdate{
-                            Text(startDate, style: .time)
-                        }
-                    }
-                    .padding()
-                    .background(getColorFromString(stringColor: event.calendar?.color))
-                }
+                Text("Large Widget")
+//                ForEach(eventsToday, id:\.self){ event in
+//                    HStack{
+//                        Text(event.name ?? "")
+//                        Spacer()
+//                        if let startDate = event.startdate{
+//                            Text(startDate, style: .time)
+//                        }
+//                    }
+//                    .padding()
+//                    .background(getColorFromString(stringColor: event.calendar?.color))
+//                }
             }
         }
     }
