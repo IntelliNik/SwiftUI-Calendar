@@ -10,8 +10,8 @@ import SwiftUI
 struct ModifyCalendar: View {
     @State var mcalendar: MCalendar
     @State var confirmationShown = false
+    @State var color: Int
     @State private var name: String = ""
-    @State private var color: Int = 0
     
     @Binding var showConfirmation: Bool
     
@@ -22,12 +22,17 @@ struct ModifyCalendar: View {
     var body: some View {
         Form{
             Section{
+                TextField("Name", text: self.$mcalendar.name ?? "")
+                    .padding()
+                    .navigationTitle("Configure Calendar")
+/*
                 TextField("Name", text: $name).padding()
                     .navigationTitle("Reconfigure calendar")
                     .onAppear {
                         name = mcalendar.name!
                         color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
                     }
+*/
             }
             Section{
                 Picker("Color", selection: $color) {
@@ -43,7 +48,6 @@ struct ModifyCalendar: View {
             }
         }
         .navigationBarItems(leading: Button(action : {
-            mcalendar.setValue(name,forKey: "name")
             mcalendar.setValue(colorStrings[color],forKey:"color")
             
             try? moc.save()
@@ -65,11 +69,14 @@ struct ModifyCalendar: View {
                 Text("Your Calendars")
             }
         })
+        /*.onAppear {
+            color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
+        }*/
     }
 }
 
 struct ModifyCalendar_Previews: PreviewProvider {
     static var previews: some View {
-        ModifyCalendar(mcalendar: MCalendar(), showConfirmation: .constant(true))
+        ModifyCalendar(mcalendar: MCalendar(), color:0, showConfirmation: .constant(true))
     }
 }

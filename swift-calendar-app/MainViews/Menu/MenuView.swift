@@ -9,7 +9,8 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    @State var accentColor = getAccentColorString()
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
@@ -128,6 +129,7 @@ struct MenuView: View {
             .sheet(isPresented: $calendarEditMode){
                 EditCalendarView()
             }
+            
             Rectangle()
                 .fill(.white)
                 .frame(height: 2)
@@ -137,33 +139,26 @@ struct MenuView: View {
                 Text("Color scheme")
                     .font(.headline)
                     .foregroundColor(.white)
-                Picker(selection: $accentColor, label: Text("Color Scheme")) {                        Image(systemName: "flame").tag("AccentColorRed")
-                    Image(systemName: "leaf").tag("AccentColorGreen")
-                    Image(systemName: "drop").tag("AccentColorBlue")
+                Picker(selection: $colorScheme, label: Text("Color Scheme")) {
+                    Image(systemName: "flame").tag("red")
+                    Image(systemName: "leaf").tag("green")
+                    Image(systemName: "drop").tag("blue")
                     
                 }
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)
-                .onChange(of: accentColor){color in
-                    setAccentColor(colorScheme: color)
+                .onChange(of: colorScheme){color in
+                    colorScheme = color
                 }
                 .padding()
             }
-        }.padding()
+        }
+            .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
-            .onAppear(){
-                if(!isAppAlreadyLaunchedOnce()){
-                    let calendar = MCalendar(context: moc)
-                    calendar.key = UUID()
-                    calendar.name = "Default"
-                    calendar.color = "Yellow"
-                    calendar.defaultCalendar = true
-                    
-                    try? moc.save()
-                }
-            }
+            .background(Color(getAccentColorString(from: colorScheme)))
+        
+            
     }
 }
 

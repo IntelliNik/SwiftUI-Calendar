@@ -16,8 +16,9 @@ struct YearView: View {
     @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
-        
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
             Spacer()
@@ -41,8 +42,9 @@ struct YearView: View {
                 pickerSelection = .current
             }
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
+            .colorMultiply(Color(getAccentColorString(from: colorScheme)))
             .padding()
+        }.padding()
             .gesture(
                 DragGesture()
                     .onEnded(){gesture in
@@ -54,12 +56,12 @@ struct YearView: View {
                         }
                     }
             )
-        }.padding()
+
     }
 }
 
 struct YearView_Previews: PreviewProvider {
     static var previews: some View {
-        YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year], from: Date.now)), updateView: .constant(false))
+        YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
     }
 }

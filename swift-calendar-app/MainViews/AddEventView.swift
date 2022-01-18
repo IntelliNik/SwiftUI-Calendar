@@ -22,13 +22,15 @@ struct AddEventView: View {
     @State private var calendar = 0
     
     @State private var startDate = Date()
-    @State private var endDate = Date()
+    @State private var endDate = Calendar.current.date(byAdding: .hour, value: 1, to: Date.now)!
     @State private var endRepetitionDate = Date()
     
     @State private var location: String = "None"
     @State private var locationSearch = ""
     @State private var markers = [Marker(location: MapMarker(coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), tint: .red))]
     let locationModes = ["None", "Current", "Custom"]
+    private let locationManager = CLLocationManager()
+    @State private var saveCurrentLocation: Bool = false
     
     @State private var wholeDay = false
     
@@ -39,7 +41,8 @@ struct AddEventView: View {
     @State private var repeatUntil = "Forever"
     @State private var amountOfRepetitions = "10"
     
-    @State private var notification = true
+    @State private var notification = false
+    @State private var notificationPermission = false
     @State private var notificationMinutesBefore = 5
     @State private var notficationTimeAtWholeDay = getDateFromHours(hours: "08:00")!
     
@@ -55,13 +58,36 @@ struct AddEventView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
         ]
     ) var calendars: FetchedResults<MCalendar>
-        
+    
+    func requestNotificationPermission(){
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                notificationPermission = true
+            } else if let error = error {
+                notificationPermission = false
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func checkNotificationPermission(){
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { permission in
+            if permission.authorizationStatus == .authorized  {
+                notificationPermission = true
+            }
+            
+        })
+    }
+
     var body: some View {
         NavigationView{
             Form{
@@ -102,26 +128,52 @@ struct AddEventView: View {
                     }.padding()
                 }
                 Section{
-                    Toggle("Notification", isOn: $notification).padding()
-                    if(notification){
-                        Picker("When", selection: $notificationMinutesBefore) {
-                            if(!wholeDay){
-                                Text("On Time").tag(0)
-                                Text("5min before").tag(5)
-                                Text("15min before").tag(15)
-                                Text("30min before").tag(30)
-                                Text("1 hour before").tag(60)
-                                Text("1 day before").tag(24*60)
-                            } else {
-                                Text("1 day before").tag(24*60)
-                                Text("2 days before").tag(2*24*60)
-                                Text("1 week before").tag(7*24*60)
+                    Toggle("Notification", isOn: $notification)
+                        .onChange(of: notification){ notification in
+                            if notification{
+                                checkNotificationPermission()
                             }
-                        }.padding()
-                        if(wholeDay){
-                            DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
-                                Text("At time")
+                        }
+                        .padding()
+                    if(notification){
+                        if(!notificationPermission){
+                            HStack{
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .padding()
+                                    .foregroundColor(.yellow)
+                                Text("Please allow to send notifications in the settings to use this feature.")
+                                    .padding()
+                                    .foregroundColor(.blue)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Button(action: {
+                                    notification = false
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                }) {
+                                    Image(systemName: "gear")
+                                        .foregroundColor(.blue)
+                                        .imageScale(.large)
+                                }
+                            }
+                        } else{
+                            Picker("When", selection: $notificationMinutesBefore) {
+                                if(!wholeDay){
+                                    Text("On Time").tag(0)
+                                    Text("5min before").tag(5)
+                                    Text("15min before").tag(15)
+                                    Text("30min before").tag(30)
+                                    Text("1 hour before").tag(60)
+                                    Text("1 day before").tag(24*60)
+                                } else {
+                                    Text("1 day before").tag(24*60)
+                                    Text("2 days before").tag(2*24*60)
+                                    Text("1 week before").tag(7*24*60)
+                                }
                             }.padding()
+                            if(wholeDay){
+                                DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
+                                    Text("At time")
+                                }.padding()
+                            }
                         }
                     }
                 }
@@ -169,17 +221,82 @@ struct AddEventView: View {
                         .padding()
                     }
                     if(location == "Current"){
-                        
-                        Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                            annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
-                            .onAppear(){
-                                let annotationCurrent = MKPointAnnotation()
-                                annotationCurrent.coordinate = currentRegion.center
-                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                        if CLLocationManager.locationServicesEnabled() {
+                            switch locationManager.authorizationStatus {
+                            case .notDetermined:
+                                Text("").onAppear{
+                                    location = "None"
+                                    locationManager.requestWhenInUseAuthorization()
+                                }
+                            case .restricted, .denied:
+                                HStack{
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .padding()
+                                        .foregroundColor(.yellow)
+                                    Text("Please allow accurate location services in the settings to use this feature.")
+                                        .padding()
+                                        .foregroundColor(.blue)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .onAppear(){                                  saveCurrentLocation = false}
+                                    Button(action: {
+                                        location = "None"
+                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                    }) {
+                                        Image(systemName: "gear")
+                                            .foregroundColor(.blue)
+                                            .imageScale(.large)
+                                    }
+                                }
+                            case .authorizedAlways, .authorizedWhenInUse:
+                                switch locationManager.accuracyAuthorization {
+                                case .fullAccuracy:
+                                    Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                                        annotationItems: markers) { marker in
+                                        marker.location
+                                    }.edgesIgnoringSafeArea(.all)
+                                        .frame(minHeight: 200)
+                                        .onAppear(){
+                                            saveCurrentLocation = true
+                                            let annotationCurrent = MKPointAnnotation()
+                                            annotationCurrent.coordinate = currentRegion.center
+                                            markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                                        }
+                                case .reducedAccuracy:
+                                    HStack{
+                                        Image(systemName: "exclamationmark.triangle.fill")
+                                            .padding()
+                                            .foregroundColor(.yellow)
+                                        Text("Please allow accurate location services in the settings to use this feature.")
+                                            .padding()
+                                            .foregroundColor(.blue)
+                                            .fixedSize(horizontal: false, vertical: true)
+                                            .onAppear(){
+                                                saveCurrentLocation = false
+                                            }
+                                        Button(action: {
+                                            location = "None"
+                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                        }) {
+                                            Image(systemName: "gear")
+                                                .foregroundColor(.blue)
+                                                .imageScale(.large)
+                                        }
+                                    }
+                                default:
+                                    Text("Error: This should not happen")
+                                        .padding()
+                                        .onAppear(){                                  saveCurrentLocation = false}
+                                }
+                            @unknown default:
+                                Text("Error: This should not happen")
+                                    .padding()
+                                    .onAppear(){                                  saveCurrentLocation = false}
                             }
+                        } else {
+                            Text("Location services are not enabled")
+                                .padding()
+                                .onAppear(){                                  saveCurrentLocation = false}
+                        }
                     }
                     if(location == "Custom"){
                         HStack{
@@ -189,7 +306,7 @@ struct AddEventView: View {
                                 .padding()
                             if locationService.status == .isSearching {
                                 Image(systemName: "clock")
-                                .foregroundColor(Color.gray)
+                                    .foregroundColor(Color.gray)
                             }
                             if self.locationSearch != "" {
                                 Button(action: {
@@ -197,37 +314,23 @@ struct AddEventView: View {
                                 })
                                 {
                                     Image(systemName: "multiply.circle")
-                                    .foregroundColor(Color.gray)
+                                        .foregroundColor(Color.gray)
                                 }
                             }
                         }
                         .onChange(of: locationSearch) { newValue in
                             locationService.queryFragment = locationSearch
-                         }
-                        /*Section(header: Text("Search")) {
-                            ZStack(alignment: .trailing) {
-                                TextField("Search", text: $locationService.queryFragment)
-                                
-                                // while user is typing input it sends the current query to the location service
-                                // which in turns sets its status to searching; when searching status is set on
-                                // searching then a clock symbol will be shown beside the search box
-                                if locationService.status == .isSearching {
-                                    Image(systemName: "clock")
-                                    .foregroundColor(Color.gray)
-                                }
-                            }
-                        }*/
-                        
+                        }
                         Section() {
                             List {
                                 Group { () -> AnyView in
                                     switch locationService.status {
-                                        case .noResults: return AnyView(Text("No Results"))
-                                        case .error(let description): return AnyView(Text("Error: \(description)"))
-                                        default: return AnyView(EmptyView())
-                                        }
-                                }.foregroundColor(Color.gray)
-                                               
+                                    case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
+                                    case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
+                                    default: return AnyView(EmptyView())
+                                    }
+                                }.foregroundColor(Color(getAccentColorString()))
+                                
                                 // display the results as a list
                                 ForEach(locationService.searchResults, id: \.self) {
                                     completionResult in
@@ -239,7 +342,7 @@ struct AddEventView: View {
                                             
                                             for item in response.mapItems {
                                                 if let name = item.name,
-                                                    let location = item.placemark.location {
+                                                   let location = item.placemark.location {
                                                     print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
                                                     customRegion.center.latitude = location.coordinate.latitude
                                                     customRegion.center.longitude = location.coordinate.longitude
@@ -253,19 +356,20 @@ struct AddEventView: View {
                                             self.locationService.queryFragment = ""
                                             self.locationService.clear()
                                         }
-                                            }) {
-                                                Text(completionResult.title + ", " + completionResult.subtitle)
-                                            }
-                                    
-                                    //Text(completionResult.title)
+                                    }) {
+                                        Text(completionResult.title + ", " + completionResult.subtitle)
+                                            .foregroundColor(Color(getAccentColorString()))
+                                    }
                                 }
                             }
                         }
+                        if(locationSearch != ""){
                         Map(coordinateRegion: $customRegion,
                             annotationItems: markers) { marker in
-                              marker.location
-                          }.edgesIgnoringSafeArea(.all)
+                            marker.location
+                        }.edgesIgnoringSafeArea(.all)
                             .frame(minHeight: 200)
+                        }
                     }
                 }
                 Section{
@@ -294,6 +398,8 @@ struct AddEventView: View {
                         event.key = UUID()
                         if name != ""{
                             event.name = name
+                        } else {
+                            event.name = "Event"
                         }
                         event.startdate = startDate
                         event.enddate = endDate
@@ -301,32 +407,29 @@ struct AddEventView: View {
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
                             event.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
-
+                            
                         }
                         if(notes != ""){
                             event.notes = notes
                         }
                         if (location == "Current"){
-                            event.location = true
-                            event.latitude = currentRegion.center.latitude
-                            event.longitude = currentRegion.center.latitude
-                            event.latitudeDelta = currentRegion.span.latitudeDelta
-                            event.longitudeDelta = currentRegion.span.longitudeDelta
+                            if saveCurrentLocation{
+                                event.location = true
+                                event.latitude = currentRegion.center.latitude
+                                event.longitude = currentRegion.center.longitude
+                                event.latitudeDelta = currentRegion.span.latitudeDelta
+                                event.longitudeDelta = currentRegion.span.longitudeDelta
+                            }
                         } else if (location == "Custom")
                         {
                             event.location = true
                             event.latitude = customRegion.center.latitude
-                            event.longitude = customRegion.center.latitude
+                            event.longitude = customRegion.center.longitude
                             event.latitudeDelta = customRegion.span.latitudeDelta
                             event.longitudeDelta = customRegion.span.longitudeDelta
                             // TODO: save the name of the location somehow in event.locationName
                         } else {
                             event.location = false
-                            //TODO: Check whether it breaks something to have items as nil
-                            //event.latitude = 0.0
-                            //event.longitude = 0.0
-                            //event.latitudeDelta = 0.0
-                            //event.longitudeDelta = 0.0
                         }
                         
                         if repetition {
@@ -348,7 +451,7 @@ struct AddEventView: View {
                             //TODO: Check whether it breaks something to have items as nil
                             // event.nextRepetition = ""
                         }
-
+                        
                         if notification {
                             event.notification = true
                             if(!wholeDay){
@@ -356,26 +459,30 @@ struct AddEventView: View {
                             } else {
                                 event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
                             }
-
+                            
                         }
                         calendars[calendar].addToEvents(event)
                         
                         try? moc.save()
                         
                         dismiss()
-                    }.foregroundColor(Color(getAccentColorString()))
-                    .navigationTitle("Add event")
-                    .confirmationDialog(
-                        "Are you sure?",
-                        isPresented: $confirmationShown
-                    ) {
-                        Button("Discard event"){
-                            saveEvent = false
-                            dismiss()
+                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                        .navigationTitle("Add event")
+                        .confirmationDialog(
+                            "Are you sure?",
+                            isPresented: $confirmationShown
+                        ) {
+                            Button("Discard event"){
+                                saveEvent = false
+                                dismiss()
+                            }
                         }
-                    }
                 }
             }
+        }
+        .onAppear{
+            requestNotificationPermission()
+            locationManager.requestWhenInUseAuthorization()
         }
     }
 }
@@ -411,7 +518,7 @@ class LocationService: NSObject, ObservableObject {
         self.searchCompleter.delegate = self
         self.searchCompleter.region = MKCoordinateRegion(.world)
         self.searchCompleter.resultTypes = MKLocalSearchCompleter.ResultType([.address, .pointOfInterest])
-
+        
         
         // receive a stream from the queryFragment in the view
         // debounce (wait) for 500 milliseconds before pushing the event further
@@ -429,7 +536,7 @@ class LocationService: NSObject, ObservableObject {
                     self.status = .idle
                     self.searchResults = []
                 }
-        })
+            })
     }
 }
 
