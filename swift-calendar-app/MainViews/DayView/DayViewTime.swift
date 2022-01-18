@@ -11,7 +11,6 @@ struct DayViewTime: View {
     
     @State var eventsToday: FetchedResults<Event>
     
-    @State var showEventSheet = false
     @State var eventToShow: Event?
     
     @AppStorage("colorScheme") private var colorScheme = "red"
@@ -49,20 +48,8 @@ struct DayViewTime: View {
                                     }
                                     ZStack{
                                         VStack(alignment: .leading){
-                                            let eventsThisHour: [Event] = filterEventsForHour(hour: hour)
-                                            ScrollView(.horizontal, showsIndicators: false){
-                                                HStack(){
-                                                    ForEach(eventsThisHour, id:\.self){ event in
-                                                        EventView(event: event).onTapGesture(){
-                                                            eventToShow = event
-                                                            showEventSheet = true
-                                                        }
-                                                    }
-   
-                                                }
-                                            }.padding(.trailing, 30)
+                                            DayViewEachHour(eventsThisHour: filterEventsForHour(hour: hour))
                                         }.zIndex(1)
-                                        
                                         Rectangle().fill(Color(UIColor.lightGray)).frame(height: 2).padding(.trailing, 30)
                                     }
                                 }
@@ -71,8 +58,6 @@ struct DayViewTime: View {
                         }
                         Spacer()
                     }
-                }.sheet(isPresented: $showEventSheet){
-                    ShowEventView(event: eventToShow!)
                 }
             }
         }
