@@ -11,8 +11,25 @@ import MapKit
 struct EventCardView: View {
     @State var event: Event
     @State var editButton: Bool
+    @State var deleteButton: Bool
     
     @State var showShowEvent = false
+    
+    @State var showConfirmation = false
+    
+    @State var saveEvent = false
+    
+    @State private var showingAlert = false
+    
+    @Environment(\.dismiss) var dismiss
+    @Environment(\.managedObjectContext) var moc
+    
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.name, ascending: true),
+        ]
+    ) var events: FetchedResults<Event>
     
     var body: some View {
         VStack{
@@ -40,38 +57,71 @@ struct EventCardView: View {
                     Button(action: {
                         showShowEvent = true
                     }, label: {
-                        // TODO: should later directly link to Edit instead of "Show"
-                        Text("Show")
-                            .foregroundColor(.white)
-                            .padding(10)
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(Color("AccentColorGreen"))
+                    }).padding(.leading, 5)
+                }
+                if(deleteButton){
+                    Button(action: {
+                        self.showingAlert = true
+                    }, label: {
+                        Image(systemName: "x.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(Color("AccentColorRed"))
                     })
-                        .background(Color(getAccentColorString()))
-                        .cornerRadius(45)
                 }
             }.padding()
             Spacer()
             HStack{
-                Text(event.startdate!, style: .date)
+                Text(event.startdate ?? Date.now, style: .date)
                 Spacer()
                 Image(systemName: "arrow.forward")
                 Spacer()
-                Text(event.enddate!, style: .date)
+                Text(event.enddate ?? Date.now, style: .date)
             }.padding()
             if(!event.wholeDay){
                 HStack{
-                    Text(event.startdate!, style: .time)
+                    Text(event.startdate ?? Date.now, style: .time)
                     Spacer()
                     Image(systemName: "clock.fill")
                     Spacer()
-                    Text(event.enddate!, style: .time)
+                    Text(event.enddate ?? Date.now, style: .time)
                 }.padding()
             }
         }
         .background(getColorFromString(stringColor: event.calendar?.color))
         .frame(maxWidth: .infinity, maxHeight: 200)
-        .sheet(isPresented: $showShowEvent){
+        /*.sheet(isPresented: $showShowEvent){
             ShowEventView(event: event)
+        }*/
+        .sheet(isPresented: $showShowEvent){
+            EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation)
         }
+        .alert(isPresented: self.$showingAlert) {
+            return Alert(
+                title: Text(event.name ?? ""),
+                   message: Text("Delete event?"),
+                   primaryButton:
+                        .cancel(),
+                   secondaryButton: .destructive(
+                       Text("Delete"),
+                       action: {
+                           deleteEvent(id: event.key!)
+                           dismiss()
+                       }
+                   )
+                )
+            }
+    }
+    
+    func deleteEvent(id: UUID)  {
+        events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
+        
+        for event in events {
+            moc.delete(event)
+        }
+        try? moc.save()
     }
 }
 
@@ -90,14 +140,9 @@ struct ExtendedEventCard: View{
     
     var body: some View{
         VStack{
-            EventCardView(event: event, editButton: true)
+            EventCardView(event: event, editButton: true, deleteButton: true)
             if(event.location){
                 let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
-                HStack{
-                    Image(systemName: "location.fill").padding()
-                    Spacer()
-                    Text(event.locationName ?? "Location Name").padding()
-                }
                 Map(coordinateRegion: .constant(region))
                     .frame(height: 200)
                     .padding([.bottom, .leading, .trailing])

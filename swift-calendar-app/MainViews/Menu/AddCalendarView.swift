@@ -10,10 +10,12 @@ import SwiftUI
 struct AddCalendarView: View {
     @State var confirmationShown = false
     @State private var name: String = ""
-    @State private var color = 0
+    @State private var color = 1
     
     @Environment(\.dismiss) var dismiss
     @Environment(\.managedObjectContext) var moc
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     @Binding var saveCalendar: Bool
     
@@ -37,12 +39,13 @@ struct AddCalendarView: View {
                                     calendar.key = UUID()
                                     calendar.name = name
                                     calendar.color = colorStrings[color]
+                                    calendar.defaultCalendar = false
                                     
                                     try? moc.save()
 
                                     saveCalendar = true
                                     dismiss()
-                                }.foregroundColor(Color(getAccentColorString()))
+                                }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             }
                         }
                         .confirmationDialog(

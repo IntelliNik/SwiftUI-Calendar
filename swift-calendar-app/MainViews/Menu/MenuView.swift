@@ -9,7 +9,8 @@ import SwiftUI
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
-    @State var accentColor = getAccentColorString()
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
@@ -17,13 +18,13 @@ struct MenuView: View {
     @Binding var title: String
     
     @State var calendarEditMode = false
-    @State var currentlySelectedCalendar: Int = 0
     
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ]
+        ],
+        predicate: NSPredicate(format: "defaultCalendar == %@", "NO")
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.dismiss) var dismiss
@@ -85,7 +86,7 @@ struct MenuView: View {
                 Spacer()
                 HStack{
                     Button(action: {calendarEditMode.toggle()}){
-                        Text("Manage")
+                        Text("Edit")
                             .foregroundColor(.white)
                             .font(.headline)
                     }
@@ -99,9 +100,19 @@ struct MenuView: View {
             }
             ScrollView(){
                 VStack(alignment: .leading) {
+                    HStack{
+                            Image(systemName: "square.fill")
+                                .foregroundColor(.yellow)
+                                .imageScale(.large)
+                            Text("Default")
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                                .frame(maxWidth: .infinity)
+                                .padding([.leading, .trailing])
+                    }
+                    .padding([.top, .bottom])
                     ForEach((0..<calendars.count),id: \.self) { index in
                         HStack{
-                            Button(action: {currentlySelectedCalendar = index}) {
                                 Image(systemName: "square.fill")
                                     .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                     .imageScale(.large)
@@ -109,16 +120,16 @@ struct MenuView: View {
                                     .foregroundColor(.white)
                                     .lineLimit(1)
                                     .frame(maxWidth: .infinity)
-                            }.padding([.leading, .trailing])
+                                    .padding([.leading, .trailing])
                         }
                         .padding([.top, .bottom])
-                        .background(currentlySelectedCalendar == index ? Color(UIColor.darkGray) : .clear)
                     }
                 }
             }
             .sheet(isPresented: $calendarEditMode){
                 EditCalendarView()
             }
+            
             Rectangle()
                 .fill(.white)
                 .frame(height: 2)
@@ -128,22 +139,26 @@ struct MenuView: View {
                 Text("Color scheme")
                     .font(.headline)
                     .foregroundColor(.white)
-                Picker(selection: $accentColor, label: Text("Color Scheme")) {                        Image(systemName: "flame").tag("AccentColorRed")
-                    Image(systemName: "leaf").tag("AccentColorGreen")
-                    Image(systemName: "drop").tag("AccentColorBlue")
+                Picker(selection: $colorScheme, label: Text("Color Scheme")) {
+                    Image(systemName: "flame").tag("red")
+                    Image(systemName: "leaf").tag("green")
+                    Image(systemName: "drop").tag("blue")
                     
                 }
                 .pickerStyle(.segmented)
                 .foregroundColor(.white)
-                .onChange(of: accentColor){color in
-                    setAccentColor(colorScheme: color)
+                .onChange(of: colorScheme){color in
+                    colorScheme = color
                 }
                 .padding()
             }
-        }.padding()
+        }
+            .padding()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color(accentColor))
             .edgesIgnoringSafeArea(.all)
+            .background(Color(getAccentColorString(from: colorScheme)))
+        
+            
     }
 }
 

@@ -14,7 +14,7 @@ struct MonthViewMonthAndYear: View {
         HStack(alignment: .bottom, spacing: 0) {
             VStack(alignment: .leading) { //button and month
                 TodayButton(dateComponents: $dateComponents)
-                Text(Month[dateComponents.month!-1])
+                Text(Months[dateComponents.month!-1])
                     .font(.system(size: 45, weight: .bold, design: .monospaced))
             }
             
@@ -31,6 +31,6 @@ struct MonthViewMonthAndYear: View {
 
 struct MonthViewMonthAndYear_Previews: PreviewProvider {
     static var previews: some View {
-        MonthViewMonthAndYear(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
+        MonthViewMonthAndYear(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
     }
 }

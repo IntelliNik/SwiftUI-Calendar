@@ -15,6 +15,8 @@ struct MonthView: View {
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     var body: some View {
         VStack {
             MonthViewMonthAndYear(dateComponents: $dateComponents)
@@ -40,23 +42,23 @@ struct MonthView: View {
             }
             
             .pickerStyle(.segmented)
-            .colorMultiply(Color(getAccentColorString()))
-            .gesture(
-                DragGesture()
-                    .onEnded(){gesture in
-                        if(gesture.translation.width < 0){
-                            pickerSelection = .previous
-                        } else if(gesture.translation.width > 0){
-                            pickerSelection = .next
-                        }
-                    }
-            )
+            .colorMultiply(Color(getAccentColorString(from: colorScheme)))
         }
+        .gesture(
+            DragGesture()
+                .onEnded(){gesture in
+                    if(gesture.translation.width < 0){
+                        pickerSelection = .previous
+                    } else if(gesture.translation.width > 0){
+                        pickerSelection = .next
+                    }
+                }
+        )
     }
 }
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
+        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
     }
 }

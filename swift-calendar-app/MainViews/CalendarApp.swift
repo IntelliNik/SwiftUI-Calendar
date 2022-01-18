@@ -21,10 +21,12 @@ struct CalendarApp: App {
     @State private var showConfirmationBox = false
     @State private var confirmationBoxText = ""
     
-    @State var selectedView: ContainedView = .allEvents
-    @State var title = "All Events"
+    @State var selectedView: ContainedView = .day
+    @State var title = "Day View"
     
     @StateObject private var dataController = DataController()
+    
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     // TODO: Remove next lines when everything is done
     // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
@@ -49,7 +51,7 @@ struct CalendarApp: App {
                         // providing a space that is tappable to close the menu
                         Text("")
                             .frame(width: geometry.size.width, height: geometry.size.height)
-                            .background(Color(getAccentColorString()))
+                            .background(Color(getAccentColorString(from: colorScheme)))
                             .opacity(0.05)
                             .onTapGesture {
                                 withAnimation{
@@ -70,7 +72,6 @@ struct CalendarApp: App {
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
-                            .onAppear(perform: requestPermissions)
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
@@ -107,18 +108,12 @@ struct CalendarApp: App {
     }
 }
 
-
-func requestPermissions(){
-    // request notification access
-    let center = UNUserNotificationCenter.current()
-    center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-        if let error = error {
-            // TODO: Handle the error here.
-        }
-        // TODO: Enable or disable features based on the authorization.
+func isAppAlreadyLaunchedOnce() -> Bool {
+    let defaults = UserDefaults.standard
+    if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
+        return true
+    } else {
+        defaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+        return false
     }
-    
-    // request location access
-    let locationManager = CLLocationManager()
-    locationManager.requestWhenInUseAuthorization()
 }
