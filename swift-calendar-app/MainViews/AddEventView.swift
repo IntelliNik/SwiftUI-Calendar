@@ -472,6 +472,10 @@ struct AddEventView: View {
                         calendars[calendar].addToEvents(event)
                         
                         try! moc.save()
+                        //schedule notification
+                        if notification {
+                            scheduleNotification(event: event)
+                        }
                         
                         dismiss()
                     }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
