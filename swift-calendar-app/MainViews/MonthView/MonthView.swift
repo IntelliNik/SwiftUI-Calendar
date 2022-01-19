@@ -15,14 +15,18 @@ struct MonthView: View {
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     
+    @State var offset = CGSize(width: 0, height: 0)
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         VStack {
             MonthViewMonthAndYear(dateComponents: $dateComponents)
+                .offset(offset)
                 .padding()
             Spacer()
             MonthViewCalendar()
+                .offset(offset)
             Spacer()
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousMonth(components: dateComponents, next: true)
@@ -33,13 +37,37 @@ struct MonthView: View {
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
+                    withAnimation{
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
-                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
+                    withAnimation{
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
             }
             .padding()
             .pickerStyle(.segmented)
@@ -48,9 +76,9 @@ struct MonthView: View {
         .gesture(
             DragGesture()
                 .onEnded(){gesture in
-                    if(gesture.translation.width < 0){
+                    if(gesture.translation.width > 0){
                         pickerSelection = .previous
-                    } else if(gesture.translation.width > 0){
+                    } else if(gesture.translation.width < 0){
                         pickerSelection = .next
                     }
                 }
