@@ -8,27 +8,23 @@
 import SwiftUI
 
 struct LargeDailyOverviewView: View {
-    @FetchRequest var eventsToday: FetchedResults<Event>
-    
-    init(){
-        self._eventsToday = FetchRequest(entity: Event.entity(),
-                                         sortDescriptors: [
-                                            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-                                         ],
-                                         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-        )
-    }
+     
+    @FetchRequest(entity: Event.entity(),
+                 sortDescriptors: [
+                    NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+                  ],
+                  predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event> 
     
     var body: some View {
         VStack{
             HStack{
+                Text("Your Events today").font(.headline)
                 Spacer()
                 Text(getWeekday())
                     .foregroundColor(Color(getAccentColorString()))
                 Text(Date.now, formatter: getDayFormatter())
-            }
+            }.padding()
             Spacer()
-            ScrollView{
                 ForEach(eventsToday, id:\.self){ event in
                     HStack{
                         Text(event.name ?? "")
@@ -40,7 +36,6 @@ struct LargeDailyOverviewView: View {
                     .padding()
                     .background(getColorFromString(stringColor: event.calendar?.color))
                 }
-            }
         }
     }
 }
