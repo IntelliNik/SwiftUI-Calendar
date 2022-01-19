@@ -37,7 +37,11 @@ struct AddCalendarView: View {
                                     
                                     let calendar = MCalendar(context: moc)
                                     calendar.key = UUID()
-                                    calendar.name = name
+                                    if (calendar.name != nil && calendar.name != ""){
+                                        calendar.name = name
+                                    } else {
+                                        calendar.name = "Calendar"
+                                    }
                                     calendar.color = colorStrings[color]
                                     calendar.defaultCalendar = false
                                     
