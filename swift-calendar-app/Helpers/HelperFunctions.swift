@@ -156,3 +156,14 @@ func addWeekOfYear(dateComponents: DateComponents) -> DateComponents{
     return newDateComponents
 }
 
+// URL
+
+func getURLwithoutProtocol(urlString: String) -> String{
+    if(urlString.hasPrefix("http://")){
+        return String(urlString.dropFirst(7))
+    }
+    if(urlString.hasPrefix("https://")){
+        return String(urlString.dropFirst(8))
+    }
+    return urlString
+}

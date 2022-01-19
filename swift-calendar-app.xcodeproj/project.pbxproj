@@ -34,12 +34,12 @@
 		775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */; };
 		777627DE279016980097826F /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77046DC0278455FC001DA0DA /* HelperFunctions.swift */; };
 		779BF16D2781B42000DCFBEB /* EventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779BF16C2781B42000DCFBEB /* EventCardView.swift */; };
-		77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06922780974B00767504 /* LinkPreviewProvider.swift */; };
 		77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06962780AEAF00767504 /* ShowEventView.swift */; };
 		77B3C96C2792102000571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
 		77B3C96D2792199E00571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
 		77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DAC8EE277CA0EC000D8BCD /* MainView.swift */; };
+		77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E08BC127970DBA00D4791A /* DayViewEachHour.swift */; };
 		77EA32D5278F5E9800093312 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775244292789C89500FE7206 /* WidgetKit.framework */; };
 		77EA32D6278F5E9800093312 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7752442B2789C89500FE7206 /* SwiftUI.framework */; };
 		77EA32DB278F5E9A00093312 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77EA32DA278F5E9A00093312 /* Assets.xcassets */; };
@@ -124,11 +124,11 @@
 		77535AEB2780E0E1003FAD80 /* SearchEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventView.swift; sourceTree = "<group>"; };
 		775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
 		779BF16C2781B42000DCFBEB /* EventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardView.swift; sourceTree = "<group>"; };
-		77AD06922780974B00767504 /* LinkPreviewProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkPreviewProvider.swift; sourceTree = "<group>"; };
 		77AD06962780AEAF00767504 /* ShowEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventView.swift; sourceTree = "<group>"; };
 		77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
 		77DAC8EA277C6C09000D8BCD /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		77DAC8EE277CA0EC000D8BCD /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		77E08BC127970DBA00D4791A /* DayViewEachHour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewEachHour.swift; sourceTree = "<group>"; };
 		77EA32BC278F5CC500093312 /* swift-calendar-app.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "swift-calendar-app.entitlements"; sourceTree = "<group>"; };
 		77EA32D4278F5E9800093312 /* DailyWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DailyWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		77EA32DA278F5E9A00093312 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -232,7 +232,6 @@
 			children = (
 				A0D30B222796F1C700EB1F22 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
-				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
 				35B6832D277A182E00D9EBAC /* MonthView */,
 				35FC5CAB2779C56E009033C5 /* YearView */,
@@ -241,11 +240,11 @@
 				770FB6AB276F485200D38A07 /* CalendarApp.swift */,
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
+				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
 				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
 				77AD06962780AEAF00767504 /* ShowEventView.swift */,
-				77AD06922780974B00767504 /* LinkPreviewProvider.swift */,
 				77EA32E6278F605B00093312 /* Persistence */,
 			);
 			path = MainViews;
@@ -364,20 +363,13 @@
 		A0D30B222796F1C700EB1F22 /* DayView */ = {
 			isa = PBXGroup;
 			children = (
-				A0D30B232796F1CF00EB1F22 /* ViewHelpers */,
 				A0D30B242796F1ED00EB1F22 /* DayView.swift */,
+				A0D30B282796F26500EB1F22 /* DayViewTime.swift */,
+				77E08BC127970DBA00D4791A /* DayViewEachHour.swift */,
+				A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */,
+				A0D30B262796F22200EB1F22 /* EventView.swift */,
 			);
 			path = DayView;
-			sourceTree = "<group>";
-		};
-		A0D30B232796F1CF00EB1F22 /* ViewHelpers */ = {
-			isa = PBXGroup;
-			children = (
-				A0D30B262796F22200EB1F22 /* EventView.swift */,
-				A0D30B282796F26500EB1F22 /* DayViewTime.swift */,
-				A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */,
-			);
-			path = ViewHelpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -513,6 +505,7 @@
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
 				A0D30B2B2796F28E00EB1F22 /* DayViewHeader.swift in Sources */,
+				77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */,
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				3579ED9D278DA70400B46AD0 /* (null) in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,
@@ -531,7 +524,6 @@
 				77F466A62768FF6F0034C68B /* (null) in Sources */,
 				77EA32EB278F607900093312 /* DataController.swift in Sources */,
 				A0D30B252796F1ED00EB1F22 /* DayView.swift in Sources */,
-				77AD06932780974B00767504 /* LinkPreviewProvider.swift in Sources */,
 				A0D30B292796F26500EB1F22 /* DayViewTime.swift in Sources */,
 				77B3C96C2792102000571D8F /* SettingsBundleHelper.swift in Sources */,
 				7727CC55278F523500C9B7FE /* WeekViewDayBox.swift in Sources */,
@@ -744,7 +736,11 @@
 				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "swift-calendar-app/Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Needed to access your calendars";
+				INFOPLIST_KEY_NSContactsUsageDescription = "To access shared calendars and invites.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
+				INFOPLIST_KEY_NSRemindersUsageDescription = "Needed to access your calendar reminders.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -777,7 +773,11 @@
 				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "swift-calendar-app/Info.plist";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "Needed to access your calendars";
+				INFOPLIST_KEY_NSContactsUsageDescription = "To access shared calendars and invites.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The app can add your current location to a newly created event";
+				INFOPLIST_KEY_NSRemindersUsageDescription = "Needed to access your calendar reminders.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
