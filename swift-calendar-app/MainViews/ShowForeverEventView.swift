@@ -157,9 +157,9 @@ struct ShowForeverEventView: View {
                         Text("Edit")
                             .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                     }
-                    /*.sheet(isPresented: $confirmationShown) {
-                        EditEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
-                    }*/
+                    .sheet(isPresented: $confirmationShown) {
+                        EditForeverEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+                    }
                 }
             }
         }

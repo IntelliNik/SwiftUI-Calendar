@@ -51,7 +51,7 @@ struct SearchEventView: View {
                         }
                     }
                     ForEach((0..<foreverEvents.count), id: \.self) { index in
-                        if (index < events.count) {
+                        if (index < foreverEvents.count) {
                            /* NavigationLink(
                                 destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
                             ) {
