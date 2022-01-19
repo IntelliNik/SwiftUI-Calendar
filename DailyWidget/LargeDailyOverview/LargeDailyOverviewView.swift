@@ -18,13 +18,13 @@ struct LargeDailyOverviewView: View {
     var body: some View {
         VStack{
             HStack{
+                Text("Your Events today").font(.headline)
                 Spacer()
                 Text(getWeekday())
                     .foregroundColor(Color(getAccentColorString()))
                 Text(Date.now, formatter: getDayFormatter())
-            }
+            }.padding()
             Spacer()
-                Text("Large Widget")
                 ForEach(eventsToday, id:\.self){ event in
                     HStack{
                         Text(event.name ?? "")
