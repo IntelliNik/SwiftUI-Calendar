@@ -14,6 +14,7 @@ struct DayViewTime: View {
     @State var eventToShow: Event?
     
     @AppStorage("colorScheme") private var colorScheme = "red"
+    @EnvironmentObject var currentTime: CurrentTime
     
     func filterEventsForHour(hour: Int) -> [Event]{
         var foundEvents: [Event] = []
@@ -26,8 +27,6 @@ struct DayViewTime: View {
     }
     
     var body: some View {
-        let cur_hour = getToday().hour
-        let cur_day = getToday().day
         ScrollViewReader{ scroll in
             ScrollView(showsIndicators: false){
                 ZStack{
@@ -38,8 +37,8 @@ struct DayViewTime: View {
                                     ZStack{
                                         Text("\(String(hour)):00")
                                             .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
-                                        if (cur_day == dateComponents.day){
-                                            if (cur_hour == hour){
+                                        if (currentTime.currentTime.day == dateComponents.day){
+                                            if (currentTime.currentTime.hour == hour){
                                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                                                     .stroke(Color(getAccentColorString(from: colorScheme)), lineWidth: 2.0)
                                                     .frame(width: geometry.size.width * 0.175, height: 45)

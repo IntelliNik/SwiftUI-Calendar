@@ -62,6 +62,7 @@
 		77F466A82768FF6F0034C68B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		77F466AA2768FF720034C68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
 		77FB1855278CDAB600C63286 /* AllEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770FB6B5276FA1C700D38A07 /* AllEventsView.swift */; };
+		A0069AB727998DCF00A07105 /* CurrentTimePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */; };
 		A0CB453C2792E63800E6DBC9 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F6637C2791C47D007ACCC4 /* EditEventView.swift */; };
 		A0D30B252796F1ED00EB1F22 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B242796F1ED00EB1F22 /* DayView.swift */; };
 		A0D30B272796F22200EB1F22 /* EventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B262796F22200EB1F22 /* EventView.swift */; };
@@ -146,6 +147,7 @@
 		77F466A92768FF720034C68B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		77F6637C2791C47D007ACCC4 /* EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallDailyOverviewView.swift; sourceTree = "<group>"; };
+		A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CurrentTimePublisher.swift; path = "swift-calendar-app/Helpers/CurrentTimePublisher.swift"; sourceTree = SOURCE_ROOT; };
 		A0D30B242796F1ED00EB1F22 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		A0D30B262796F22200EB1F22 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		A0D30B282796F26500EB1F22 /* DayViewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				77046DBF27844568001DA0DA /* PickerView */,
 				7706517627847E6E008390EC /* Menu */,
 				770FB6AB276F485200D38A07 /* CalendarApp.swift */,
+				A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */,
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
 				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
@@ -505,6 +508,7 @@
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
 				A0D30B2B2796F28E00EB1F22 /* DayViewHeader.swift in Sources */,
+				A0069AB727998DCF00A07105 /* CurrentTimePublisher.swift in Sources */,
 				77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */,
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				3579ED9D278DA70400B46AD0 /* (null) in Sources */,

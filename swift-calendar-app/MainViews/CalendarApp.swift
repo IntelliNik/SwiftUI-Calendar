@@ -26,6 +26,8 @@ struct CalendarApp: App {
     
     @StateObject private var dataController = DataController()
     
+    @StateObject private var currentTime = CurrentTime()
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     // TODO: Remove next lines when everything is done
@@ -103,6 +105,7 @@ struct CalendarApp: App {
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
+            .environmentObject(currentTime)
         }
     }
 }
