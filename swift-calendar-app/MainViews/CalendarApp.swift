@@ -100,6 +100,22 @@ struct CalendarApp: App {
                             }
                     }
                 }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    if let appiconcolor =  UserDefaults.standard.string(forKey: "appIcon") {
+                        let current_icon = UIApplication.shared.alternateIconName == nil ? "AppIcon-Light" : UIApplication.shared.alternateIconName
+                        if (appiconcolor=="AppIcon-Light" || current_icon == appiconcolor) {
+                            return
+                        }
+                        else if (appiconcolor=="AppIcon-Light") {
+                            UIApplication.shared.setAlternateIconName(nil)
+                        }
+                        else {
+                            UIApplication.shared.setAlternateIconName(appiconcolor)
+                        }
+                    }
+                        }
+                
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
