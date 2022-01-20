@@ -39,22 +39,30 @@ struct DayViewHeader: View {
                 let weekOfYear = addWeekOfYear(dateComponents: dateComponents).weekOfYear!
                 let year_formatted = formatYear(year: String(year))
                 VStack(alignment: .leading, spacing: 0) {
-                    HStack{
-                        if showWeekNumbers {
+                    if showWeekNumbers {
+                        HStack{
                             Text("\(weekday)")
                                 .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                            Spacer()
                             Text("W \(weekOfYear)").foregroundColor(.gray)
                                 .frame(minWidth: 35, alignment: .trailing)
-                        } else {
+                        }.frame(width: 80, alignment: .leading)
+                        HStack{
+                            Text("\(month)")
+                            Spacer()
+                            Text("\(year_formatted)")
+                        }.frame(width: 80, alignment: .leading)
+                    } else {
+                        HStack{
                             Text("\(weekdayLong)")
                                 .foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                                
-                        }
-                    }.frame(width: 90, alignment: .leading)
-                    HStack{
-                        Text("\(month)")
-                        Text("\(year_formatted)")
-                    }.frame(minWidth: 90, alignment: .leading)
+                        }.frame(width: 90, alignment: .leading)
+                        HStack{
+                            Text("\(month)")
+                            //Spacer()
+                            Text("\(year_formatted)")
+                        }.frame(width: 90, alignment: .leading)
+                    }
                 }
                 
                 Spacer()
