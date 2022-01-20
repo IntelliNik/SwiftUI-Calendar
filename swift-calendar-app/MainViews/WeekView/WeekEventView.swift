@@ -10,12 +10,18 @@ import SwiftUI
 struct WeekEventView: View {
     @FetchRequest var events: FetchedResults<Event>
     
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
+    
     @State var showEdit = false
     @State var eventIndex = 0
     
+    @State private var foreverEventsToShow: [ForeverEvent] = []
+    private let dateComponent: DateComponents
+    
     var body: some View {
         ScrollView {
-            ForEach(Array(zip(events.indices, events)), id: \.0) { index, event in
+            ForEach(Array(zip(foreverEventsToShow.indices, foreverEventsToShow)), id: \.0) { index, event in
                 HStack{
                     Text(event.name ?? "Event")
                         .foregroundColor(.white)
@@ -41,6 +47,10 @@ struct WeekEventView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
         }
+        .onAppear(perform: {
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponent)
+            print(foreverEventsToShow.isEmpty)
+        })
     }
     
     init(filter: DateComponents) {
@@ -52,6 +62,7 @@ struct WeekEventView: View {
             predicate: NSPredicate(format: "startdate <= %@ AND %@ <= enddate", getDateForStartdateComparison(from: filter)! as CVarArg, getDateForEnddateComparison(from: filter)! as CVarArg)
         )
         
+        self.dateComponent = filter
     }
 }
 

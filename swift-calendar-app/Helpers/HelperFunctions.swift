@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 // Color
-public let colorStrings = ["Yellow","Mint","Blue","Purple","Black","Red","Orange","Brown","Indigo"]
+public let colorStrings = ["Yellow","Mint","Blue","Purple","Red","Orange","Brown","Indigo"]
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
@@ -131,7 +131,7 @@ func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
 let Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
 
-enum RepetitionInterval {
+enum RepetitionInterval : String {
     case daily, weekly, monthly, yearly
 }
 
@@ -171,4 +171,78 @@ func getURLwithoutProtocol(urlString: String) -> String{
         return String(urlString.dropFirst(8))
     }
     return urlString
+}
+
+func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecomponent: DateComponents) -> [ForeverEvent]{
+    var eventsOfDate : [ForeverEvent] = []
+    
+    for event in events{
+        switch RepetitionInterval(rawValue: event.repetitionInterval ?? "daily"){
+        case .daily:
+            eventsOfDate.append(event)
+        case .weekly:
+            eventsOfDate.append(event)
+        case .monthly:
+            guard let startdate = event.startdate else {return []}
+            guard let enddate = event.enddate else {return []}
+            guard let curDate = Calendar.current.date(from: datecomponent) else {return []}
+            var addEvent = false
+            Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
+                (projStartdate, _, stop) in
+                if let projStartdate = projStartdate {
+                    if smallerEqualDateComp_Helper(projStartdate, curDate)  {
+                        let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
+                        if smallerEqualDateComp_Helper(curDate, projEnddate) {
+                            stop = true
+                            addEvent = true
+                        }
+                    }
+                    if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                        stop = true
+                        addEvent = false
+                    }
+                } else {
+                    stop = true
+                    addEvent = false
+                }
+            })
+            
+            if addEvent {
+                eventsOfDate.append(event)
+            }
+        case .yearly:
+            eventsOfDate.append(event)
+        case .none:
+            break
+        }
+    }
+        
+    return eventsOfDate
+}
+
+func getTimeInterval(between first: Date, and second: Date) -> TimeInterval {
+    let minute: TimeInterval = 60.0
+    let hour: TimeInterval = 60 * minute
+    let day: TimeInterval = 24 * hour
+    
+    let diff = Calendar.current.dateComponents([.day, .hour, .minute, .second], from: first, to: second)
+    
+    var interval: TimeInterval = 0.0
+    interval = interval + Double(diff.day ?? 0) * day
+    interval = interval + Double(diff.hour ?? 0) * hour
+    interval = interval + Double(diff.minute ?? 0) * minute
+    interval = interval + Double(diff.second ?? 0)
+    
+    return interval
+}
+
+func smallerEqualDateComp_Helper(_ first: Date, _ second: Date) -> Bool {
+    switch Calendar.current.compare(first, to: second, toGranularity: .day) {
+    case .orderedAscending:
+        return true
+    case .orderedSame:
+        return true
+    case .orderedDescending:
+        return false
+    }
 }
