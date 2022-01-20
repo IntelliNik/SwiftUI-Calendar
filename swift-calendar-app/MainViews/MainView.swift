@@ -23,13 +23,13 @@ struct MainView: View {
     var body: some View {
         switch containedView{
         case .day:
-            Text("TODO")
+            DayView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
             WeekView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .month:
-            MonthView(dateComponents: $dateComponents)
+            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel())
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .year:
             YearView(dateComponents: $dateComponents, updateView: $updateView)

@@ -403,7 +403,13 @@ struct AddEventView: View {
                             event.name = "Event"
                         }
                         event.startdate = startDate
-                        event.enddate = endDate
+                        
+                        if(endDate < startDate){
+                            event.enddate = startDate
+                        } else{
+                            event.enddate = endDate
+                        }
+                        
                         event.wholeDay = wholeDay
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
@@ -433,6 +439,15 @@ struct AddEventView: View {
                             event.location = false
                         }
                         
+                        /*if notification {
+                            event.notification = true
+                            if(!wholeDay){
+                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            } else {
+                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                            }
+                            
+                        }*/
                         if notification {
                             event.notification = true
                             if(!wholeDay){
@@ -441,6 +456,8 @@ struct AddEventView: View {
                                 event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
                             }
                             
+                        } else {
+                            event.notification = false
                         }
                         
                         if repetition {
@@ -560,7 +577,7 @@ struct AddEventView: View {
                             calendars[calendar].addToEvents(event)
                         }
                         
-                        try? moc.save()
+                        try! moc.save()
                         
                         dismiss()
                     }.foregroundColor(Color(getAccentColorString(from: colorScheme)))

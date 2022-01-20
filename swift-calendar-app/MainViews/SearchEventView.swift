@@ -94,7 +94,7 @@ struct SearchEventView: View {
         
     private func searchPredicate(query: String) -> NSPredicate? {
         if query.isEmpty { return nil }
-        return NSPredicate(format: "name BEGINSWITH %@", query)
+        return NSPredicate(format: "name contains[c] %@", query)
     }
     
     private func searchPredicateForeverEvents(query: String) -> NSPredicate? {

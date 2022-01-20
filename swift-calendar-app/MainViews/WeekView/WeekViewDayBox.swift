@@ -45,10 +45,12 @@ struct WeekViewRoundedRectangleTop: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(.thinMaterial)
                 .frame(width: width, height: 20)
-                .overlay(Text("\(daylist[transformWeekdayToGermanStandard(day: dateComponents.weekday ?? 1) - 1])").fontWeight(.heavy))
-            /*
-             , \(Calendar.current.date(from: dateComponents)!.formatted(.dateTime))
-             */
+                .overlay(
+                    HStack{
+                        Text("  \(daylist[transformWeekdayToGermanStandard(day: dateComponents.weekday ?? 1) - 1])").fontWeight(.heavy)
+                        Spacer()
+                        Text("\(Calendar.current.date(from: dateComponents)!.formatted(.dateTime.day().month()))  ").fontWeight(.heavy)
+                    })
                 .offset(x:0 , y: -((height - 20)/2))
                 .foregroundColor(.gray)
             
