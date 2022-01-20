@@ -557,7 +557,7 @@
 				CODE_SIGN_ENTITLEMENTS = DailyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = UQGM52CY44;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Daily Overview";
@@ -569,7 +569,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -586,7 +586,7 @@
 				CODE_SIGN_ENTITLEMENTS = DailyWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = UQGM52CY44;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Daily Overview";
@@ -598,7 +598,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -733,7 +733,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = UQGM52CY44;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "swift-calendar-app/Info.plist";
@@ -751,7 +751,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -770,7 +770,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = QMQ5R6KV6T;
+				DEVELOPMENT_TEAM = UQGM52CY44;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "swift-calendar-app/Info.plist";
@@ -788,7 +788,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
