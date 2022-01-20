@@ -119,6 +119,9 @@ struct CalendarApp: App {
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { (_) in
+                      print("UIApplication: active")
+                    }
         }
     }
 }
