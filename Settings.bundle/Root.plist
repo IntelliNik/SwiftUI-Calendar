@@ -30,7 +30,7 @@
 			<key>Key</key>
 			<string>appIcon</string>
 			<key>DefaultValue</key>
-			<string>Light Icon</string>
+			<string>AppIcon-Light</string>
 			<key>Titles</key>
 			<array>
 				<string>Light Icon</string>
