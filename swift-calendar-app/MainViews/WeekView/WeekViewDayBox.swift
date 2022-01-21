@@ -22,8 +22,8 @@ struct WeekViewDayBox: View {
                 WeekViewRoundedRectangleBottomTodo(dateComponents: dateComponents, height: height, width: width)
                 WeekViewRoundedRectangleTopTodo(height: height, width: width)
             } else {
-                WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
                 WeekViewRoundedRectangleTop(dateComponents: dateComponents, height: height, width: width)
+                WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
             }
         }
     }
@@ -34,16 +34,17 @@ struct WeekViewRoundedRectangleTop: View {
     let height: CGFloat
     let width: CGFloat
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    @EnvironmentObject var currentTime: CurrentTime
+    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(.thinMaterial)
-                .frame(width: width, height: 10)
-                .offset(x:0 , y: -((height - 20)/2) + 5)
-                .foregroundColor(.gray)
             
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            Rectangle()
                 .fill(.thinMaterial)
+                .colorMultiply((dateComponents.year == currentTime.components.year && dateComponents.weekOfYear == currentTime.components.weekOfYear && dateComponents.day == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+                .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: 0.3))
+                .cornerRadius(20, corners: [.topLeft, .topRight])
                 .frame(width: width, height: 20)
                 .overlay(
                     HStack{
@@ -52,12 +53,7 @@ struct WeekViewRoundedRectangleTop: View {
                         Text("\(Calendar.current.date(from: dateComponents)!.formatted(.dateTime.day().month()))  ").fontWeight(.heavy)
                     })
                 .offset(x:0 , y: -((height - 20)/2))
-                .foregroundColor(.gray)
-            
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .foregroundColor(.gray)
-                .frame(width: width, height: 1)
-                .offset(x:0 , y: -((height - 20)/2) + 10)
+                .foregroundColor(.black)
         }
     }
 }
@@ -77,6 +73,11 @@ struct WeekViewRoundedRectangleBottom: View {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .stroke(.gray)
                 .frame(width: width, height: height)
+            
+            Rectangle()
+                .foregroundColor(.gray)
+                .frame(width: width, height: 1)
+                .offset(x:0 , y: -((height - 20)/2) + 10)
         }
     }
 }
@@ -133,5 +134,6 @@ struct WeekViewDayBox_Previews: PreviewProvider {
             WeekViewRoundedRectangleTop(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now) , height: 220, width: 220)
             WeekViewRoundedRectangleBottom(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
         }
+        .environmentObject(CurrentTime())
     }
 }
