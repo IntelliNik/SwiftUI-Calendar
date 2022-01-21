@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import EventKitUI
+import EventKit
 
 struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
     
     @AppStorage("colorScheme") private var colorScheme = "red"
-    
+        
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
@@ -45,9 +47,12 @@ struct MenuView: View {
                             .padding()
                     }
                     Spacer()
+                    
+                    //show syncing view
                     Button(action: {
-                        showSyncSheet = true
-                    }) {
+                        //showSyncSheet = true
+                            currentlySelectedView = .sync; title = "Sync View"; withAnimation{menuOpen = false}
+                        }) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .foregroundColor(.white)
                             .imageScale(.large)
@@ -141,9 +146,6 @@ struct MenuView: View {
             }
             .sheet(isPresented: $calendarEditMode){
                 EditCalendarView()
-            }
-            .sheet(isPresented: $showSyncSheet){
-                SyncCalendarsView()
             }
             
             Rectangle()

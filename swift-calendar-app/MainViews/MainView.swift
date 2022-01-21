@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventKit
+import EventKitUI
 
 enum ContainedView{
     case day
@@ -13,7 +15,10 @@ enum ContainedView{
     case month
     case year
     case allEvents
+    case sync
 }
+
+
 
 struct MainView: View {
     @Binding var containedView: ContainedView
@@ -43,9 +48,41 @@ struct MainView: View {
         case .allEvents:
             AllEventsView()
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+            
+        case .sync:
+            let result = requestAccess()
+            
+            if result {
+                SyncCalendarsView()
+                    .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+            }
+            
         }
+        
+
     }
 }
+
+func requestAccess() -> Bool {
+    //TODO: What if denied?
+    if (EKEventStore.authorizationStatus(for: .event) == EKAuthorizationStatus.notDetermined)
+    {
+        var r = false;
+        eventStore.requestAccess(to: .event) { granted, error in
+            if granted {
+                r = true
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        return r
+    }
+    
+    else {
+        return true
+    }
+}
+
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
