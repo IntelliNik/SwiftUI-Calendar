@@ -67,10 +67,17 @@ struct WeekViewRoundedRectangleBottom: View {
     let height: CGFloat
     let width: CGFloat
     
+    //@FetchRequest var foreverEvents: FetchedResults<ForeverEvent>
+    
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
+    
+    @State private var foreverEventsToShow: [ForeverEvent] = []
+    
     var body: some View {
         ZStack {
             // Fore unwrap here might not be the best idea
-            WeekEventView(filter: dateComponents)
+            WeekEventView(filter: dateComponents, foreverEventsToShow: foreverEventsToShow)
                 .frame(width: width - 5, height: height - 30, alignment: .top)
                 .offset(x: 0, y: 10)
             
@@ -78,6 +85,12 @@ struct WeekViewRoundedRectangleBottom: View {
                 .stroke(.gray)
                 .frame(width: width, height: height)
         }
+        .onChange(of: dateComponents) { [dateComponents] _ in
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)
+                }
+        .onAppear(perform: {
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)
+        })
     }
 }
 

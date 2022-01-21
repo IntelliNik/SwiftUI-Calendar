@@ -10,18 +10,15 @@ import SwiftUI
 struct WeekEventView: View {
     @FetchRequest var events: FetchedResults<Event>
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
-    private var foreverEvents: FetchedResults<ForeverEvent>
-    
     @State var showEdit = false
     @State var eventIndex = 0
     
-    @State private var foreverEventsToShow: [ForeverEvent] = []
     private let dateComponent: DateComponents
+    private let foreverEventsToShow: [ForeverEvent]
     
     var body: some View {
         ScrollView {
-            ForEach(Array(zip(foreverEventsToShow.indices, foreverEventsToShow)), id: \.0) { index, event in
+            ForEach(Array(zip(events.indices, events)), id: \.0) { index, event in
                 HStack{
                     Text(event.name ?? "Event")
                         .foregroundColor(.white)
@@ -46,14 +43,35 @@ struct WeekEventView: View {
                 .background(getColorFromString(stringColor: event.calendar?.color))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
             }
+            ForEach(Array(zip(foreverEventsToShow.indices, foreverEventsToShow)), id: \.0) { index, event in
+                HStack{
+                    Text(event.name ?? "Event")
+                        .foregroundColor(.white)
+                        .lineLimit(1)
+                    Spacer()
+                    if let date = event.startdate{
+                        if(!event.wholeDay){
+                            Text(date, style: .time)
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                        }
+                    }
+                }
+                .onTapGesture{
+                    eventIndex = index
+                    showEdit = true
+                }
+                .sheet(isPresented: $showEdit){
+                    ShowForeverEventView(event: foreverEventsToShow[eventIndex])
+                }
+                .padding(5)
+                .background(getColorFromString(stringColor: event.calendar?.color))
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+            }
         }
-        .onAppear(perform: {
-            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponent)
-            print(foreverEventsToShow.isEmpty)
-        })
     }
     
-    init(filter: DateComponents) {
+    init(filter: DateComponents, foreverEventsToShow: [ForeverEvent]) {
         _events = FetchRequest<Event>(
             sortDescriptors: [
                 NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
@@ -63,6 +81,7 @@ struct WeekEventView: View {
         )
         
         self.dateComponent = filter
+        self.foreverEventsToShow = foreverEventsToShow
     }
 }
 
