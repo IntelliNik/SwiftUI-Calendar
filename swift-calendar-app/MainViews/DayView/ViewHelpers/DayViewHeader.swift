@@ -44,7 +44,7 @@ struct DayViewHeader: View {
                             Text("\(weekday)")
                                 .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                             Spacer()
-                            Text("W \(weekOfYear)").foregroundColor(.gray)
+                            Text("W\(weekOfYear)").foregroundColor(.gray)
                                 .frame(minWidth: 35, alignment: .trailing)
                         }.frame(width: 80, alignment: .leading)
                         HStack{
