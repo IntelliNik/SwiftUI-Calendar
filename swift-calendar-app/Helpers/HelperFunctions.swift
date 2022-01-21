@@ -165,7 +165,7 @@ func addWeekOfYear(dateComponents: DateComponents) -> DateComponents{
 
 func getCurrentWeekOfYear() -> Int{
     let dc = Calendar.current.dateComponents([.weekOfYear], from: Date.now)
-    return dc.weekOfYear ?? getCurrentWeekOfYear()
+    return dc.weekOfYear!
 }
 
 // URL
