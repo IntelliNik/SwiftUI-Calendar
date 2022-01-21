@@ -17,12 +17,15 @@ struct Part1View: View {
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
+        Rectangle()
             .fill(.thinMaterial)
+            .colorMultiply((dateComponents.year == currentTime.components.year && monthNum == currentTime.components.month) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+            .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: 0.3))
+            .cornerRadius(20, corners: [.topLeft, .topRight])
             .frame(width: width, height: 20)
             .overlay(Text(String(month)).fontWeight(.heavy))
             .offset(x:0 , y: -((height-20)/2))
-            .foregroundColor((dateComponents.year == currentTime.components.year && monthNum == currentTime.components.month) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+            .foregroundColor(.gray)
     }
 }
 

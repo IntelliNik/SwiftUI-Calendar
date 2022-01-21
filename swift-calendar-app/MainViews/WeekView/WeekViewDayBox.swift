@@ -53,7 +53,7 @@ struct WeekViewRoundedRectangleTop: View {
                         Text("\(Calendar.current.date(from: dateComponents)!.formatted(.dateTime.day().month()))  ").fontWeight(.heavy)
                     })
                 .offset(x:0 , y: -((height - 20)/2))
-                .foregroundColor(.black)
+                .foregroundColor(.gray)
         }
     }
 }
