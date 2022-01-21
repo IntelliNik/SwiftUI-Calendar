@@ -16,14 +16,18 @@ struct MonthView: View {
     @State private var pickerSelection: PickerSelection = .current
     @ObservedObject var viewModel: MonthViewModel
     
+    @State var offset = CGSize(width: 0, height: 0)
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         VStack() {
             MonthViewMonthAndYear(dateComponents: $displayedMonth)
+                .offset(offset)
             Spacer()
                 .frame(minHeight: 10, maxHeight: 10)
             MonthViewCalendar(daysOfMonth: viewModel.daysOfMonth)
+                .offset(offset)
             Spacer()
             
             Picker("", selection: $pickerSelection) {
@@ -34,17 +38,39 @@ struct MonthView: View {
             
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    //dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
-                    viewModel.moveBackwards()
+                    withAnimation{
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.moveBackwards()
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
-                   //dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
-                    viewModel.moveForward()
+                    withAnimation{
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.moveForward()
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 
                 displayedMonth = viewModel.displayedMonth!
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
             }
             
             .onAppear {
@@ -57,9 +83,9 @@ struct MonthView: View {
         .gesture(
             DragGesture()
                 .onEnded(){gesture in
-                    if(gesture.translation.width < 0){
+                    if(gesture.translation.width > 0){
                         pickerSelection = .previous
-                    } else if(gesture.translation.width > 0){
+                    } else if(gesture.translation.width < 0){
                         pickerSelection = .next
                     }
                 }

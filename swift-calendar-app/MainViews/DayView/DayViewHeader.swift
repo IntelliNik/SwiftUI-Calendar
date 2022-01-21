@@ -36,7 +36,7 @@ struct DayViewHeader: View {
                 let weekdayLong = weekDayLong[addWeekday(dateComponents: dateComponents).weekday!-1]
                 let month = Month_short[dateComponents.month!-1]
                 let year = dateComponents.year!
-                let weekOfYear = addWeekOfYear(dateComponents: dateComponents).weekOfYear!
+                let weekOfYear = addWeekOfYear(dateComponents: dateComponents).weekOfYear ?? getCurrentWeekOfYear()
                 let year_formatted = formatYear(year: String(year))
                 VStack(alignment: .leading, spacing: 0) {
                     if showWeekNumbers {
