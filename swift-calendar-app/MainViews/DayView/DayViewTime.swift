@@ -37,8 +37,8 @@ struct DayViewTime: View {
                                     ZStack{
                                         Text("\(String(hour)):00")
                                             .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
-                                        if (currentTime.currentTime.day == dateComponents.day){
-                                            if (currentTime.currentTime.hour == hour){
+                                        if (currentTime.components.day == dateComponents.day){
+                                            if (/*currentTime.components.second! % 23*/ currentTime.components.hour == hour){
                                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                                                     .stroke(Color(getAccentColorString(from: colorScheme)), lineWidth: 2.0)
                                                     .frame(width: geometry.size.width * 0.175, height: 45)
