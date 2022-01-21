@@ -27,6 +27,7 @@ struct CalendarApp: App {
     @StateObject private var dataController = DataController()
     
     @StateObject private var currentTime = CurrentTime()
+    @Environment(\.scenePhase) var scenePhase
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
@@ -106,6 +107,17 @@ struct CalendarApp: App {
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
             .environmentObject(currentTime)
+            .onChange(of: scenePhase) { newPhase in
+                            if newPhase == .active {
+                                print("Active")
+                                currentTime.activate()
+                            } else if newPhase == .inactive {
+                                print("Inactive")
+                            } else if newPhase == .background {
+                                print("Background")
+                                currentTime.enterBackground()
+                            }
+                        }
         }
     }
 }
