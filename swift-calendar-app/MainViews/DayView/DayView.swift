@@ -23,9 +23,10 @@ struct DayView: View {
 
     var body: some View {
         VStack{
+            
             DayViewHeader(dateComponents: $dateComponents)
                 .padding()
-
+            
             DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
             
             Picker("", selection: $pickerSelection) {
