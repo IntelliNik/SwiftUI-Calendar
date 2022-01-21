@@ -11,6 +11,7 @@ struct WeekEventView: View {
     @FetchRequest var events: FetchedResults<Event>
     
     @State var showEdit = false
+    @State var showEditForever = false
     @State var eventIndex = 0
     
     private let dateComponent: DateComponents
@@ -59,9 +60,9 @@ struct WeekEventView: View {
                 }
                 .onTapGesture{
                     eventIndex = index
-                    showEdit = true
+                    showEditForever = true
                 }
-                .sheet(isPresented: $showEdit){
+                .sheet(isPresented: $showEditForever){
                     ShowForeverEventView(event: foreverEventsToShow[eventIndex])
                 }
                 .padding(5)

@@ -85,8 +85,8 @@ struct WeekViewRoundedRectangleBottom: View {
                 .stroke(.gray)
                 .frame(width: width, height: height)
         }
-        .onChange(of: dateComponents) { [dateComponents] _ in
-            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)
+        .onChange(of: dateComponents) { newvalue in
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: newvalue)
                 }
         .onAppear(perform: {
             foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)

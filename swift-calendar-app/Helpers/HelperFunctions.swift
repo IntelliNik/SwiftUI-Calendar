@@ -185,91 +185,109 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
         case "Weekly":
             guard let startdate = event.startdate else {return []}
             guard let enddate = event.enddate else {return []}
-            guard let curDate = Calendar.current.date(from: datecomponent) else {return []}
+            guard let curDate2 = Calendar.current.date(from: datecomponent) else {return []}
+            var curDate = curDate2
+            curDate.addTimeInterval(3600)
             var addEvent = false
-            Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
-                (projStartdate, _, stop) in
-                if let projStartdate = projStartdate {
-                    if smallerEqualDateComp_Helper(projStartdate, curDate)  {
-                        let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
-                        if smallerEqualDateComp_Helper(curDate, projEnddate) {
-                            stop = true
-                            addEvent = true
+            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+                eventsOfDate.append(event)
+            }else{
+                Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.weekday], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
+                    (projStartdate, _, stop) in
+                    if let projStartdate = projStartdate {
+                        if smallerEqualDateComp_Helper(projStartdate, curDate)  {
+                            let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
+                            if smallerEqualDateComp_Helper(curDate, projEnddate) {
+                                stop = true
+                                addEvent = true
+                            }
                         }
-                    }
-                    if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                        if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                            stop = true
+                            addEvent = false
+                        }
+                    } else {
                         stop = true
                         addEvent = false
                     }
-                } else {
-                    stop = true
-                    addEvent = false
+                })
+                    
+                
+                if addEvent {
+                    eventsOfDate.append(event)
                 }
-            })
-            
-            if addEvent {
-                eventsOfDate.append(event)
             }
             break
         case "Monthly":
             guard let startdate = event.startdate else {return []}
             guard let enddate = event.enddate else {return []}
-            guard let curDate = Calendar.current.date(from: datecomponent) else {return []}
+            guard let curDate2 = Calendar.current.date(from: datecomponent) else {return []}
+            var curDate = curDate2
+            curDate.addTimeInterval(3600)
             var addEvent = false
-            Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
-                (projStartdate, _, stop) in
-                if let projStartdate = projStartdate {
-                    if smallerEqualDateComp_Helper(projStartdate, curDate)  {
-                        let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
-                        if smallerEqualDateComp_Helper(curDate, projEnddate) {
-                            stop = true
-                            addEvent = true
-                            print("add month event")
+            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+                eventsOfDate.append(event)
+            }else{
+                Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
+                    (projStartdate, _, stop) in
+                    if let projStartdate = projStartdate {
+                        if smallerEqualDateComp_Helper(projStartdate, curDate)  {
+                            let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
+                            if smallerEqualDateComp_Helper(curDate, projEnddate) {
+                                stop = true
+                                addEvent = true
+                            }
                         }
-                    }
-                    if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                        if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                            stop = true
+                            addEvent = false
+                        }
+                    } else {
                         stop = true
                         addEvent = false
-                        print("add month event no")
                     }
-                } else {
-                    stop = true
-                    addEvent = false
-                    print("add month event fail")
+                })
+                    
+                
+                if addEvent {
+                    eventsOfDate.append(event)
                 }
-            })
-            
-            if addEvent {
-                eventsOfDate.append(event)
             }
             break
         case "Yearly":
             guard let startdate = event.startdate else {return []}
             guard let enddate = event.enddate else {return []}
-            guard let curDate = Calendar.current.date(from: datecomponent) else {return []}
+            guard let curDate2 = Calendar.current.date(from: datecomponent) else {return []}
+            var curDate = curDate2
+            curDate.addTimeInterval(3600)
             var addEvent = false
-            Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
-                (projStartdate, _, stop) in
-                if let projStartdate = projStartdate {
-                    if smallerEqualDateComp_Helper(projStartdate, curDate)  {
-                        let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
-                        if smallerEqualDateComp_Helper(curDate, projEnddate) {
-                            stop = true
-                            addEvent = true
+            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+                eventsOfDate.append(event)
+            }else{
+                Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.month,.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
+                    (projStartdate, _, stop) in
+                    if let projStartdate = projStartdate {
+                        if smallerEqualDateComp_Helper(projStartdate, curDate)  {
+                            let projEnddate = Date(timeInterval: getTimeInterval(between: startdate, and: enddate), since: projStartdate)
+                            if smallerEqualDateComp_Helper(curDate, projEnddate) {
+                                stop = true
+                                addEvent = true
+                            }
                         }
-                    }
-                    if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                        if !(smallerEqualDateComp_Helper(projStartdate, curDate)) {
+                            stop = true
+                            addEvent = false
+                        }
+                    } else {
                         stop = true
                         addEvent = false
                     }
-                } else {
-                    stop = true
-                    addEvent = false
+                })
+                    
+                
+                if addEvent {
+                    eventsOfDate.append(event)
                 }
-            })
-            
-            if addEvent {
-                eventsOfDate.append(event)
             }
             break
         default:
@@ -277,7 +295,6 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
         }
     }
         
-    print(eventsOfDate.count)
     return eventsOfDate
 }
 
