@@ -25,10 +25,11 @@ struct DayView: View {
 
     var body: some View {
         VStack{
+            
             DayViewHeader(dateComponents: $dateComponents)
                 .offset(offset)
                 .padding()
-
+            
             DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
                 .offset(offset)
             

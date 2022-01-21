@@ -10,7 +10,7 @@ import SwiftUI
 struct ModifyCalendar: View {
     @State var mcalendar: MCalendar
     @State var confirmationShown = false
-    @State var color: Int
+    @State var color: Int = 1
     @State private var name: String = ""
     
     @Binding var showConfirmation: Bool

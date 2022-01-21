@@ -12,36 +12,37 @@ struct MonthView: View {
     //    var month : Int
     //    var year : Int
     //}
-    @Binding var dateComponents: DateComponents
+    @Binding var displayedMonth: DateComponents
     @State private var pickerSelection: PickerSelection = .current
+    @ObservedObject var viewModel: MonthViewModel
     
     @State var offset = CGSize(width: 0, height: 0)
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
-        VStack {
-            MonthViewMonthAndYear(dateComponents: $dateComponents)
-                .offset(offset)
-                .padding()
-            Spacer()
-            MonthViewCalendar()
+        VStack() {
+            MonthViewMonthAndYear(dateComponents: $displayedMonth)
                 .offset(offset)
             Spacer()
+                .frame(minHeight: 10, maxHeight: 10)
+            MonthViewCalendar(daysOfMonth: viewModel.daysOfMonth)
+                .offset(offset)
+            Spacer()
+            
             Picker("", selection: $pickerSelection) {
-                let next = getNextOrPreviousMonth(components: dateComponents, next: true)
-                let previous = getNextOrPreviousMonth(components: dateComponents, next: false)
-                Text("\(previous!.month!) ' \(previous!.year!)").tag(PickerSelection.previous)
-                Text("\(dateComponents.month!) ' \(dateComponents.year!)").tag(PickerSelection.current)
-                Text("\(next!.month!) ' \(next!.year!)").tag(PickerSelection.next)
+                Text(String((viewModel.previousMonth?.month)! as Int)).tag(PickerSelection.previous)
+                Text(String((viewModel.displayedMonth?.month!)! as Int)).tag(PickerSelection.current)
+                Text(String((viewModel.nextMonth?.month!)! as Int)).tag(PickerSelection.next)
             }
+            
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
                     withAnimation{
                         offset.width = 500
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
+                        viewModel.moveBackwards()
                         offset.width = -500
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -55,7 +56,7 @@ struct MonthView: View {
                         offset.width = -500
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                        dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
+                        viewModel.moveForward()
                         offset.width = 500
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -64,10 +65,16 @@ struct MonthView: View {
                         }
                     }
                 }
+                
+                displayedMonth = viewModel.displayedMonth!
                 // reset picker
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     pickerSelection = .current
                 }
+            }
+            
+            .onAppear {
+                displayedMonth = viewModel.displayedMonth!
             }
             .padding()
             .pickerStyle(.segmented)
@@ -88,6 +95,6 @@ struct MonthView: View {
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
+        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), viewModel: MonthViewModel())
     }
 }
