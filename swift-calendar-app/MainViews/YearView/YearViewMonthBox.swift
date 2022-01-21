@@ -8,8 +8,13 @@
 import SwiftUI
 
 struct Part1View: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var month : String
     var width, height: CGFloat
+    
+    @EnvironmentObject var currentTime: CurrentTime
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         RoundedRectangle(cornerRadius: 10, style: .continuous)
@@ -17,7 +22,7 @@ struct Part1View: View {
             .frame(width: width, height: 20)
             .overlay(Text(String(month)).fontWeight(.heavy))
             .offset(x:0 , y: -((height-20)/2))
-            .foregroundColor(.gray)
+            .foregroundColor((dateComponents.year == currentTime.components.year && monthNum == currentTime.components.month) ? Color(getAccentColorString(from: colorScheme)) : .gray)
     }
 }
 
@@ -96,6 +101,8 @@ struct Part4View: View {
 
 
 struct YearViewMonthBox: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var month : String
     
     var width, height: CGFloat
@@ -106,7 +113,7 @@ struct YearViewMonthBox: View {
     var body: some View {
         ZStack(alignment: .trailing) {
     
-            Part1View(month: month, width: width, height:height)
+            Part1View(dateComponents: dateComponents, monthNum: monthNum, month: month, width: width, height:height)
             Part2View(width: width, height:height)
             
             VStack(alignment: .center, spacing: 2) {
@@ -123,6 +130,6 @@ struct YearViewMonthBox: View {
 
 struct YearViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
-        YearViewMonthBox(month: "Jan.", width: 45, height: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
+        YearViewMonthBox(dateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: Date.now) , monthNum: 1, month: "Jan.", width: 45, height: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
     }
 }
