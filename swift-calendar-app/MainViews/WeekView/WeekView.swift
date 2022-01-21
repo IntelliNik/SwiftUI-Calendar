@@ -12,17 +12,21 @@ struct WeekView: View {
     @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
     
+    @State var offset = CGSize(width: 0, height: 0)
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         VStack{
             WeekViewWeekAndYear(dateComponents: $dateComponents)
+                .offset(offset)
             .padding(.bottom)
             GeometryReader { geo in
                 HStack {
                     Spacer()
                         .frame(width: 10, alignment: .leading)
                     WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width - 20)
+                        .offset(offset)
                     Spacer()
                         .frame(width: 10, alignment: .trailing)
                 }
@@ -32,19 +36,43 @@ struct WeekView: View {
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousWeek(components: dateComponents, next: true)
                 let previous = getNextOrPreviousWeek(components: dateComponents, next: false)
-                Text("W\(previous!.weekOfYear!)").tag(PickerSelection.previous)
-                Text("W\(dateComponents.weekOfYear!)").tag(PickerSelection.current)
-                Text("W\(next!.weekOfYear!)").tag(PickerSelection.next)
+                Text("W\(previous!.weekOfYear ?? getCurrentWeekOfYear())").tag(PickerSelection.previous)
+                Text("W\(dateComponents.weekOfYear ?? getCurrentWeekOfYear())").tag(PickerSelection.current)
+                Text("W\(next!.weekOfYear ?? getCurrentWeekOfYear())").tag(PickerSelection.next)
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    dateComponents = getNextOrPreviousWeek(components: dateComponents, next: false)!
+                    withAnimation{
+                        offset.width = 400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dateComponents = getNextOrPreviousWeek(components: dateComponents, next: false)!
+                        offset.width = -400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
-                    dateComponents = getNextOrPreviousWeek(components: dateComponents, next: true)!
+                    withAnimation{
+                        offset.width = -400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dateComponents = getNextOrPreviousWeek(components: dateComponents, next: true)!
+                        offset.width = 400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
             }
             .padding()
             .pickerStyle(.segmented)
@@ -53,9 +81,9 @@ struct WeekView: View {
         .gesture(
             DragGesture()
                 .onEnded(){gesture in
-                    if(gesture.translation.width < 0){
+                    if(gesture.translation.width > 0){
                         pickerSelection = .previous
-                    } else if(gesture.translation.width > 0){
+                    } else if(gesture.translation.width < 0){
                         pickerSelection = .next
                     }
                 }
