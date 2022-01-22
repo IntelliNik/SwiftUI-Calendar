@@ -25,6 +25,9 @@ struct WeekEventView: View {
                         .foregroundColor(.white)
                         .lineLimit(1)
                     Spacer()
+                    if(event.repetition){
+                        Image(systemName: "repeat")
+                    }
                     if let date = event.startdate{
                         if(!event.wholeDay){
                             Text(date, style: .time)
@@ -50,6 +53,7 @@ struct WeekEventView: View {
                         .foregroundColor(.white)
                         .lineLimit(1)
                     Spacer()
+                    Image(systemName: "repeat")
                     if let date = event.startdate{
                         if(!event.wholeDay){
                             Text(date, style: .time)
