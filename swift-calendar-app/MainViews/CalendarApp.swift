@@ -44,7 +44,7 @@ struct CalendarApp: App {
         WindowGroup {
             ZStack{
                 if(showConfirmationBox){
-                    ConfirmationBoxView(success: saveSucessful, text: confirmationBoxText)
+                    ConfirmationBoxView(mode: saveSucessful ? .success : .fail, text: confirmationBoxText)
                     // show on top, even on top of menu
                         .zIndex(2)
                 }

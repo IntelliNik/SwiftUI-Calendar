@@ -47,11 +47,8 @@ struct MenuView: View {
                             .padding()
                     }
                     Spacer()
-                    
-                    //show syncing view
                     Button(action: {
-                        //showSyncSheet = true
-                            currentlySelectedView = .sync; title = "Sync View"; withAnimation{menuOpen = false}
+                            currentlySelectedView = .sync; title = "Sync Calendars"; withAnimation{menuOpen = false}
                         }) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .foregroundColor(.white)

@@ -129,12 +129,6 @@ struct ShowEventView: View {
             .toolbar{
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    /*
-                     NavigationView{
-                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                     */
-                    
                     Button(action: {dismiss()}){
                         HStack{
                             Image(systemName: "chevron.left")
