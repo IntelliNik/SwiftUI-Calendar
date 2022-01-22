@@ -17,13 +17,14 @@ class MonthViewModel: ObservableObject
     private var endDayOfMonth: DateComponents?
     
     @Published var daysOfMonth = [String?]()
+    @Published var daysOfMonthWithWeek = [String?]()
 
     init() {
         initMonths()
     }
     
     public func initMonths(){
-        self.displayedMonth = Calendar.current.dateComponents([.day, .month, .year], from: Date.now)
+        self.displayedMonth = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
         self.previousMonth = self.getNextOrPreviousMonth(components: (displayedMonth)!, next: false)
         self.nextMonth = self.getNextOrPreviousMonth(components: (displayedMonth)!, next: true)
         
@@ -38,17 +39,27 @@ class MonthViewModel: ObservableObject
         //we need too transform the weekday component so monday is mapped to 1 instead of sunday
         let transformedStartWeekday = transformWeekdays(date: Calendar.current.date(from: startDayOfMonth!)!)
         
+        daysOfMonthWithWeek.append("W\(self.startDayOfMonth?.weekOfYear ?? 0)")
+        
         //put in nils so the view is filled accordingly
         if(transformedStartWeekday != 1){
             for _ in 1...(transformedStartWeekday! - 1) {
                 daysOfMonth.append(nil)
+                daysOfMonthWithWeek.append(nil)
             }
         }
         
         var iterateDay = startDayOfMonth
+        var lastWeekOfYear = self.startDayOfMonth?.weekOfYear
         
         for index in 1...(endDayOfMonth?.day)! {
             daysOfMonth.append( "\(index)" )
+            
+            if lastWeekOfYear != iterateDay?.weekOfYear {
+                lastWeekOfYear = iterateDay?.weekOfYear
+                daysOfMonthWithWeek.append("W\(lastWeekOfYear ?? 0)")
+            }
+            daysOfMonthWithWeek.append( "\(index)" )
             iterateDay = getNextDay(components: iterateDay!)
         }
     }
@@ -79,7 +90,7 @@ class MonthViewModel: ObservableObject
     public func getNextDay(components: DateComponents) -> DateComponents?{
         guard let date = Calendar.current.date(from: components) else {return nil}
         guard let nextDate = Calendar.current.date(byAdding: .day, value: 1, to: date) else {return nil}
-        return Calendar.current.dateComponents([.day, .month, .year], from: nextDate)
+        return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: nextDate)
     }
     
     //

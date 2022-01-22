@@ -19,6 +19,7 @@ struct MonthView: View {
     @State var offset = CGSize(width: 0, height: 0)
     
     @AppStorage("colorScheme") private var colorScheme = "red"
+    @AppStorage("weekNumbers") private var showWeekNumbers = true
     
     var body: some View {
         VStack() {
@@ -26,7 +27,7 @@ struct MonthView: View {
                 .offset(offset)
             Spacer()
                 .frame(minHeight: 10, maxHeight: 10)
-            MonthViewCalendar(daysOfMonth: viewModel.daysOfMonth)
+            MonthViewCalendar(daysOfMonth: showWeekNumbers ? viewModel.daysOfMonthWithWeek : viewModel.daysOfMonth)
                 .offset(offset)
             Spacer()
             
