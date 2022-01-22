@@ -8,10 +8,6 @@
 import SwiftUI
 
 struct MonthView: View {
-    //struct Month {
-    //    var month : Int
-    //    var year : Int
-    //}
     @Binding var displayedMonth: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     @ObservedObject var viewModel: MonthViewModel
@@ -73,7 +69,6 @@ struct MonthView: View {
                     pickerSelection = .current
                 }
             }
-            
             .onAppear {
                 displayedMonth = viewModel.displayedMonth!
             }
