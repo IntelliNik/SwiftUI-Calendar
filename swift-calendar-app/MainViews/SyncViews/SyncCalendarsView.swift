@@ -9,17 +9,19 @@ import SwiftUI
 import EventKit
 import EventKitUI
 
-let eventStore = EKEventStore()
 
+
+//should probably rather be named import/export calender view
 struct SyncCalendarsView: View {
+    
+    @ObservedObject var parser : EKCal_Parser
     
     @State var selectedCalendarExport = 0
     
     @State var selectedCalendarImport = false
     
-    let eventStore = EKEventStore()
-    
-    
+    @Environment(\.managedObjectContext) var moc
+ 
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
@@ -67,24 +69,18 @@ struct SyncCalendarsView: View {
                              }
                          }
                      }
-        
         }
         
         .sheet(isPresented: $selectedCalendarImport){
-            CalendarSelector(eventStore: eventStore)
-        }
-        
-        .onAppear{
-            //requestAccess()
-            //requestNotificationPermission()
+            CalendarSelector(eventStore: parser.eventStore, calendars: $parser.selectedCalendars)
         }
     }
 }
 
 
 
-struct SyncCalendarsView_Previews: PreviewProvider {
+/*struct SyncCalendarsView_Previews: PreviewProvider {
     static var previews: some View {
-        SyncCalendarsView()
+        SyncCalendarsView(parser: <#T##EKCal_Parser#>)
     }
-}
+}*/

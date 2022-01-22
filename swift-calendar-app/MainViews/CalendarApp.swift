@@ -26,6 +26,8 @@ struct CalendarApp: App {
     
     @StateObject private var dataController = DataController()
     
+    
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     // TODO: Remove next lines when everything is done
@@ -72,6 +74,8 @@ struct CalendarApp: App {
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
+                            .environment(\.managedObjectContext, dataController.container.viewContext)
+                        
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true

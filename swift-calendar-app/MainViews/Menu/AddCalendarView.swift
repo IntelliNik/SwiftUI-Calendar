@@ -35,13 +35,15 @@ struct AddCalendarView: View {
                             ToolbarItem(placement: .primaryAction) {
                                 Button("Save calendar"){
                                     
-                                    let calendar = MCalendar(context: moc)
+                                    /*let calendar = MCalendar(context: moc)
                                     calendar.key = UUID()
                                     calendar.name = name
                                     calendar.color = colorStrings[color]
                                     calendar.defaultCalendar = false
                                     
-                                    try? moc.save()
+                                    try? moc.save()*/
+                                    
+                                    saveCalendar(name: name, color: colorStrings[color], defaultCal: false)
 
                                     saveCalendar = true
                                     dismiss()
@@ -73,7 +75,21 @@ struct AddCalendarView: View {
             }
         }
     }
+    
+    public func saveCalendar(name: String, color: String, defaultCal: Bool){
+        let calendar = MCalendar(context: moc)
+        calendar.key = UUID()
+        calendar.name = name
+        calendar.color = color
+        calendar.defaultCalendar = false
+        
+        try? moc.save()
+    }
+    
 }
+
+
+
 
 struct AddCalendarView_Previews: PreviewProvider {
     static var previews: some View {

@@ -18,12 +18,12 @@ enum ContainedView{
     case sync
 }
 
-
-
 struct MainView: View {
     @Binding var containedView: ContainedView
     @State var updateView = false
     @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
+
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         switch containedView{
@@ -50,36 +50,13 @@ struct MainView: View {
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
             
         case .sync:
-            let result = requestAccess()
-            
-            if result {
-                SyncCalendarsView()
-                    .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
-            }
+            SyncCalendarsView(parser: EKCal_Parser(viewContext: moc))
+                .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
             
         }
         
+        
 
-    }
-}
-
-func requestAccess() -> Bool {
-    //TODO: What if denied?
-    if (EKEventStore.authorizationStatus(for: .event) == EKAuthorizationStatus.notDetermined)
-    {
-        var r = false;
-        eventStore.requestAccess(to: .event) { granted, error in
-            if granted {
-                r = true
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
-        return r
-    }
-    
-    else {
-        return true
     }
 }
 
