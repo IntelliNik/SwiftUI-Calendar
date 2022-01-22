@@ -12,34 +12,69 @@ struct MonthView: View {
     //    var month : Int
     //    var year : Int
     //}
-    @Binding var dateComponents: DateComponents
+    @Binding var displayedMonth: DateComponents
     @State private var pickerSelection: PickerSelection = .current
+    @ObservedObject var viewModel: MonthViewModel
+    
+    @State var offset = CGSize(width: 0, height: 0)
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
-        VStack {
-            MonthViewMonthAndYear(dateComponents: $dateComponents)
-                .padding()
+        VStack() {
+            MonthViewMonthAndYear(dateComponents: $displayedMonth)
+                .offset(offset)
             Spacer()
-            MonthViewCalendar()
+                .frame(minHeight: 10, maxHeight: 10)
+            MonthViewCalendar(daysOfMonth: viewModel.daysOfMonth)
+                .offset(offset)
             Spacer()
+            
             Picker("", selection: $pickerSelection) {
-                let next = getNextOrPreviousMonth(components: dateComponents, next: true)
-                let previous = getNextOrPreviousMonth(components: dateComponents, next: false)
-                Text("\(previous!.month!) ' \(previous!.year!)").tag(PickerSelection.previous)
-                Text("\(dateComponents.month!) ' \(dateComponents.year!)").tag(PickerSelection.current)
-                Text("\(next!.month!) ' \(next!.year!)").tag(PickerSelection.next)
+                Text(Month_short[((viewModel.previousMonth?.month)! as Int) - 1] + " " + String((viewModel.previousMonth?.year)! as Int)).tag(PickerSelection.previous)
+                Text(Month_short[((viewModel.displayedMonth?.month!)! as Int) - 1] + " " + String((viewModel.displayedMonth?.year)! as Int)).tag(PickerSelection.current)
+                Text(Month_short[((viewModel.nextMonth?.month!)! as Int) - 1] + " " + String((viewModel.nextMonth?.year)! as Int)).tag(PickerSelection.next)
             }
+            
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: false)!
+                    withAnimation{
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.moveBackwards()
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
-                    dateComponents = getNextOrPreviousMonth(components: dateComponents, next: true)!
+                    withAnimation{
+                        offset.width = -500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.moveForward()
+                        offset.width = 500
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
+                
+                displayedMonth = viewModel.displayedMonth!
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
+            }
+            
+            .onAppear {
+                displayedMonth = viewModel.displayedMonth!
             }
             .padding()
             .pickerStyle(.segmented)
@@ -48,18 +83,19 @@ struct MonthView: View {
         .gesture(
             DragGesture()
                 .onEnded(){gesture in
-                    if(gesture.translation.width < 0){
+                    if(gesture.translation.width > 0){
                         pickerSelection = .previous
-                    } else if(gesture.translation.width > 0){
+                    } else if(gesture.translation.width < 0){
                         pickerSelection = .next
                     }
                 }
         )
+        .environmentObject(viewModel)
     }
 }
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
+        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), viewModel: MonthViewModel(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
     }
 }

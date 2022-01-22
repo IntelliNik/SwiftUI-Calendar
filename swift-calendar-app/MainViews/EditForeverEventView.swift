@@ -1,18 +1,18 @@
 //
-//  EditEventView.swift
+//  EditForeverEventView.swift
 //  swift-calendar-app
 //
-//  Created by Daniel Rademacher on 11.01.22.
+//  Created by Daniel Rademacher on 19.01.22.
 //
 
 import SwiftUI
 import MapKit
 
-struct EditEventView: View {
+struct EditForeverEventView: View {
     
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
-    @State var event: Event
+    @State var event: ForeverEvent
     @State var confirmationShown = false
     @State private var name: String = ""
     
@@ -73,9 +73,9 @@ struct EditEventView: View {
     @FetchRequest(
         entity: Event.entity(),
         sortDescriptors: [
-            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+            NSSortDescriptor(keyPath: \ForeverEvent.startdate, ascending: true),
         ]
-    ) var events: FetchedResults<Event>
+    ) var events: FetchedResults<ForeverEvent>
     
     var body: some View {
         NavigationView{
@@ -138,37 +138,6 @@ struct EditEventView: View {
                             DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
                                 Text("At time")
                             }.padding()
-                        }
-                    }
-                }
-                Section{
-                    Toggle("Repeat", isOn: $repetition).padding()
-                    if(repetition){
-                        Picker("Interval", selection: $repetitionInterval) {
-                            ForEach(repetitionIntevals, id: \.self) {
-                                Text($0)
-                            }
-                        }.padding()
-                        Picker("Until", selection: $repeatUntil) {
-                            ForEach(repeatUntilModes, id: \.self) {
-                                Text($0)
-                            }
-                        }.padding()
-                        if(repeatUntil == "Repetitions"){
-                            HStack{
-                                Text("Repetitions").padding()
-                                Spacer()
-                                TextField("Repetitions", text: $amountOfRepetitions)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .padding()
-                            }
-                        }
-                        if(repeatUntil == "End Date"){
-                            DatePicker(selection: $endRepetitionDate, in: endDate..., displayedComponents: [.date]){
-                                Text("End Date")
-                            }
-                            .padding()
                         }
                     }
                 }
@@ -368,7 +337,7 @@ struct EditEventView: View {
                         .padding()
                 }
             }
-            .navigationTitle("Edit Event")
+            .navigationTitle("Edit Forever Event")
             .toolbar {
                 Button("Delete") {
                     confirmationShown = true
@@ -381,7 +350,7 @@ struct EditEventView: View {
                 isPresented: $confirmationShown
             ) {
                 Button("Delete event"){
-                    deleteEvent(id: event.key!)
+                    deleteForeverEvent(id: event.key!)
                     dismiss()
                 }
             }
@@ -414,22 +383,6 @@ struct EditEventView: View {
                     event.setValue(false, forKey: "location")
                 }
                 
-                if repetition {
-                    event.setValue(true, forKey: "repetition")
-                    event.setValue(repeatUntil, forKey: "repetitionUntil")
-                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                    if(repeatUntil == "Repetitions"){
-                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                    }
-                    if(repeatUntil == "End Date"){
-                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                    }
-                    //event.repetitionID
-                } else {
-                    event.setValue(false, forKey: "repetition")
-                    // event.nextRepetition = ""
-                }
-                
                 if notification {
                     event.setValue(true,forKey:"notification")
                     if(!wholeDay){
@@ -442,7 +395,7 @@ struct EditEventView: View {
                     event.setValue(false,forKey:"notification")
                 }
                 
-                calendars[calendar].addToEvents(event)
+                calendars[calendar].addToForeverEvents(event)
                 
                 try? moc.save()
                 
@@ -477,27 +430,15 @@ struct EditEventView: View {
             notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
             urlString = event.url ?? ""
             notes = event.notes ?? ""
-            endRepetitionDate = event.repetitionEndDate ?? Date()
             locationBool = event.location
             if locationBool{
                 location = "Custom"
                 customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
                 markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
             }
-            repetition = event.repetition
-            if repetition{
-                repeatUntil = event.repetitionUntil!
-                repetitionInterval = event.repetitionInterval!
-                if(repeatUntil == "Repetitions"){
-                    amountOfRepetitions = String(event.repetitionAmount)
-                }
-                if(repeatUntil == "End Date"){
-                    endRepetitionDate = event.repetitionEndDate!
-                }
-            }
         }
     }
-    func deleteEvent(id: UUID)  {
+    func deleteForeverEvent(id: UUID)  {
         events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
         
         for event in events {
@@ -507,8 +448,8 @@ struct EditEventView: View {
     }
 }
 
-struct EditEventView_Previews: PreviewProvider {
+struct EditForeverEventView_Previews: PreviewProvider {
     static var previews: some View {
-        EditEventView(event: Event(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+        EditForeverEventView(event: ForeverEvent(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
     }
 }

@@ -7,17 +7,43 @@
 
 import SwiftUI
 
+func isToday(from dateComponents: DateComponents, and monthNum: Int, _ currentTime: CurrentTime) -> Bool {
+    return dateComponents.year == currentTime.components.year && monthNum == currentTime.components.month
+}
+
 struct Part1View: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var month : String
     var width, height: CGFloat
     
+    @EnvironmentObject var currentTime: CurrentTime
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    @Environment(\.colorScheme) var darkMode
+    
     var body: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(.thinMaterial)
-            .frame(width: width, height: 20)
-            .overlay(Text(String(month)).fontWeight(.heavy))
-            .offset(x:0 , y: -((height-20)/2))
-            .foregroundColor(.gray)
+        if darkMode == .dark {
+            Rectangle()
+                .fill(.thinMaterial)
+                .colorInvert()
+                .colorMultiply((isToday(from: dateComponents, and: monthNum, currentTime)) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+                .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: isToday(from: dateComponents, and: monthNum, currentTime) ? 0.7 : 0.3))
+                .cornerRadius(20, corners: [.topLeft, .topRight])
+                .frame(width: width, height: 20)
+                .overlay(Text(String(month)).fontWeight(.heavy))
+                .offset(x:0 , y: -((height-20)/2))
+                .foregroundColor(.gray)
+        } else {
+            Rectangle()
+                .fill(.thinMaterial)
+                .colorMultiply((isToday(from: dateComponents, and: monthNum, currentTime)) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+                .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: 0.3))
+                .cornerRadius(20, corners: [.topLeft, .topRight])
+                .frame(width: width, height: 20)
+                .overlay(Text(String(month)).fontWeight(.heavy))
+                .offset(x:0 , y: -((height-20)/2))
+                .foregroundColor(.gray)
+        }
     }
 }
 
@@ -38,9 +64,14 @@ struct Part2View: View {
 
 
 struct Part3View: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var row: Int
     var lastDayOfMonth: Int
     var width, height: CGFloat
+    
+    @EnvironmentObject var currentTime: CurrentTime
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         HStack(alignment: .center, spacing: nil) {
@@ -50,10 +81,10 @@ struct Part3View: View {
                     {
                         let text = "  "  + String(dayofweek + row)
                         Text(text).font(.custom("Calender", size: 7))
-                            .foregroundColor(.gray)
+                            .foregroundColor((isToday(from: dateComponents, and: monthNum, currentTime) && dayofweek+row == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray)
                     } else {
                         Text(String(dayofweek + row)).font(.custom("Calender", size: 7))
-                            .foregroundColor(.gray)
+                            .foregroundColor((isToday(from: dateComponents, and: monthNum, currentTime) && dayofweek+row == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray)
                     }
                 } else {
                     let text = "    "
@@ -73,8 +104,13 @@ struct Part3View: View {
 
 
 struct Part4View: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var startOfMonthDay: Int
     var width, height: CGFloat
+    
+    @EnvironmentObject var currentTime: CurrentTime
+    @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         HStack(alignment: .center, spacing: nil) {
@@ -82,7 +118,7 @@ struct Part4View: View {
                 if ((dayofweek - 1) >= startOfMonthDay){
                     let text = "  "  + String(dayofweek - startOfMonthDay)
                     Text(text).font(.custom("Calender", size: 7))
-                        .foregroundColor(.gray)
+                        .foregroundColor((isToday(from: dateComponents, and: monthNum, currentTime) && dayofweek-startOfMonthDay == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray)
                 } else {
                     let text = "    "
                     Text(text).font(.custom("Calender", size: 7))
@@ -96,6 +132,8 @@ struct Part4View: View {
 
 
 struct YearViewMonthBox: View {
+    var dateComponents: DateComponents
+    var monthNum: Int
     var month : String
     
     var width, height: CGFloat
@@ -106,15 +144,15 @@ struct YearViewMonthBox: View {
     var body: some View {
         ZStack(alignment: .trailing) {
     
-            Part1View(month: month, width: width, height:height)
+            Part1View(dateComponents: dateComponents, monthNum: monthNum, month: month, width: width, height:height)
             Part2View(width: width, height:height)
             
             VStack(alignment: .center, spacing: 2) {
                 
-                Part4View(startOfMonthDay: startOfMonthDay,width: width, height:height)
+                Part4View(dateComponents: dateComponents, monthNum: monthNum, startOfMonthDay: startOfMonthDay,width: width, height:height)
                 ForEach([7,14,21,28,35], id:\.self)  { row in
                     let number = row - startOfMonthDay
-                    Part3View(row: number, lastDayOfMonth: lastDayOfMonth,width: width, height:height)
+                    Part3View(dateComponents: dateComponents, monthNum: monthNum, row: number, lastDayOfMonth: lastDayOfMonth,width: width, height:height)
                 }
             }.offset(x:0 , y: 10)
         }
@@ -123,6 +161,7 @@ struct YearViewMonthBox: View {
 
 struct YearViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
-        YearViewMonthBox(month: "Jan.", width: 45, height: 45, startOfMonthDay: 0, lastDayOfMonth: 31)
+        YearViewMonthBox(dateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: Date.now) , monthNum: 1, month: "Jan.", width: 45, height: 45, startOfMonthDay: 5, lastDayOfMonth: 31)
+            .environmentObject(CurrentTime())
     }
 }

@@ -29,7 +29,7 @@ struct MainView: View {
             WeekView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .month:
-            MonthView(dateComponents: $dateComponents)
+            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel(dateComponents: dateComponents))
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .year:
             YearView(dateComponents: $dateComponents, updateView: $updateView)
