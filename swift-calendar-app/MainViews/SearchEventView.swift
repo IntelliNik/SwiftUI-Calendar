@@ -89,6 +89,10 @@ struct SearchEventView: View {
             events.nsPredicate = searchPredicate(query: newValue)
             foreverEvents.nsPredicate = searchPredicateForeverEvents(query: newValue)
          }
+        .onAppear {
+            //Fix the Cancel button Color
+            UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes([NSAttributedString.Key(rawValue: NSAttributedString.Key.foregroundColor.rawValue): UIColor(Color(getAccentColorString(from: colorScheme)))], for: .normal)
+        }
         
     }
         
