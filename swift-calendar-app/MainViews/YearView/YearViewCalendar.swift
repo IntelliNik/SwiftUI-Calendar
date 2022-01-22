@@ -25,7 +25,7 @@ struct YearViewCalendar: View {
                                     dateComponents = setMonth(dateComponents: dateComponents, month: monthofyear + row)
                                     updateView = true
                                 }){
-                                    YearViewMonthBox(month: montlist[monthofyear + row-1], width: calculateWidth(geo: geo), height: calculateHeight(geo: geo), startOfMonthDay: getFirstDayOfMonth(year: dateComponents.year!, month:monthofyear + row), lastDayOfMonth: getNumberOfDaysOfMonth(year:dateComponents.year!,month:monthofyear + row))
+                                    YearViewMonthBox(dateComponents: dateComponents, monthNum: monthofyear + row, month: montlist[monthofyear + row-1], width: calculateWidth(geo: geo), height: calculateHeight(geo: geo), startOfMonthDay: getFirstDayOfMonth(year: dateComponents.year!, month:monthofyear + row), lastDayOfMonth: getNumberOfDaysOfMonth(year:dateComponents.year!,month:monthofyear + row))
                                     //YearViewMonthBox(month: montlist[monthofyear + row-1], width: 110, height: 110, startOfMonthDay: 6, lastDayOfMonth: 31)
                                 .padding(.all, 1)
                                 }
@@ -69,5 +69,6 @@ struct YearViewCalendar: View {
 struct YearViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
         YearViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
+            .environmentObject(CurrentTime())
     }
 }
