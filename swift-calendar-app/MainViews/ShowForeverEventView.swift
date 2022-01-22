@@ -1,16 +1,16 @@
 //
-//  ShowEventView.swift
+//  SwiftUIView.swift
 //  swift-calendar-app
 //
-//  Created by Schulte, Niklas on 01.01.22.
+//  Created by Daniel Rademacher on 19.01.22.
 //
 
 import SwiftUI
 import MapKit
 
-struct ShowEventView: View {
+struct ShowForeverEventView: View {
     
-    @State var event: Event
+    @State var event: ForeverEvent
     
     @State var showShowEvent = false
     
@@ -72,7 +72,7 @@ struct ShowEventView: View {
                             Text("None")
                         }
                     }
-                    HStack{
+                    /*HStack{
                         Image(systemName: "repeat")
                         Spacer()
                         if(event.repetition){
@@ -96,7 +96,7 @@ struct ShowEventView: View {
                                 Text(event.repetitionEndDate!, style: .date)
                             }
                         }
-                    }
+                    }*/
                 }.padding()
                 Section{
                     if(event.location){
@@ -108,6 +108,14 @@ struct ShowEventView: View {
                 
                 Section{
                     // TODO: doesn't really work within a List
+                    /*if let url = event.url{
+                        MetadataView(vm: LinkViewModel(link: url))
+                        HStack{
+                            Image(systemName: "globe").padding()
+                            Spacer()
+                            Text(url).padding()
+                        }
+                    }*/
                     if let urlString = event.url{
                         HStack{
                             Image(systemName: "globe").padding()
@@ -134,6 +142,12 @@ struct ShowEventView: View {
             .toolbar{
                 
                 ToolbarItem(placement: .navigationBarLeading) {
+                    /*
+                     NavigationView{
+                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
+                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                     */
+                    
                     Button(action: {dismiss()}){
                         HStack{
                             Image(systemName: "chevron.left")
@@ -157,7 +171,7 @@ struct ShowEventView: View {
                             .foregroundColor(Color(getAccentColorString(from: colorScheme)))
                     }
                     .sheet(isPresented: $confirmationShown) {
-                        EditEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+                        EditForeverEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
                     }
                 }
             }
@@ -165,8 +179,8 @@ struct ShowEventView: View {
     }
 }
 
-struct ShowEventView_Previews: PreviewProvider {
+struct ShowForeverEventView_Previews: PreviewProvider {
     static var previews: some View {
-        ShowEventView(event: Event())
+        ShowForeverEventView(event:ForeverEvent())
     }
 }

@@ -16,6 +16,8 @@ struct MonthViewDayBox: View {
     @State var rectangle: Bool?
     @State var markToday: Bool?
     
+    @EnvironmentObject var currentTime: CurrentTime
+    @EnvironmentObject var viewModel: MonthViewModel
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -27,8 +29,8 @@ struct MonthViewDayBox: View {
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
                 .overlay(Text(String(date))
-                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                            .font(.system(size: fontSize ?? 20)))
+                            .foregroundColor((viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
+                .font(.system(size: fontSize ?? 20))
         }
     }
 }

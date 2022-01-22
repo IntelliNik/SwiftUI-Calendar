@@ -11,6 +11,8 @@ struct DayView: View {
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     
+    @State var offset = CGSize(width: 0, height: 0)
+    
     @FetchRequest(
         entity: Event.entity(),
         sortDescriptors: [
@@ -23,10 +25,13 @@ struct DayView: View {
 
     var body: some View {
         VStack{
+            
             DayViewHeader(dateComponents: $dateComponents)
+                .offset(offset)
                 .padding()
-
+            
             DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
+                .offset(offset)
             
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousDay(components: dateComponents, next: true)
@@ -40,29 +45,53 @@ struct DayView: View {
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
-                    dateComponents = getNextOrPreviousDay(components: dateComponents, next: false)!
+                    withAnimation{
+                        offset.width = 400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        dateComponents = getNextOrPreviousDay(components: dateComponents, next: false)!
+                        offset.width = -400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
-                    dateComponents = getNextOrPreviousDay(components: dateComponents, next: true)!
+                    withAnimation{
+                        offset.width = -400
+                    }
+                    
+                        dateComponents = getNextOrPreviousDay(components: dateComponents, next: true)!
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        offset.width = 400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
             }
             .padding()
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString(from: colorScheme)))
-            .gesture(
-                DragGesture()
-                    .onEnded(){gesture in
-                        if(gesture.translation.width < 0){
-                            pickerSelection = .previous
-                        } else if(gesture.translation.width > 0){
-                            pickerSelection = .next
-                        }
-                    }
-            )
         }
-        
+        .gesture(
+            DragGesture()
+                .onEnded(){gesture in
+                    if(gesture.translation.width > 0){
+                        pickerSelection = .previous
+                    } else if(gesture.translation.width < 0){
+                        pickerSelection = .next
+                    }
+                }
+        )
     }
 }
 

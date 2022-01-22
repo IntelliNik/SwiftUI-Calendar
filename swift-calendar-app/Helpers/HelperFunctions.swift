@@ -9,14 +9,13 @@ import SwiftUI
 import MapKit
 
 // Color
-public let colorStrings = ["Yellow","Green","Blue","Pink","Purple","Black","Red","Orange","Brown","Indigo"]
+public let colorStrings = ["Yellow","Mint","Blue","Purple","Red","Orange","Brown","Indigo"]
 
 func getColorFromString(stringColor: String?) -> Color{
     switch stringColor{
     case "Yellow": return .yellow
-    case "Green": return .green
+    case "Mint": return .mint
     case "Blue": return .blue
-    case "Pink": return .pink
     case "Purple": return .purple
     case "Black": return .black
     case "Red": return .red
@@ -146,9 +145,16 @@ func ??<T>(lhs: Binding<Optional<T>>, rhs: T) -> Binding<T> {
 
 let Months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+
+enum RepetitionInterval {
+    case daily, weekly, monthly, yearly
+}
+
 let Month_short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 let weekDay = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+
+let weekDayLong = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
 let Hour = ["00:00", "01:00", "02:00", "03:00", "04:00", "05:00", "06:00","07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "00:00"]
 
@@ -170,4 +176,21 @@ func addWeekOfYear(dateComponents: DateComponents) -> DateComponents{
     newDateComponents.day = dateComponents.day
     newDateComponents.weekOfYear = Calendar.current.component(.weekOfYear, from: date!)
     return newDateComponents
+}
+
+func getCurrentWeekOfYear() -> Int{
+    let dc = Calendar.current.dateComponents([.weekOfYear], from: Date.now)
+    return dc.weekOfYear!
+}
+
+// URL
+
+func getURLwithoutProtocol(urlString: String) -> String{
+    if(urlString.hasPrefix("http://")){
+        return String(urlString.dropFirst(7))
+    }
+    if(urlString.hasPrefix("https://")){
+        return String(urlString.dropFirst(8))
+    }
+    return urlString
 }

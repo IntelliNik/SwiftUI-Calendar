@@ -11,10 +11,10 @@ struct DayViewTime: View {
     
     @State var eventsToday: FetchedResults<Event>
     
-    @State var showEventSheet = false
     @State var eventToShow: Event?
     
     @AppStorage("colorScheme") private var colorScheme = "red"
+    @EnvironmentObject var currentTime: CurrentTime
     
     func filterEventsForHour(hour: Int) -> [Event]{
         var foundEvents: [Event] = []
@@ -28,10 +28,8 @@ struct DayViewTime: View {
     }
     
     var body: some View {
-        let cur_hour = getToday().hour
-        let cur_day = getToday().day
         ScrollViewReader{ scroll in
-            ScrollView{
+            ScrollView(showsIndicators: false){
                 ZStack{
                     VStack(alignment: .leading, spacing: 25){
                         ForEach(0...23, id:\.self){ hour in
@@ -40,30 +38,12 @@ struct DayViewTime: View {
                                     ZStack{
                                         Text("\(String(hour)):00")
                                             .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
-                                        if (cur_day == dateComponents.day){
-                                            if (cur_hour == hour){
-                                                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                                    .stroke(Color(getAccentColorString(from: colorScheme)), lineWidth: 2.0)
-                                                    .frame(width: geometry.size.width * 0.175, height: 45)
-                                            }
-                                        }
+                                            .foregroundColor((currentTime.components.day == dateComponents.day && currentTime.components.hour == hour) ? Color(getAccentColorString(from: colorScheme)) : .black)
                                     }
                                     ZStack{
                                         VStack(alignment: .leading){
-                                            let eventsThisHour: [Event] = filterEventsForHour(hour: hour)
-                                            ScrollView(.horizontal){
-                                                HStack(){
-                                                    ForEach(eventsThisHour, id:\.self){ event in
-                                                        EventView(event: event).onTapGesture(){
-                                                            eventToShow = event
-                                                            showEventSheet = true
-                                                        }
-                                                    }
-   
-                                                }
-                                            }.padding(.trailing, 30)
+                                            DayViewEachHour(eventsThisHour: filterEventsForHour(hour: hour))
                                         }.zIndex(1)
-                                        
                                         Rectangle().fill(Color(UIColor.lightGray)).frame(height: 2).padding(.trailing, 30)
                                     }
                                 }
@@ -72,8 +52,6 @@ struct DayViewTime: View {
                         }
                         Spacer()
                     }
-                }.sheet(isPresented: $showEventSheet){
-                    ShowEventView(event: eventToShow!)
                 }
             }
         }

@@ -21,12 +21,13 @@ struct CalendarApp: App {
     @State private var showConfirmationBox = false
     @State private var confirmationBoxText = ""
     
-    @State var selectedView: ContainedView = .day
-    @State var title = "Day View"
+    @State var selectedView: ContainedView = .allEvents
+    @State var title = "All Events"
     
     @StateObject private var dataController = DataController()
     
-    
+    @StateObject private var currentTime = CurrentTime()
+    @Environment(\.scenePhase) var scenePhase
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
@@ -69,7 +70,6 @@ struct CalendarApp: App {
                 // show menu on top
                 .zIndex(1)
                 VStack{
-                    // TODO: why is the title update not working ???
                     NavigationBarView(showMenu: $showMenu, showShowEvent: $showShowEvent, showAddEventSheet: $showAddEventSheet, showSearchView: $showSearchView, title: title)
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
@@ -108,6 +108,18 @@ struct CalendarApp: App {
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
+            .environmentObject(currentTime)
+            .onChange(of: scenePhase) { newPhase in
+                            if newPhase == .active {
+                                print("Active")
+                                currentTime.activate()
+                            } else if newPhase == .inactive {
+                                print("Inactive")
+                            } else if newPhase == .background {
+                                print("Background")
+                                currentTime.enterBackground()
+                            }
+                        }
         }
     }
 }

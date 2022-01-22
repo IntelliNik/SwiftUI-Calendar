@@ -19,11 +19,11 @@ class DataController: ObservableObject {
     
     init() {
         self.containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.swift.calendar.app")!
-        self.storeURL = containerURL.appendingPathComponent("swift_calendar_app.sqlite")
+        self.storeURL = containerURL.appendingPathComponent("store.sqlite")
         
         self.description = NSPersistentStoreDescription(url: storeURL)
         
-        self.container = NSPersistentContainer(name: "swift_calendar_app")
+        self.container = NSPersistentContainer(name: "store")
         container.persistentStoreDescriptions = [description]
         
         container.loadPersistentStores { description, error in

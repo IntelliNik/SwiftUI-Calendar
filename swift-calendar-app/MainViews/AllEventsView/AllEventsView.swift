@@ -32,6 +32,24 @@ struct AllEventsView: View {
     @State var showExtended = false
     
     var body: some View {
+        if(events.count == 0){
+            GeometryReader{geo in
+            HStack(alignment: .top){
+                Spacer()
+                VStack(alignment: .trailing){
+                    Image("arrow")
+                        .resizable()
+                        .frame(width: 96.0, height: 96.0)
+                        .padding(.trailing, 50)
+                    Text("It looks like you don't have any events yet, click here to add one!")
+                        .font(.caption)
+                        .frame(width: geo.size.width/2, height: geo.size.height/2, alignment: .top)
+                        .padding(.trailing, 50)
+                    Spacer()
+                }
+            }
+            }
+        }
         ZStack(alignment: .leading){
             ScrollViewReader { reader in
                 ScrollView(showsIndicators: false) {
@@ -47,9 +65,6 @@ struct AllEventsView: View {
                                 .onAppear {
                                     self.refreshID = UUID()
                                 }
-                                /*.onChange(of: event) { newValue in
-                                    self.refreshID = UUID()
-                                 }*/
                             } else{
                                 EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
                                     withAnimation{
@@ -60,9 +75,6 @@ struct AllEventsView: View {
                                 .onAppear {
                                     self.refreshID = UUID()
                                 }
-                                /*.onChange(of: event) { newValue in
-                                    self.refreshID = UUID()
-                                 }*/
                             }
                         }
                         .onChange(of: refreshID) { _ in
