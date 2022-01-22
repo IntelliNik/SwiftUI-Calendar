@@ -196,7 +196,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
             var curDate = curDate2
             curDate.addTimeInterval(3600)
             var addEvent = false
-            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+            if smallerEqualDateComp_Helper(startdate,curDate) && smallerEqualDateComp_Helper(curDate,enddate){
                 eventsOfDate.append(event)
             }else{
                 Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.weekday], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
@@ -232,7 +232,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
             var curDate = curDate2
             curDate.addTimeInterval(3600)
             var addEvent = false
-            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+            if smallerEqualDateComp_Helper(startdate,curDate) && smallerEqualDateComp_Helper(curDate,enddate){
                 eventsOfDate.append(event)
             }else{
                 Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
@@ -268,7 +268,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
             var curDate = curDate2
             curDate.addTimeInterval(3600)
             var addEvent = false
-            if Calendar.current.compare(startdate,to:curDate,toGranularity: .day) == .orderedSame{
+            if smallerEqualDateComp_Helper(startdate,curDate) && smallerEqualDateComp_Helper(curDate,enddate){
                 eventsOfDate.append(event)
             }else{
                 Calendar.current.enumerateDates(startingAfter: startdate, matching: Calendar.current.dateComponents([.month,.day], from: startdate) , matchingPolicy: .strict, repeatedTimePolicy: .first, direction: .forward, using: {
