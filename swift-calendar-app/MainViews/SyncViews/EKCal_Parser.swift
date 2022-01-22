@@ -28,7 +28,7 @@ class EKCal_Parser: ObservableObject
     init(viewContext: NSManagedObjectContext){
         self.viewContext = viewContext
         
-        requestAccess()
+        let _ = requestAccess()
         
         $selectedCalendars.sink( receiveValue: { calendars in
             if calendars != nil {
@@ -39,24 +39,74 @@ class EKCal_Parser: ObservableObject
         
     }
     
-    private func parseAndSaveCalendars(_ calendars: Set<EKCalendar>?) {
-        //read EKCalendars array and make it an MCalendar
+    private func parseAndSaveCalendars(_ calendars: Set<EKCalendar>?) {        //read EKCalendars array and make it an MCalendar
         for ekCal in calendars! {
             
-            let calendar = MCalendar(context: viewContext)
-            calendar.key = UUID()
-            calendar.name = ekCal.title
+            let mCalendar = MCalendar(context: viewContext)
+            mCalendar.key = UUID()
+            mCalendar.name = ekCal.title
             //TODO: what the actual fuck? who uses strings for colors?????
-            calendar.color = "Black"
-            calendar.defaultCalendar = false
-            //calendar.imported = true
+            mCalendar.color = "Red"
+            mCalendar.defaultCalendar = false
+            mCalendar.imported = true
             
             try? viewContext.save()
+            
+            let currentCalendar = Calendar.current
+            
+            // Get the events of the calendar
+            // TODO: max time span of 4 years here
+            var pastComponents = DateComponents()
+            pastComponents.year = -2
+            let past = currentCalendar.date(byAdding: pastComponents, to: Date())
+
+            var futureComponents = DateComponents()
+            futureComponents.year = 2
+            let future = currentCalendar.date(byAdding: futureComponents, to: Date())
+
+            var predicate: NSPredicate? = nil
+            if let p = past, let f = future {
+                predicate = eventStore.predicateForEvents(withStart: p, end: f, calendars: [ekCal])
+            }
+            
+            let ekCalEvents = eventStore.events(matching: predicate!)
+            
+            // Create Events, store them in the newly created calendar
+            ekCalEvents.forEach{ ekCalEvent in
+                let mEvent = Event(context: viewContext)
+                mEvent.name = ekCalEvent.title
+                
+                mEvent.startdate = ekCalEvent.startDate
+                mEvent.startdate = ekCalEvent.endDate
+                
+                //location
+                
+                mEvent.notes = ekCalEvent.notes
+                
+                //notification
+                
+                //repetition
+                mEvent.repetition = ekCalEvent.isDetached
+                
+                mEvent.url = ekCalEvent.url?.absoluteString
+                
+                mEvent.wholeDay = ekCalEvent.isAllDay
+                
+                mCalendar.addToEvents(mEvent)
+                
+                try? viewContext.save()
+            }
             
             //TODO: selectedCalendars disappear after restart
             //TODO: save it in user defaults, so it is persistent after restart
             //TODO: check for doubles
         }
+    }
+    
+    func exportCalendar(_ mCalendar: MCalendar){
+        let ekCalendar = EKCalendar(for: .event, eventStore: eventStore)
+        ekCalendar.title = mCalendar.name ?? "Calendar"
+        ekCalendar.cgColor = CGColor(colorSpace: CGColorSpaceCreateDeviceRGB(), components: [1.0, 0.5, 0.5, 1.0])
     }
     
     private func caseInternalChange_syncImported(){
