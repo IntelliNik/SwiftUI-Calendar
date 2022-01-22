@@ -16,6 +16,7 @@ struct SearchEventView: View {
     @State var confirmationForeverEventShown = false
     
     @State var selectedEvent = 0
+    @State var selectedEventForever = 0
     @State var saveEvent = 0
     
     @AppStorage("colorScheme") private var colorScheme = "red"
@@ -36,12 +37,6 @@ struct SearchEventView: View {
                 List {
                     ForEach((0..<events.count), id: \.self) { index in
                         if (index < events.count) {
-                           /* NavigationLink(
-                                destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
-                            ) {
-                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
-                            }
-                             */
                             Button(action: {confirmationShown = true
                                 selectedEvent = events.firstIndex {$0 == events[index] }!
                             }){
@@ -52,14 +47,8 @@ struct SearchEventView: View {
                     }
                     ForEach((0..<foreverEvents.count), id: \.self) { index in
                         if (index < foreverEvents.count) {
-                           /* NavigationLink(
-                                destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
-                            ) {
-                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
-                            }
-                             */
                             Button(action: {confirmationForeverEventShown = true
-                                selectedEvent = foreverEvents.firstIndex {$0 == foreverEvents[index] }!
+                                selectedEventForever = foreverEvents.firstIndex {$0 == foreverEvents[index] }!
                             }){
                                 Text("Name: \(foreverEvents[index].name ?? "") in Calendar: \(foreverEvents[index].calendar?.name ?? "No Calendar")")
                                     .foregroundColor(Color(getAccentColorString(from: colorScheme)))
@@ -82,7 +71,7 @@ struct SearchEventView: View {
             ShowEventView(event:events[selectedEvent])
         }
         .sheet(isPresented: $confirmationForeverEventShown) {
-            ShowForeverEventView(event:foreverEvents[selectedEvent])
+            ShowForeverEventView(event:foreverEvents[selectedEventForever])
         }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Search events")
         .onChange(of: query) { newValue in
