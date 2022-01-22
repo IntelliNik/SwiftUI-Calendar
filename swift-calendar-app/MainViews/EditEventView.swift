@@ -387,100 +387,297 @@ struct EditEventView: View {
                 }
             }
             .navigationBarItems(leading: Button(action : {
-                event.setValue(wholeDay,forKey:"wholeDay")
-                event.setValue(startDate,forKey:"startdate")
-                event.setValue(endDate,forKey:"enddate")
-                
-                if(urlString != ""){
-                    event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
-                }
-                
-                if (location == "Current"){
-                    if saveCurrentLocation{
-                        event.setValue(true, forKey: "location")
-                        event.setValue(currentRegion.center.latitude, forKey: "latitude")
-                        event.setValue(currentRegion.center.longitude, forKey: "longitude")
-                        event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                        event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                    }
-                } else if (location == "Custom")
-                {
-                    event.setValue(true, forKey: "location")
-                    event.setValue(customRegion.center.latitude, forKey: "latitude")
-                    event.setValue(customRegion.center.longitude, forKey: "longitude")
-                    event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                    event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                    // TODO: save the name of the location somehow in event.locationName
-                } else {
-                    event.setValue(false, forKey: "location")
-                }
-                
-                if notification {
-                    event.setValue(true,forKey:"notification")
-                    if(!wholeDay){
-                        event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                    } else {
-                        event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                if event.repetition && repetition{
+                    // In this case event was a repeating event and should still be one
+                    event.setValue(wholeDay,forKey:"wholeDay")
+                    event.setValue(startDate,forKey:"startdate")
+                    event.setValue(endDate,forKey:"enddate")
+                    
+                    if(urlString != ""){
+                        event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
                     }
                     
-                } else{
-                    event.setValue(false,forKey:"notification")
-                }
-                
-                if repetition {
-                    event.setValue(true, forKey: "repetition")
-                    event.setValue(repeatUntil, forKey: "repetitionUntil")
-                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                    if(repeatUntil == "Repetitions"){
-                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                    }
-                    if(repeatUntil == "End Date"){
-                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                    }
-                    //TODO: Change also upcoming events of repetition with
-                    //event.repetitionID
-                    if(repeatUntil == "Forever"){
-                        let eventForever = ForeverEvent(context: moc)
-                        eventForever.key = UUID()
-                        eventForever.startdate = event.startdate!
-                        eventForever.enddate = event.enddate!
-                        eventForever.name = self.event.name
-                        eventForever.url = event.url
-                        eventForever.notes = event.notes
-                        
-                        if event.location{
-                            eventForever.location = true
-                            eventForever.latitude = event.latitude
-                            eventForever.longitude = event.longitude
-                            eventForever.latitudeDelta = event.latitudeDelta
-                            eventForever.longitudeDelta = event.longitudeDelta
-                        }else{
-                            eventForever.location = false
+                    if (location == "Current"){
+                        if saveCurrentLocation{
+                            event.setValue(true, forKey: "location")
+                            event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                            event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                            event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                            event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
                         }
-                        if event.notification{
-                            eventForever.notification = true
-                            if(!event.wholeDay){
-                                eventForever.notificationMinutesBefore = event.notificationMinutesBefore
-                            } else {
-                                eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                    } else if (location == "Custom")
+                    {
+                        event.setValue(true, forKey: "location")
+                        event.setValue(customRegion.center.latitude, forKey: "latitude")
+                        event.setValue(customRegion.center.longitude, forKey: "longitude")
+                        event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                        event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                        // TODO: save the name of the location somehow in event.locationName
+                    } else {
+                        event.setValue(false, forKey: "location")
+                    }
+                    
+                    if notification {
+                        event.setValue(true,forKey:"notification")
+                        if(!wholeDay){
+                            event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                        } else {
+                            event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                        }
+                        
+                    } else{
+                        event.setValue(false,forKey:"notification")
+                    }
+                    
+                    if repetition {
+                        event.setValue(true, forKey: "repetition")
+                        event.setValue(repeatUntil, forKey: "repetitionUntil")
+                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                        if(repeatUntil == "Repetitions"){
+                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                        }
+                        if(repeatUntil == "End Date"){
+                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                        }
+                        //TODO: Change also upcoming events of repetition with
+                        //event.repetitionID
+                        if(repeatUntil == "Forever"){
+                            let eventForever = ForeverEvent(context: moc)
+                            eventForever.key = UUID()
+                            eventForever.startdate = event.startdate!
+                            eventForever.enddate = event.enddate!
+                            eventForever.name = self.event.name
+                            eventForever.url = event.url
+                            eventForever.notes = event.notes
+                            
+                            if event.location{
+                                eventForever.location = true
+                                eventForever.latitude = event.latitude
+                                eventForever.longitude = event.longitude
+                                eventForever.latitudeDelta = event.latitudeDelta
+                                eventForever.longitudeDelta = event.longitudeDelta
+                            }else{
+                                eventForever.location = false
                             }
-                        }else{
-                            eventForever.notification = false
+                            if event.notification{
+                                eventForever.notification = true
+                                if(!event.wholeDay){
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                } else {
+                                    eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                }
+                            }else{
+                                eventForever.notification = false
+                            }
+                            
+                            eventForever.repetitionInterval = repetitionInterval
+                            
+                            calendars[calendar].addToForeverEvents(eventForever)
+                            moc.delete(event)
+                            foreverEvent = true
+                        }
+                    } else {
+                        event.setValue(false, forKey: "repetition")
+                        // event.nextRepetition = ""
+                    }
+                    
+                    if !foreverEvent{
+                        calendars[calendar].addToEvents(event)
+                    }
+                } else if event.repetition && !repetition{
+                    // In this case event was a repeating event but should not be one anymore
+                    event.setValue(wholeDay,forKey:"wholeDay")
+                    event.setValue(startDate,forKey:"startdate")
+                    event.setValue(endDate,forKey:"enddate")
+                    
+                    if(urlString != ""){
+                        event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                    }
+                    
+                    if (location == "Current"){
+                        if saveCurrentLocation{
+                            event.setValue(true, forKey: "location")
+                            event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                            event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                            event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                            event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                        }
+                    } else if (location == "Custom")
+                    {
+                        event.setValue(true, forKey: "location")
+                        event.setValue(customRegion.center.latitude, forKey: "latitude")
+                        event.setValue(customRegion.center.longitude, forKey: "longitude")
+                        event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                        event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                        // TODO: save the name of the location somehow in event.locationName
+                    } else {
+                        event.setValue(false, forKey: "location")
+                    }
+                    
+                    if notification {
+                        event.setValue(true,forKey:"notification")
+                        if(!wholeDay){
+                            event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                        } else {
+                            event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
                         }
                         
-                        eventForever.repetitionInterval = repetitionInterval
-                        
-                        calendars[calendar].addToForeverEvents(eventForever)
-                        moc.delete(event)
-                        foreverEvent = true
+                    } else{
+                        event.setValue(false,forKey:"notification")
                     }
-                } else {
-                    event.setValue(false, forKey: "repetition")
-                    // event.nextRepetition = ""
-                }
-                
-                if !foreverEvent{
-                    calendars[calendar].addToEvents(event)
+                    
+                    if repetition {
+                        event.setValue(true, forKey: "repetition")
+                        event.setValue(repeatUntil, forKey: "repetitionUntil")
+                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                        if(repeatUntil == "Repetitions"){
+                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                        }
+                        if(repeatUntil == "End Date"){
+                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                        }
+                        //TODO: Change also upcoming events of repetition with
+                        //event.repetitionID
+                        if(repeatUntil == "Forever"){
+                            let eventForever = ForeverEvent(context: moc)
+                            eventForever.key = UUID()
+                            eventForever.startdate = event.startdate!
+                            eventForever.enddate = event.enddate!
+                            eventForever.name = self.event.name
+                            eventForever.url = event.url
+                            eventForever.notes = event.notes
+                            
+                            if event.location{
+                                eventForever.location = true
+                                eventForever.latitude = event.latitude
+                                eventForever.longitude = event.longitude
+                                eventForever.latitudeDelta = event.latitudeDelta
+                                eventForever.longitudeDelta = event.longitudeDelta
+                            }else{
+                                eventForever.location = false
+                            }
+                            if event.notification{
+                                eventForever.notification = true
+                                if(!event.wholeDay){
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                } else {
+                                    eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                }
+                            }else{
+                                eventForever.notification = false
+                            }
+                            
+                            eventForever.repetitionInterval = repetitionInterval
+                            
+                            calendars[calendar].addToForeverEvents(eventForever)
+                            moc.delete(event)
+                            foreverEvent = true
+                        }
+                    } else {
+                        event.setValue(false, forKey: "repetition")
+                        // event.nextRepetition = ""
+                    }
+                    
+                    if !foreverEvent{
+                        calendars[calendar].addToEvents(event)
+                    }
+                }else{
+                    // In this case event was no repeating event
+                    event.setValue(wholeDay,forKey:"wholeDay")
+                    event.setValue(startDate,forKey:"startdate")
+                    event.setValue(endDate,forKey:"enddate")
+                    
+                    if(urlString != ""){
+                        event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                    }
+                    
+                    if (location == "Current"){
+                        if saveCurrentLocation{
+                            event.setValue(true, forKey: "location")
+                            event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                            event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                            event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                            event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                        }
+                    } else if (location == "Custom")
+                    {
+                        event.setValue(true, forKey: "location")
+                        event.setValue(customRegion.center.latitude, forKey: "latitude")
+                        event.setValue(customRegion.center.longitude, forKey: "longitude")
+                        event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                        event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                        // TODO: save the name of the location somehow in event.locationName
+                    } else {
+                        event.setValue(false, forKey: "location")
+                    }
+                    
+                    if notification {
+                        event.setValue(true,forKey:"notification")
+                        if(!wholeDay){
+                            event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                        } else {
+                            event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                        }
+                        
+                    } else{
+                        event.setValue(false,forKey:"notification")
+                    }
+                    
+                    if repetition {
+                        event.setValue(true, forKey: "repetition")
+                        event.setValue(repeatUntil, forKey: "repetitionUntil")
+                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                        if(repeatUntil == "Repetitions"){
+                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                        }
+                        if(repeatUntil == "End Date"){
+                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                        }
+                        //TODO: Change also upcoming events of repetition with
+                        //event.repetitionID
+                        if(repeatUntil == "Forever"){
+                            let eventForever = ForeverEvent(context: moc)
+                            eventForever.key = UUID()
+                            eventForever.startdate = event.startdate!
+                            eventForever.enddate = event.enddate!
+                            eventForever.name = self.event.name
+                            eventForever.url = event.url
+                            eventForever.notes = event.notes
+                            
+                            if event.location{
+                                eventForever.location = true
+                                eventForever.latitude = event.latitude
+                                eventForever.longitude = event.longitude
+                                eventForever.latitudeDelta = event.latitudeDelta
+                                eventForever.longitudeDelta = event.longitudeDelta
+                            }else{
+                                eventForever.location = false
+                            }
+                            if event.notification{
+                                eventForever.notification = true
+                                if(!event.wholeDay){
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                } else {
+                                    eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                }
+                            }else{
+                                eventForever.notification = false
+                            }
+                            
+                            eventForever.repetitionInterval = repetitionInterval
+                            
+                            calendars[calendar].addToForeverEvents(eventForever)
+                            moc.delete(event)
+                            foreverEvent = true
+                        }
+                    } else {
+                        event.setValue(false, forKey: "repetition")
+                        // event.nextRepetition = ""
+                    }
+                    
+                    if !foreverEvent{
+                        calendars[calendar].addToEvents(event)
+                    }
                 }
                 
                 try? moc.save()
