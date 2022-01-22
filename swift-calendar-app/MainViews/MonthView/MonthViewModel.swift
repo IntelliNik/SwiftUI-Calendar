@@ -19,12 +19,12 @@ class MonthViewModel: ObservableObject
     @Published var daysOfMonth = [String?]()
     @Published var daysOfMonthWithWeek = [String?]()
 
-    init() {
-        initMonths()
+    init(dateComponents: DateComponents) {
+        initMonths(dateComponents: dateComponents)
     }
     
-    public func initMonths(){
-        self.displayedMonth = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
+    public func initMonths(dateComponents: DateComponents){
+        self.displayedMonth = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Calendar.current.date(from :dateComponents)!)
         self.previousMonth = self.getNextOrPreviousMonth(components: (displayedMonth)!, next: false)
         self.nextMonth = self.getNextOrPreviousMonth(components: (displayedMonth)!, next: true)
         
@@ -84,7 +84,7 @@ class MonthViewModel: ObservableObject
     public func getNextOrPreviousMonth(components: DateComponents, next: Bool) -> DateComponents?{
         guard let date = Calendar.current.date(from: components) else {return nil}
         guard let nextDate = Calendar.current.date(byAdding: .month, value: next ? 1 : -1, to: date) else {return nil}
-        return Calendar.current.dateComponents([.month, .year], from: nextDate)
+        return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: nextDate)
     }
     
     public func getNextDay(components: DateComponents) -> DateComponents?{

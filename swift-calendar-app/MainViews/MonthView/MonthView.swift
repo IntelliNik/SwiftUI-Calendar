@@ -32,9 +32,9 @@ struct MonthView: View {
             Spacer()
             
             Picker("", selection: $pickerSelection) {
-                Text(String((viewModel.previousMonth?.month)! as Int)).tag(PickerSelection.previous)
-                Text(String((viewModel.displayedMonth?.month!)! as Int)).tag(PickerSelection.current)
-                Text(String((viewModel.nextMonth?.month!)! as Int)).tag(PickerSelection.next)
+                Text(Month_short[((viewModel.previousMonth?.month)! as Int) - 1] + " " + String((viewModel.previousMonth?.year)! as Int)).tag(PickerSelection.previous)
+                Text(Month_short[((viewModel.displayedMonth?.month!)! as Int) - 1] + " " + String((viewModel.displayedMonth?.year)! as Int)).tag(PickerSelection.current)
+                Text(Month_short[((viewModel.nextMonth?.month!)! as Int) - 1] + " " + String((viewModel.nextMonth?.year)! as Int)).tag(PickerSelection.next)
             }
             
             .onChange(of: pickerSelection){ _ in
@@ -91,11 +91,12 @@ struct MonthView: View {
                     }
                 }
         )
+        .environmentObject(viewModel)
     }
 }
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)), viewModel: MonthViewModel())
+        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), viewModel: MonthViewModel(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
     }
 }
