@@ -71,7 +71,7 @@ struct EditForeverEventView: View {
     ) var calendars: FetchedResults<MCalendar>
     
     @FetchRequest(
-        entity: Event.entity(),
+        entity: ForeverEvent.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \ForeverEvent.startdate, ascending: true),
         ]
@@ -154,17 +154,6 @@ struct EditForeverEventView: View {
                         .padding()
                     }
                     if(location == "Current"){
-                        
-                        /*Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                            annotationItems: markers) { marker in
-                            marker.location
-                        }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
-                            .onAppear(){
-                                let annotationCurrent = MKPointAnnotation()
-                                annotationCurrent.coordinate = currentRegion.center
-                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
-                            }*/
                         if CLLocationManager.locationServicesEnabled() {
                             switch locationManager.authorizationStatus {
                                 case .notDetermined, .restricted, .denied:
@@ -262,20 +251,6 @@ struct EditForeverEventView: View {
                         .onChange(of: locationSearch) { newValue in
                             locationService.queryFragment = locationSearch
                         }
-                        /*Section(header: Text("Search")) {
-                         ZStack(alignment: .trailing) {
-                         TextField("Search", text: $locationService.queryFragment)
-                         
-                         // while user is typing input it sends the current query to the location service
-                         // which in turns sets its status to searching; when searching status is set on
-                         // searching then a clock symbol will be shown beside the search box
-                         if locationService.status == .isSearching {
-                         Image(systemName: "clock")
-                         .foregroundColor(Color.gray)
-                         }
-                         }
-                         }*/
-                        
                         Section() {
                             List {
                                 Group { () -> AnyView in
@@ -314,8 +289,6 @@ struct EditForeverEventView: View {
                                     }) {
                                         Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
                                     }
-                                    
-                                    //Text(completionResult.title)
                                 }
                             }
                         }

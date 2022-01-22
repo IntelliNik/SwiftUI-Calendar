@@ -186,8 +186,13 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
     for event in events{
         switch event.repetitionInterval{
         case "Daily":
-            print("daily case")
-            eventsOfDate.append(event)
+            guard let startdate = event.startdate else {return []}
+            guard let curDate2 = Calendar.current.date(from: datecomponent) else {return []}
+            var curDate = curDate2
+            curDate.addTimeInterval(3600)
+            if smallerEqualDateComp_Helper(startdate,curDate){
+                eventsOfDate.append(event)
+            }
             break
         case "Weekly":
             guard let startdate = event.startdate else {return []}
