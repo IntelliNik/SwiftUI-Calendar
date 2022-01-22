@@ -90,6 +90,7 @@ struct MonthView: View {
                     }
                 }
         )
+        .environmentObject(viewModel)
     }
 }
 
