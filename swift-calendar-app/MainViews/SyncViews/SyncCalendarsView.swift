@@ -9,8 +9,6 @@ import SwiftUI
 import EventKit
 import EventKitUI
 
-
-
 //should probably rather be named import/export calender view
 struct SyncCalendarsView: View {
     

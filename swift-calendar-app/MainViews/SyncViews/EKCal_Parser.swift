@@ -37,16 +37,7 @@ class EKCal_Parser: ObservableObject
             
         }).store(in: &calendarSubscribers)
         
-        //TODO: selectedCalendars disappear after restart
-        //TODO: save it in user defaults, so it is persistent after restart
-        //TODO: get access to our calendar list
-        //TODO: check for doubles
-        
     }
-    
-    
-    
-    
     
     private func parseAndSaveCalendars(_ calendars: Set<EKCalendar>?) {
         //read EKCalendars array and make it an MCalendar
@@ -58,14 +49,37 @@ class EKCal_Parser: ObservableObject
             //TODO: what the actual fuck? who uses strings for colors?????
             calendar.color = "Black"
             calendar.defaultCalendar = false
+            //calendar.imported = true
             
             try? viewContext.save()
-           
-           
+            
+            //TODO: selectedCalendars disappear after restart
+            //TODO: save it in user defaults, so it is persistent after restart
+            //TODO: check for doubles
         }
-        
-        
     }
+    
+    private func caseInternalChange_syncImported(){
+        //sync means take all selected calendars
+        //alle mcalendars die attribut imported auf true haben
+        //guck events durch pro calendar
+    }
+    
+    private func caseExternalChange_syncImported(){
+        //sync means take all selected calendars
+        //alle mcalendars die attribut imported auf true haben
+        //guck events durch pro calendar
+    }
+    
+    private func syncExported(){
+        //TODO: Put in fetch request
+        //TODO: get access to our calendar list
+        //alle mcalendars die attribut imported auf false haben
+        //guck events durch pro calendar
+    }
+    
+    
+    
     
     private func saveSelectedCalendars(_ calendars: Set<EKCalendar>?) {
         if let identifiers = calendars?.compactMap({ $0.calendarIdentifier }) {
@@ -73,10 +87,7 @@ class EKCal_Parser: ObservableObject
         }
     }
     
-    
-    
-    
-    
+
     func requestAccess() -> Bool {
         //TODO: What if denied?
         if (EKEventStore.authorizationStatus(for: .event) == EKAuthorizationStatus.notDetermined)
