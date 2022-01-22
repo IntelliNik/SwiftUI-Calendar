@@ -19,6 +19,7 @@ struct CalendarSelector : UIViewControllerRepresentable {
     
     let eventStore : EKEventStore
     @Binding var calendars: Set<EKCalendar>?
+    @Binding var selectedCalendars: Set<EKCalendar>?
     
     //func of UIViewControllerRepresentable
     //UIViewControllerRepresentable needs to be changed to UINavigationController:
@@ -55,10 +56,9 @@ struct CalendarSelector : UIViewControllerRepresentable {
 
             func calendarChooserDidFinish(_ calChooser: EKCalendarChooser) {
                 //setting the calendars variable to the selected Calendars from the view
-                parent.calendars = calChooser.selectedCalendars
                 parent.presentationMode.wrappedValue.dismiss()
-                //TODO: add animation
-                
+                //parent.calendars = calChooser.selectedCalendars
+                parent.selectedCalendars = calChooser.selectedCalendars
             }
 
             func calendarChooserDidCancel(_ calendarChooser: EKCalendarChooser) {
