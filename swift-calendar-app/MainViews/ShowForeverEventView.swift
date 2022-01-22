@@ -72,15 +72,11 @@ struct ShowForeverEventView: View {
                             Text("None")
                         }
                     }
-                    /*HStack{
+                    HStack{
                         Image(systemName: "repeat")
                         Spacer()
-                        if(event.repetition){
-                            Text("\(event.repetitionInterval!)")
-                        }else {
-                            Text("None")
-                        }
-                    }
+                        Text("\(event.repetitionInterval!)")
+                    }/*
                     if(event.repetition){
                         if(event.repetitionUntil! == "Repetitions"){
                             HStack{

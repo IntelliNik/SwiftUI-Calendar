@@ -37,8 +37,8 @@ struct AddEventView: View {
     @State private var repetition = false
     let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
     @State private var repetitionInterval = "Daily"
-    let repeatUntilModes = ["Repetitions", "End Date","Forever"]
-    @State private var repeatUntil = "Repetitions"
+    let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
+    @State private var repeatUntil = "Forever"
     @State private var amountOfRepetitions = "10"
     @State private var foreverEvent = false
     
