@@ -43,6 +43,7 @@ struct EditEventView: View {
     let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
     @State private var repeatUntil = "Forever"
     @State private var amountOfRepetitions = "10"
+    @State private var foreverEvent = false
     
     @State private var notification = true
     @State private var notificationMinutesBefore = 5
@@ -414,22 +415,6 @@ struct EditEventView: View {
                     event.setValue(false, forKey: "location")
                 }
                 
-                if repetition {
-                    event.setValue(true, forKey: "repetition")
-                    event.setValue(repeatUntil, forKey: "repetitionUntil")
-                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                    if(repeatUntil == "Repetitions"){
-                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                    }
-                    if(repeatUntil == "End Date"){
-                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                    }
-                    //event.repetitionID
-                } else {
-                    event.setValue(false, forKey: "repetition")
-                    // event.nextRepetition = ""
-                }
-                
                 if notification {
                     event.setValue(true,forKey:"notification")
                     if(!wholeDay){
@@ -442,7 +427,61 @@ struct EditEventView: View {
                     event.setValue(false,forKey:"notification")
                 }
                 
-                calendars[calendar].addToEvents(event)
+                if repetition {
+                    event.setValue(true, forKey: "repetition")
+                    event.setValue(repeatUntil, forKey: "repetitionUntil")
+                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                    if(repeatUntil == "Repetitions"){
+                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                    }
+                    if(repeatUntil == "End Date"){
+                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                    }
+                    //TODO: Change also upcoming events of repetition with
+                    //event.repetitionID
+                    if(repeatUntil == "Forever"){
+                        let eventForever = ForeverEvent(context: moc)
+                        eventForever.key = UUID()
+                        eventForever.startdate = event.startdate!
+                        eventForever.enddate = event.enddate!
+                        eventForever.name = self.event.name
+                        eventForever.url = event.url
+                        eventForever.notes = event.notes
+                        
+                        if event.location{
+                            eventForever.location = true
+                            eventForever.latitude = event.latitude
+                            eventForever.longitude = event.longitude
+                            eventForever.latitudeDelta = event.latitudeDelta
+                            eventForever.longitudeDelta = event.longitudeDelta
+                        }else{
+                            eventForever.location = false
+                        }
+                        if event.notification{
+                            eventForever.notification = true
+                            if(!event.wholeDay){
+                                eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                            } else {
+                                eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                            }
+                        }else{
+                            eventForever.notification = false
+                        }
+                        
+                        eventForever.repetitionInterval = repetitionInterval
+                        
+                        calendars[calendar].addToForeverEvents(eventForever)
+                        moc.delete(event)
+                        foreverEvent = true
+                    }
+                } else {
+                    event.setValue(false, forKey: "repetition")
+                    // event.nextRepetition = ""
+                }
+                
+                if !foreverEvent{
+                    calendars[calendar].addToEvents(event)
+                }
                 
                 try? moc.save()
                 

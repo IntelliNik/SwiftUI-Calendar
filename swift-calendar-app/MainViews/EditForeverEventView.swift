@@ -581,7 +581,7 @@ struct EditForeverEventView: View {
             notes = event.notes ?? ""
             repetition = true
             repetitionInterval = event.repetitionInterval!
-            repeatUntil = event.repetitionInterval!
+            repeatUntil = "Forever"
             locationBool = event.location
             if locationBool{
                 location = "Custom"
