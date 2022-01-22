@@ -76,7 +76,7 @@ struct ShowEventView: View {
                         Image(systemName: "repeat")
                         Spacer()
                         if(event.repetition){
-                            Text("\(event.repetitionInterval!)")
+                            Text("\(event.repetitionInterval ?? "Daily")")
                         }else {
                             Text("None")
                         }
