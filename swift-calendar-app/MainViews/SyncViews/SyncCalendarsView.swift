@@ -19,6 +19,9 @@ struct SyncCalendarsView: View {
     @State var selectedCalendarImport = false
     
     @State var showLoading = false
+    @State var textLoading = ""
+    @State var showConfirmation = false
+    @State var confirmationText = ""
     
     @State var selectedCalendars: Set<EKCalendar>?
     
@@ -35,13 +38,16 @@ struct SyncCalendarsView: View {
     var body: some View {
         ZStack{
             if(showLoading){
-                ConfirmationBoxView(mode: .loading, text: "Import in progress...")
+                ConfirmationBoxView(mode: .loading, text: textLoading)
                     .zIndex(1)
-                }
+            }
+            if(showConfirmation){
+                ConfirmationBoxView(mode: .success, text: confirmationText)
+                    .zIndex(1)
+            }
             NavigationView{
                 Form{
                     Section{
-                        Text("Choose a calendar to export to an Apple Calendar: ")
                         Picker("", selection: $selectedCalendarExport){
                             ForEach(Array(zip(calendars.indices, calendars)), id: \.0) { index, calendar in
                                 Text(calendar.name ?? "Unknown Calendar").tag(index)
@@ -49,7 +55,25 @@ struct SyncCalendarsView: View {
                         }
                         HStack{
                             Button(action: {
-                                parser.exportCalendar(calendars[selectedCalendarExport])
+                                textLoading = "Export in progress..."
+                                withAnimation{
+                                    showLoading = true
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                    parser.exportCalendar(calendars[selectedCalendarExport])
+                                    withAnimation{
+                                        showLoading = false
+                                    }
+                                    confirmationText = "Export successful"
+                                    withAnimation{
+                                        showConfirmation = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                        withAnimation{
+                                            showConfirmation = false
+                                        }
+                                    }
+                                }
                             }) {
                                 HStack{
                                     Text("Export Calendar")
@@ -66,7 +90,7 @@ struct SyncCalendarsView: View {
                                 selectedCalendarImport.toggle()
                             }) {
                                 HStack{
-                                    Text("Import Calendar")
+                                    Text("Import Calendars")
                                     Spacer()
                                     Image(systemName: "square.and.arrow.down")
                                         .imageScale(.large)
@@ -82,21 +106,27 @@ struct SyncCalendarsView: View {
         }
         .onChange(of: selectedCalendars){ newValue in
             if(selectedCalendars != nil){
-            showLoading = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5, qos: .background) {
+                textLoading = "Import in progress..."
+                withAnimation{
+                    showLoading = true
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
                     parser.selectedCalendars = selectedCalendars
                     self.selectedCalendars = nil
-                    showLoading = false
-            }
+                    withAnimation{
+                        showLoading = false
+                    }
+                    confirmationText = "Import successful"
+                    withAnimation{
+                        showConfirmation = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                        withAnimation{
+                            showConfirmation = false
+                        }
+                    }
+                }
             }
         }
     }
 }
-
-
-
-/*struct SyncCalendarsView_Previews: PreviewProvider {
- static var previews: some View {
- SyncCalendarsView(parser: <#T##EKCal_Parser#>)
- }
- }*/
