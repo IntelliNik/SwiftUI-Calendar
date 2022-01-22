@@ -20,22 +20,30 @@ struct MonthViewCalendar: View {
             GridItem(.flexible())
     ]
     
+    let columnsWeekNumbers = [GridItem(.flexible())]
+    
     var body: some View {
-        VStack() {
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(daysOfMonth, id: \.self) { dc in
-                    if(dc == nil){
-                        Text(dc ?? "")
+        HStack {
+            LazyVGrid(columns: columnsWeekNumbers) {
+                Text("W")
+            }
+            
+            VStack() {
+                LazyVGrid(columns: columns, spacing: 15) {
+                    ForEach(daysOfMonth, id: \.self) { dc in
+                        if(dc == nil){
+                            Text(dc ?? "")
+                        }
+                        else {
+                            MonthViewDayBox(date: Int(dc!) ?? 0, width: 45, length: 45)
+                                .padding(1)
+                        }
+                         
+                         //Text(dc ?? "")
+                        }
                     }
-                    else {
-                        MonthViewDayBox(date: Int(dc!) ?? 0, width: 45, length: 45)
-                            .padding(1)
-                    }
-                     
-                     //Text(dc ?? "")
-                    }
-                }
-                .padding(.horizontal)
+                    .padding(.horizontal)
+            }
         }
     }
 }
