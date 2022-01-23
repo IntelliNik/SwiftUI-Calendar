@@ -31,8 +31,7 @@ struct SyncCalendarsView: View {
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ],
-        predicate: NSPredicate(format: "defaultCalendar == %@", "NO")
+        ]
     ) var calendars: FetchedResults<MCalendar>
     
     var body: some View {
