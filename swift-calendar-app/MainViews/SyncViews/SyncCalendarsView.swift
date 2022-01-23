@@ -27,11 +27,9 @@ struct SyncCalendarsView: View {
     @State var stopSyncName = ""
     @State var stopSyncIndex: Int?
     
-    @State var selectedCalendars: Set<EKCalendar>?
+    @State var selectedCalendarsEventKitUI: Set<EKCalendar>?
     
     @Environment(\.managedObjectContext) var moc
-    
-    @AppStorage("colorScheme") private var colorScheme = "red"
     
     @FetchRequest(
         entity: MCalendar.entity(),
@@ -194,7 +192,7 @@ struct SyncCalendarsView: View {
                             }){
                                 HStack{
                                     Text("Synchronize Calendars now")
-                                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                                        .foregroundColor(.red)
                                     Spacer()
                                     Image(systemName: "arrow.triangle.2.circlepath")
                                 }
@@ -203,18 +201,17 @@ struct SyncCalendarsView: View {
                     }
                 }
                 .sheet(isPresented: $selectedCalendarImport){
-                    CalendarSelector(eventStore: parser.eventStore, calendars: $parser.selectedCalendars, selectedCalendars: $selectedCalendars)
+                    CalendarSelector(eventStore: parser.eventStore, calendars: $parser.selectedCalendars, selectedCalendars: $selectedCalendarsEventKitUI)
                 }
             }
-            .onChange(of: selectedCalendars){ newValue in
-                if(selectedCalendars != nil){
+            .onChange(of: selectedCalendarsEventKitUI){ newValue in
+                if(selectedCalendarsEventKitUI != nil){
                     textLoading = "Connecting your selected calendars..."
                     withAnimation{
                         showLoading = true
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                        parser.selectedCalendars = selectedCalendars
-                        self.selectedCalendars = nil
+                        parser.selectedCalendars = selectedCalendarsEventKitUI
                         withAnimation{
                             showLoading = false
                         }
@@ -225,6 +222,9 @@ struct SyncCalendarsView: View {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
                             withAnimation{
                                 showConfirmation = false
+                                // reset selection
+                                parser.selectedCalendars = nil
+                                selectedCalendarsEventKitUI = nil
                             }
                         }
                     }
