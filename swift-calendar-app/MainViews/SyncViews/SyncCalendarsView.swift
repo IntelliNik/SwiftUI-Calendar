@@ -78,7 +78,7 @@ struct SyncCalendarsView: View {
                                             showLoading = true
                                         }
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                                            parser.exportCalendar(calendarsToSync[selectedCalendarExport])
+                                            parser.exportMCalendar(calendarsToSync[selectedCalendarExport])
                                             withAnimation{
                                                 showLoading = false
                                             }

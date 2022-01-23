@@ -33,14 +33,14 @@ class EKCal_Parser: ObservableObject
         
         $selectedCalendars.sink( receiveValue: { calendars in
             if calendars != nil {
-                self.exportCalendar(calendars)
+                self.importEKCalendar(calendars)
             }
             
         }).store(in: &calendarSubscribers)
         
     }
     
-    private func exportCalendar(_ calendars: Set<EKCalendar>?) {
+    private func importEKCalendar(_ calendars: Set<EKCalendar>?) {
         //read EKCalendars array and make it an MCalendar
         for ekCal in calendars! {
             
@@ -60,43 +60,53 @@ class EKCal_Parser: ObservableObject
             
             // Create Events, store them in the newly created calendar
             ekCalEvents.forEach{ ekCalEvent in
-                let mEvent = Event(context: viewContext)
-                mEvent.name = ekCalEvent.title
-                
-                mEvent.startdate = ekCalEvent.startDate
-                mEvent.enddate = ekCalEvent.endDate
-                
-                //location
-                mEvent.location = ekCalEvent.structuredLocation != nil
-                // TODO: convert location somehow
-                
-                mEvent.notes = ekCalEvent.notes
-                
-                //notifications => notificationDates
-                mEvent.notification = ekCalEvent.hasAlarms
-                if(ekCalEvent.hasAlarms){
-                    var notificationDates: [Date] = []
-                    ekCalEvent.alarms?.forEach{ alarm in
-                        if let date = alarm.absoluteDate{
-                            notificationDates.append(date)
-                        }
-                    }
-                    mEvent.notificationDates = notificationDates
-                }
-                
-                // repetition
-                // TODO: convert repetition somehow
-                mEvent.repetition = ekCalEvent.isDetached
-                
-                mEvent.url = ekCalEvent.url?.absoluteString
-                
-                mEvent.wholeDay = ekCalEvent.isAllDay
-                
-                mCalendar.addToEvents(mEvent)
-                
-                try! viewContext.save()
+                saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar)
             }
         }
+    }
+    
+    private func saveEventinMCalendar(ekCalEvent: EKEvent, mCalendar: MCalendar, saveSyncUuidAt: Bool? = nil){
+        let mEvent = Event(context: viewContext)
+        mEvent.name = ekCalEvent.title
+        
+        mEvent.importedFromUUID = ekCalEvent.eventIdentifier
+        
+        mEvent.startdate = ekCalEvent.startDate
+        mEvent.enddate = ekCalEvent.endDate
+        
+        //location
+        mEvent.location = ekCalEvent.structuredLocation != nil
+        // TODO: convert location somehow
+        
+        mEvent.notes = ekCalEvent.notes
+        
+        //notifications => notificationDates
+        mEvent.notification = ekCalEvent.hasAlarms
+        if(ekCalEvent.hasAlarms){
+            var notificationDates: [Date] = []
+            ekCalEvent.alarms?.forEach{ alarm in
+                if let date = alarm.absoluteDate{
+                    notificationDates.append(date)
+                }
+            }
+            mEvent.notificationDates = notificationDates
+        }
+        
+        // repetition
+        // TODO: convert repetition somehow
+        mEvent.repetition = ekCalEvent.isDetached
+        
+        mEvent.url = ekCalEvent.url?.absoluteString
+        
+        mEvent.wholeDay = ekCalEvent.isAllDay
+        
+        mCalendar.addToEvents(mEvent)
+        
+        if(saveSyncUuidAt == true){
+            mEvent.importedFromUUID = ekCalEvent.eventIdentifier
+        }
+        
+        try! viewContext.save()
     }
     
     private func getEventsInMCalendar(mCalendar: MCalendar) -> [Event]{
@@ -126,7 +136,7 @@ class EKCal_Parser: ObservableObject
         return eventStore.events(matching: predicate!)
     }
     
-    func exportCalendar(_ mCalendar: MCalendar){
+    func exportMCalendar(_ mCalendar: MCalendar){
         let ekCalendar = EKCalendar(for: .event, eventStore: eventStore)
         
         mCalendar.synchronized = true
@@ -146,31 +156,7 @@ class EKCal_Parser: ObservableObject
             if(mEvent.calendar?.key != mCalendar.key){
                 continue
             }
-            let ekEvent = EKEvent(eventStore: eventStore)
-            ekEvent.calendar = ekCalendar
-            
-            ekEvent.title = mEvent.name
-            
-            ekEvent.startDate = mEvent.startdate
-            ekEvent.endDate = mEvent.enddate
-            ekEvent.isAllDay = mEvent.wholeDay
-            
-            // repetition
-            
-            // location
-            
-            // reminder
-            
-            if let urlString = mEvent.url{
-                if let url = URL(string: urlString){
-                    ekEvent.url = url
-                }
-            }
-            
-            ekEvent.notes = mEvent.notes
-            
-            // TODO: decide how to set span here
-            try! eventStore.save(ekEvent, span: .futureEvents, commit: true)
+            saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCalendar)
         }
     }
     
@@ -203,6 +189,40 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    private func saveEKCalEventFromMEvent(mEvent: Event, ekCalendar: EKCalendar, saveSyncUuidAt: Event? = nil){
+        let ekEvent = EKEvent(eventStore: eventStore)
+        ekEvent.calendar = ekCalendar
+        
+        ekEvent.title = mEvent.name
+        
+        ekEvent.startDate = mEvent.startdate
+        ekEvent.endDate = mEvent.enddate
+        ekEvent.isAllDay = mEvent.wholeDay
+        
+        // repetition
+        
+        // location
+        
+        // reminder
+        
+        if let urlString = mEvent.url{
+            if let url = URL(string: urlString){
+                ekEvent.url = url
+            }
+        }
+        
+        ekEvent.notes = mEvent.notes
+        
+        // TODO: decide how to set span here
+        // TODO: SHIT, SOME CALENDARS ARE READONLY, E.G. THE BIRTYDAY ONE -> HANDLE THIS
+        try! eventStore.save(ekEvent, span: .futureEvents, commit: true)
+        
+        if(saveSyncUuidAt != nil){
+            saveSyncUuidAt!.importedFromUUID = ekEvent.eventIdentifier
+            try! viewContext.save()
+        }
+    }
+    
     func synchronizeCalendars(){
         let fr = MCalendar.fetchRequest()
         let predicate = NSPredicate(format: "synchronized == true")
@@ -210,16 +230,56 @@ class EKCal_Parser: ObservableObject
         let syncedCalendars = try! viewContext.fetch(fr)
         
         for mCalendar in syncedCalendars{
+            print("SYNC CALENDAR: \(mCalendar.name!)")
+            
             let ekCal = eventStore.calendar(withIdentifier: mCalendar.synchronizedWithCalendarIdentifier!)
             
             let eventsEKCal = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal!)
-            
             let eventsMCal = getEventsInMCalendar(mCalendar: mCalendar)
+            let uuidsEKCal = eventsEKCal.map{ $0.eventIdentifier }
+            let uuidsMCal = eventsMCal.map{ $0.importedFromUUID }
             
-            // TODO: compare events in calendars somehow and add the missing ones to each other
+            // COMPARING UUIDs OF THE EVENTS TO DERTERMINE WHICH TO IMPORT/EXPORT
+            // EXPORT
+            var eventsToAddInEkCal: [Event] = []
+            for eventMCal in eventsMCal {
+                if(uuidsEKCal.contains(eventMCal.importedFromUUID)){
+                    // skip existing events
+                    continue
+                }else{
+                    // collect events to add
+                    eventsToAddInEkCal.append(eventMCal)
+                }
+            }
+            print("TO EXPORT", eventsToAddInEkCal.map{$0.name})
+            
+            // Export new events to EKCal and save syncUUID to remember the event synced with
+            for mEvent in eventsToAddInEkCal{
+                saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
+            }
             
             
-            print(ekCal!.title, eventsEKCal.count, eventsMCal.count)
+            // IMPORT
+            var eventsToAddInMCal: [EKEvent] = []
+            for eventEkCal in eventsEKCal {
+                if(uuidsMCal.contains(eventEkCal.eventIdentifier)){
+                    // skip existing events
+                    continue
+                }else{
+                    // collect events to add
+                    eventsToAddInMCal.append(eventEkCal)
+                }
+            }
+            print("TO IMPORT", eventsToAddInMCal.map{$0.title})
+            
+            // Import new events to MKCal and save syncUUID to remember the event synced with
+            for ekCalEvent in eventsToAddInMCal{
+                //saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
+                saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
+            }
+            
+            
+            print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
         }
     }
 }
