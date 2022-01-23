@@ -44,23 +44,31 @@ struct AllEventsView: View {
             HStack{
                 Button(action:{
                     if(offset >= limit){
-                        offset = offset - limit
+                        withAnimation{
+                            offset = offset - limit
+                        }
                     }else{
+                        withAnimation{
                         offset = 0
-                    }                }){
+                        }
+                    }
+                }){
                     Image(systemName: "arrow.left")
-                        .padding()
+                        .padding(.leading)
                 }
                 Spacer()
                 Text("Showing \(offset) - \(offset + limit) of \(events.count) stored events")
+                    .lineLimit(1)
                     .font(.caption)
                         .padding()
                 Spacer()
                 Button(action:{
-                    offset = min(offset + limit, events.count - limit)
+                    withAnimation{
+                        offset = min(offset + limit, events.count - limit)
+                    }
                 }){
                     Image(systemName: "arrow.right")
-                        .padding()
+                        .padding(.trailing)
                 }
             }
             if(events.count == 0){
