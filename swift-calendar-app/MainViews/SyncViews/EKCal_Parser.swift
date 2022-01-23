@@ -22,13 +22,14 @@ class EKCal_Parser: ObservableObject
     let eventStore = EKEventStore()
     //the selectedCalendars to import
     @Published var selectedCalendars: Set<EKCalendar>?
+    @Published var accessGranted = false
     private var calendarSubscribers: Set<AnyCancellable> = []
     private let viewContext: NSManagedObjectContext
     
     init(viewContext: NSManagedObjectContext){
         self.viewContext = viewContext
         
-        let _ = requestAccess()
+        //accessGranted = requestAccess()
         
         $selectedCalendars.sink( receiveValue: { calendars in
             if calendars != nil {
@@ -185,25 +186,26 @@ class EKCal_Parser: ObservableObject
         }
     }
     
-    
-    func requestAccess() -> Bool {
-        //TODO: What if denied?
-        if (EKEventStore.authorizationStatus(for: .event) == EKAuthorizationStatus.notDetermined)
-        {
-            var r = false;
-            eventStore.requestAccess(to: .event) { granted, error in
-                if granted {
-                    r = true
-                } else if let error = error {
-                    print(error.localizedDescription)
-                }
+    func requestAccess(){
+        let _ = eventStore.requestAccess(to: .event){_ , _ in
+            DispatchQueue.main.async {
+                self.accessGranted = self.checkAccess()
             }
-            return r
-        }
-        
-        else {
-            return true
         }
     }
     
+    func checkAccess() -> Bool {
+        switch EKEventStore.authorizationStatus(for: .event){
+        case .authorized:
+            return true
+        case .notDetermined:
+            return false
+        case .restricted:
+            return false
+        case .denied:
+            return false
+        @unknown default:
+            return false
+        }
+    }
 }

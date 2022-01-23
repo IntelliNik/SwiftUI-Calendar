@@ -36,96 +36,110 @@ struct SyncCalendarsView: View {
     ) var calendars: FetchedResults<MCalendar>
     
     var body: some View {
-        ZStack{
-            if(showLoading){
-                ConfirmationBoxView(mode: .loading, text: textLoading)
-                    .zIndex(1)
-            }
-            if(showConfirmation){
-                ConfirmationBoxView(mode: .success, text: confirmationText)
-                    .zIndex(1)
-            }
-            NavigationView{
-                Form{
-                    Section{
-                        Picker("", selection: $selectedCalendarExport){
-                            ForEach(Array(zip(calendars.indices, calendars)), id: \.0) { index, calendar in
-                                Text(calendar.name ?? "Unknown Calendar").tag(index)
-                            }
-                        }
-                        HStack{
-                            Button(action: {
-                                textLoading = "Export in progress..."
-                                withAnimation{
-                                    showLoading = true
+        if(parser.accessGranted){
+            ZStack{
+                if(showLoading){
+                    ConfirmationBoxView(mode: .loading, text: textLoading)
+                        .zIndex(1)
+                }
+                if(showConfirmation){
+                    ConfirmationBoxView(mode: .success, text: confirmationText)
+                        .zIndex(1)
+                }
+                NavigationView{
+                    Form{
+                        Section{
+                            Picker("", selection: $selectedCalendarExport){
+                                ForEach(Array(zip(calendars.indices, calendars)), id: \.0) { index, calendar in
+                                    Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                                    parser.exportCalendar(calendars[selectedCalendarExport])
+                            }
+                            HStack{
+                                Button(action: {
+                                    textLoading = "Export in progress..."
                                     withAnimation{
-                                        showLoading = false
-                                    }
-                                    confirmationText = "Export successful"
-                                    withAnimation{
-                                        showConfirmation = true
+                                        showLoading = true
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                        parser.exportCalendar(calendars[selectedCalendarExport])
                                         withAnimation{
-                                            showConfirmation = false
+                                            showLoading = false
+                                        }
+                                        confirmationText = "Export successful"
+                                        withAnimation{
+                                            showConfirmation = true
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                            withAnimation{
+                                                showConfirmation = false
+                                            }
                                         }
                                     }
-                                }
-                            }) {
-                                HStack{
-                                    Text("Export Calendar")
-                                    Spacer()
-                                    Image(systemName: "square.and.arrow.up")
-                                        .imageScale(.large)
+                                }) {
+                                    HStack{
+                                        Text("Export Calendar")
+                                        Spacer()
+                                        Image(systemName: "square.and.arrow.up")
+                                            .imageScale(.large)
+                                    }
                                 }
                             }
                         }
-                    }
-                    Section{
-                        HStack{
-                            Button(action: {
-                                selectedCalendarImport.toggle()
-                            }) {
-                                HStack{
-                                    Text("Import Calendars")
-                                    Spacer()
-                                    Image(systemName: "square.and.arrow.down")
-                                        .imageScale(.large)
+                        Section{
+                            HStack{
+                                Button(action: {
+                                    selectedCalendarImport.toggle()
+                                }) {
+                                    HStack{
+                                        Text("Import Calendars")
+                                        Spacer()
+                                        Image(systemName: "square.and.arrow.down")
+                                            .imageScale(.large)
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
-            .sheet(isPresented: $selectedCalendarImport){
-                CalendarSelector(eventStore: parser.eventStore, calendars: $parser.selectedCalendars, selectedCalendars: $selectedCalendars)
-            }
-        }
-        .onChange(of: selectedCalendars){ newValue in
-            if(selectedCalendars != nil){
-                textLoading = "Import in progress..."
-                withAnimation{
-                    showLoading = true
+                .sheet(isPresented: $selectedCalendarImport){
+                    CalendarSelector(eventStore: parser.eventStore, calendars: $parser.selectedCalendars, selectedCalendars: $selectedCalendars)
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                    parser.selectedCalendars = selectedCalendars
-                    self.selectedCalendars = nil
+            }
+            .onChange(of: selectedCalendars){ newValue in
+                if(selectedCalendars != nil){
+                    textLoading = "Import in progress..."
                     withAnimation{
-                        showLoading = false
-                    }
-                    confirmationText = "Import successful"
-                    withAnimation{
-                        showConfirmation = true
+                        showLoading = true
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                        parser.selectedCalendars = selectedCalendars
+                        self.selectedCalendars = nil
                         withAnimation{
-                            showConfirmation = false
+                            showLoading = false
+                        }
+                        confirmationText = "Import successful"
+                        withAnimation{
+                            showConfirmation = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                            withAnimation{
+                                showConfirmation = false
+                            }
                         }
                     }
                 }
+            }
+        } else{
+            VStack{
+                Image(systemName: "lock.fill")
+                    .font(.system(size: 128))
+                    .foregroundColor(.gray)
+                    .padding()
+                Text("Please allow access to your Calenders to use this feature.")
+                Spacer()
+            }
+            .onAppear{
+                parser.requestAccess()
             }
         }
     }
