@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CoreLocation
-
 @main
 struct CalendarApp: App {
     @State var saveSucessful = true

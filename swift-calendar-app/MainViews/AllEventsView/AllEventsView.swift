@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import CoreData
 
 
 struct AllEventsView: View {
@@ -18,24 +19,49 @@ struct AllEventsView: View {
     
     @State var currentlyExtended: Event?
     
-    @FetchRequest(
-        entity: Event.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-        ]
-    ) var events: FetchedResults<Event>
+    @FetchRequest var events: FetchedResults<Event>
     
     @Environment(\.colorScheme) var colorScheme
     
     @State var showExtended = false
     
+    
+    var limit = 50
+    @State var offset = 0
+    
+    init() {
+        let request = Event.fetchRequest()
+        
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true)
+        ]
+        
+        _events = FetchRequest(fetchRequest: request)
+    }
+    
     var body: some View {
         VStack{
             HStack{
+                Button(action:{
+                    if(offset >= limit){
+                        offset = offset - limit
+                    }else{
+                        offset = 0
+                    }                }){
+                    Image(systemName: "arrow.left")
+                        .padding()
+                }
                 Spacer()
-                Text("You have got \(events.count) Events stored")
+                Text("Showing \(offset) - \(offset + limit) of \(events.count) stored events")
                     .font(.caption)
-                    .padding(.trailing)
+                        .padding()
+                Spacer()
+                Button(action:{
+                    offset = min(offset + limit, events.count - limit)
+                }){
+                    Image(systemName: "arrow.right")
+                        .padding()
+                }
             }
             if(events.count == 0){
                 GeometryReader{geo in
@@ -59,9 +85,9 @@ struct AllEventsView: View {
                 ScrollViewReader { reader in
                     ScrollView() {
                         VStack(alignment: .leading){
-                            ForEach(events, id: \.self) { event in
-                                if(currentlyExtended == event){
-                                    ExtendedEventCard(event: event).onTapGesture(){
+                            ForEach(offset..<offset+limit, id: \.self) { index in
+                                if(currentlyExtended == events[index]){
+                                    ExtendedEventCard(event: events[index]).onTapGesture(){
                                         withAnimation{
                                             currentlyExtended = nil
                                         }
@@ -71,9 +97,9 @@ struct AllEventsView: View {
                                         self.refreshID = UUID()
                                     }
                                 } else{
-                                    EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
+                                    EventCardView(event: events[index], editButton: false, deleteButton: false).onTapGesture(){
                                         withAnimation{
-                                            currentlyExtended = event
+                                            currentlyExtended = events[index]
                                         }
                                     }
                                     .transition(.slide)
@@ -105,6 +131,20 @@ struct AllEventsView: View {
                 }
             }
         }
+    }
+    
+    func loadBatch(offset: Int, limit: Int){
+        let request = Event.fetchRequest()
+        
+        request.fetchLimit = limit
+        request.fetchOffset = offset
+        
+        
+        request.sortDescriptors = [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true)
+        ]
+        
+        //events = FetchRequest(fetchRequest: request)
     }
     
     
