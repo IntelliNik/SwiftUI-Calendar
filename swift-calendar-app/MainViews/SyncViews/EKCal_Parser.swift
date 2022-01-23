@@ -56,24 +56,7 @@ class EKCal_Parser: ObservableObject
             
             try! viewContext.save()
             
-            let currentCalendar = Calendar.current
-            
-            // Get the events of the calendar
-            // TODO: max time span of 4 years here
-            var pastComponents = DateComponents()
-            pastComponents.year = -2
-            let past = currentCalendar.date(byAdding: pastComponents, to: Date())
-            
-            var futureComponents = DateComponents()
-            futureComponents.year = 2
-            let future = currentCalendar.date(byAdding: futureComponents, to: Date())
-            
-            var predicate: NSPredicate? = nil
-            if let p = past, let f = future {
-                predicate = eventStore.predicateForEvents(withStart: p, end: f, calendars: [ekCal])
-            }
-            
-            let ekCalEvents = eventStore.events(matching: predicate!)
+            let ekCalEvents = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal)
             
             // Create Events, store them in the newly created calendar
             ekCalEvents.forEach{ ekCalEvent in
@@ -116,6 +99,33 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    private func getEventsInMCalendar(mCalendar: MCalendar) -> [Event]{
+        let fr = Event.fetchRequest()
+        let predicate = NSPredicate(format: "calendar == %@ ", mCalendar)
+        fr.predicate = predicate
+        return try! viewContext.fetch(fr)
+    }
+    
+    
+    private func getEventsInEKCalendar(yearsPast: Int, yearsFuture: Int, calendar: EKCalendar) -> [EKEvent]{
+        let currentCalendar = Calendar.current
+        
+        var pastComponents = DateComponents()
+        pastComponents.year = -yearsPast
+        let past = currentCalendar.date(byAdding: pastComponents, to: Date())
+        
+        var futureComponents = DateComponents()
+        futureComponents.year = yearsFuture
+        let future = currentCalendar.date(byAdding: futureComponents, to: Date())
+        
+        var predicate: NSPredicate? = nil
+        if let p = past, let f = future {
+            predicate = eventStore.predicateForEvents(withStart: p, end: f, calendars: [calendar])
+        }
+        
+        return eventStore.events(matching: predicate!)
+    }
+    
     func exportCalendar(_ mCalendar: MCalendar){
         let ekCalendar = EKCalendar(for: .event, eventStore: eventStore)
         
@@ -129,13 +139,10 @@ class EKCal_Parser: ObservableObject
         
         ekCalendar.source = eventStore.sources.first(where: { $0.sourceType == .local })
         try! eventStore.saveCalendar(ekCalendar, commit: true)
+    
+        let mCalEvents = getEventsInMCalendar(mCalendar: mCalendar)
         
-        let predicate = NSPredicate(format: "calendar == %@ ", mCalendar)
-        let fr: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Event")
-        
-        let events = try! viewContext.fetch(fr) as! [Event]
-        
-        for mEvent in events{
+        for mEvent in mCalEvents{
             if(mEvent.calendar?.key != mCalendar.key){
                 continue
             }
@@ -193,6 +200,26 @@ class EKCal_Parser: ObservableObject
             return false
         @unknown default:
             return false
+        }
+    }
+    
+    func synchronizeCalendars(){
+        let fr = MCalendar.fetchRequest()
+        let predicate = NSPredicate(format: "synchronized == true")
+        fr.predicate = predicate
+        let syncedCalendars = try! viewContext.fetch(fr)
+        
+        for mCalendar in syncedCalendars{
+            let ekCal = eventStore.calendar(withIdentifier: mCalendar.synchronizedWithCalendarIdentifier!)
+            
+            let eventsEKCal = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal!)
+            
+            let eventsMCal = getEventsInMCalendar(mCalendar: mCalendar)
+            
+            // TODO: compare events in calendars somehow and add the missing ones to each other
+            
+            
+            print(ekCal!.title, eventsEKCal.count, eventsMCal.count)
         }
     }
 }

@@ -171,7 +171,7 @@ struct SyncCalendarsView: View {
                                         showLoading = false
                                     }
                                     
-                                    // TODO: SYNCHRONIZE HERE
+                                    parser.synchronizeCalendars()
                                     
                                     confirmationText = "Sync completed"
                                     withAnimation{
