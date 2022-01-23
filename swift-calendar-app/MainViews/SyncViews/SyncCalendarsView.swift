@@ -132,16 +132,23 @@ struct SyncCalendarsView: View {
                             if(syncedCalendars.count != 0){
                                 List{
                                     ForEach(Array(zip(syncedCalendars.indices, syncedCalendars)), id: \.0) { index, calendar in
-                                        Button(action: {
-                                            stopSyncIndex = index
-                                            stopSyncName = syncedCalendars[index].name ?? "Unkown"
-                                            if(stopSyncIndex != nil){
-                                                showAlert = true
-                                            }
-                                        }){
-                                            HStack{
-                                                Spacer()
-                                                Text(calendar.name ?? "Unknown Calendar").tag(index)
+                                        HStack{
+                                            Button(action: {
+                                                stopSyncIndex = index
+                                                stopSyncName = syncedCalendars[index].name ?? "Unkown"
+                                                if(stopSyncIndex != nil){
+                                                    showAlert = true
+                                                }
+                                            }){
+                                                HStack{
+                                                    Spacer()
+                                                    Text(calendar.synchronizedIsReadonly ? "readonly" : "")
+                                                        .font(.caption)
+                                                        .foregroundColor(.red)
+                                                        .padding()
+                                                    Text(calendar.name ?? "Unknown Calendar")
+                                                        .tag(index)
+                                                }
                                             }
                                         }
                                     }

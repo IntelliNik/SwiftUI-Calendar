@@ -50,6 +50,7 @@ class EKCal_Parser: ObservableObject
             mCalendar.color = getRandomCalendarColor()
             mCalendar.defaultCalendar = false
             mCalendar.imported = true
+            mCalendar.synchronizedIsReadonly = ekCal.isImmutable
             
             mCalendar.synchronized = true
             mCalendar.synchronizedWithCalendarIdentifier = ekCal.calendarIdentifier
@@ -254,10 +255,13 @@ class EKCal_Parser: ObservableObject
             print("TO EXPORT", eventsToAddInEkCal.map{$0.name})
             
             // Export new events to EKCal and save syncUUID to remember the event synced with
-            for mEvent in eventsToAddInEkCal{
-                saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
+            if(!ekCal!.isImmutable){
+                for mEvent in eventsToAddInEkCal{
+                    saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
+                }
+            }else{
+                print("WARNING! Calendar \(ekCal!.title) is readonly, continuing without writing to that calendar.")
             }
-            
             
             // IMPORT
             var eventsToAddInMCal: [EKEvent] = []
