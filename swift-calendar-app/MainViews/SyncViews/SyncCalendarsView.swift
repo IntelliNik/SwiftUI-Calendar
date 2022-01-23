@@ -72,22 +72,24 @@ struct SyncCalendarsView: View {
                             }
                             HStack{
                                 Button(action: {
-                                    textLoading = "Export to an Apple Calendar..."
-                                    withAnimation{
-                                        showLoading = true
-                                    }
-                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                                        parser.exportCalendar(calendarsToSync[selectedCalendarExport])
+                                    if(calendarsToSync.count != 0){
+                                        textLoading = "Export to an Apple Calendar..."
                                         withAnimation{
-                                            showLoading = false
-                                        }
-                                        confirmationText = "Connected"
-                                        withAnimation{
-                                            showConfirmation = true
+                                            showLoading = true
                                         }
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                            parser.exportCalendar(calendarsToSync[selectedCalendarExport])
                                             withAnimation{
-                                                showConfirmation = false
+                                                showLoading = false
+                                            }
+                                            confirmationText = "Connected"
+                                            withAnimation{
+                                                showConfirmation = true
+                                            }
+                                            DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                                withAnimation{
+                                                    showConfirmation = false
+                                                }
                                             }
                                         }
                                     }
