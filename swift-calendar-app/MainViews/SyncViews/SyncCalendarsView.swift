@@ -63,7 +63,7 @@ struct SyncCalendarsView: View {
                 NavigationView{
                     Form{
                         Section{
-                            Text("Connect to an iPhone calendar")
+                            Text("Export to an iPhone calendar")
                                 .font(.headline)
                             Picker("In-app Calendar", selection: $selectedCalendarExport){
                                 ForEach(Array(zip(calendarsToSync.indices, calendarsToSync)), id: \.0) { index, calendar in
@@ -104,7 +104,7 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
-                            Text("Connect an iPhone calendar")
+                            Text("Import an iPhone calendar")
                                 .font(.headline)
                             HStack{
                                 Button(action: {
