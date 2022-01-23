@@ -31,6 +31,8 @@ struct SyncCalendarsView: View {
     
     @Environment(\.managedObjectContext) var moc
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    
     @FetchRequest(
         entity: MCalendar.entity(),
         sortDescriptors: [
@@ -99,7 +101,7 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
-                            Text("Connect an Apple Calendar")
+                            Text("Connect from an Apple Calendar")
                                 .font(.headline)
                             HStack{
                                 Button(action: {
@@ -149,6 +151,40 @@ struct SyncCalendarsView: View {
                                     Spacer()
                                     Text("None")
                                         .font(.caption)
+                                }
+                            }
+                        }
+                        Section{
+                            Button(action: {
+                                textLoading = "Sync in progress..."
+                                withAnimation{
+                                    showLoading = true
+                                }
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                    withAnimation{
+                                        showLoading = false
+                                    }
+                                    
+                                    // TODO: SYNCHRONIZE HERE
+                                    
+                                    confirmationText = "Sync completed"
+                                    withAnimation{
+                                        showConfirmation = true
+                                    }
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
+                                        withAnimation{
+                                            showConfirmation = false
+                                        }
+                                    }
+                                    
+                                }
+                            }){
+                                HStack{
+                                    Text("Synchronize Calendars now")
+                                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                                    Spacer()
+                                    Image(systemName: "arrow.triangle.2.circlepath")
                                 }
                             }
                         }
