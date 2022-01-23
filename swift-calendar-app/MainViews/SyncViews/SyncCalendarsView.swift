@@ -25,7 +25,7 @@ struct SyncCalendarsView: View {
     
     @State var showAlert = false
     @State var stopSyncName = ""
-    @State var stopSyncIndex = 0
+    @State var stopSyncIndex: Int?
     
     @State var selectedCalendars: Set<EKCalendar>?
     
@@ -37,8 +37,9 @@ struct SyncCalendarsView: View {
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ]
-    ) var calendars: FetchedResults<MCalendar>
+        ],
+        predicate: NSPredicate(format: "synchronized == false")
+    ) var calendarsToSync: FetchedResults<MCalendar>
     
     @FetchRequest(
         entity: MCalendar.entity(),
@@ -65,18 +66,18 @@ struct SyncCalendarsView: View {
                             Text("Connect to an Apple Calendar")
                                 .font(.headline)
                             Picker("Choose a calendar", selection: $selectedCalendarExport){
-                                ForEach(Array(zip(calendars.indices, calendars)), id: \.0) { index, calendar in
+                                ForEach(Array(zip(calendarsToSync.indices, calendarsToSync)), id: \.0) { index, calendar in
                                     Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
                             }
                             HStack{
                                 Button(action: {
-                                    textLoading = "Connecting to an Apple Calendar..."
+                                    textLoading = "Export to an Apple Calendar..."
                                     withAnimation{
                                         showLoading = true
                                     }
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 1, qos: .background) {
-                                        parser.exportCalendar(calendars[selectedCalendarExport])
+                                        parser.exportCalendar(calendarsToSync[selectedCalendarExport])
                                         withAnimation{
                                             showLoading = false
                                         }
@@ -101,7 +102,7 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
-                            Text("Connect from an Apple Calendar")
+                            Text("Import from an Apple Calendar")
                                 .font(.headline)
                             HStack{
                                 Button(action: {
@@ -121,7 +122,7 @@ struct SyncCalendarsView: View {
                                 .font(.headline)
                                 .confirmationDialog("Stop synchronizing Calendar \(stopSyncName) ?", isPresented: $showAlert, titleVisibility: .visible) {
                                     Button("Yes", role: .destructive) {
-                                        syncedCalendars[stopSyncIndex].synchronized = false
+                                        syncedCalendars[stopSyncIndex!].synchronized = false
                                         try! moc.save()
                                     }
                                     Button("No") { }
@@ -131,8 +132,10 @@ struct SyncCalendarsView: View {
                                     ForEach(Array(zip(syncedCalendars.indices, syncedCalendars)), id: \.0) { index, calendar in
                                         Button(action: {
                                             stopSyncIndex = index
-                                            stopSyncName = calendars[index].name ?? "Unkown"
-                                            showAlert = true
+                                            stopSyncName = syncedCalendars[index].name ?? "Unkown"
+                                            if(stopSyncIndex != nil){
+                                                showAlert = true
+                                            }
                                         }){
                                             HStack{
                                                 Spacer()

@@ -123,7 +123,6 @@ struct MenuView: View {
                                 .foregroundColor(.white)
                                 .lineLimit(1)
                                 .frame(maxWidth: .infinity)
-                                .padding([.leading, .trailing])
                             if(calendars[index].synchronized){
                                 Button(action: {
                                     currentlySelectedView = .sync

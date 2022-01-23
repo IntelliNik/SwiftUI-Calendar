@@ -57,6 +57,7 @@ struct NavigationBarView: View {
                 calendar.color = "Yellow"
                 calendar.defaultCalendar = true
                 calendar.imported = false
+                calendar.synchronized = false
                 
                 try! moc.save()
             }

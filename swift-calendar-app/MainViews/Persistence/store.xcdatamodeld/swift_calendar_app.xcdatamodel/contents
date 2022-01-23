@@ -50,7 +50,7 @@
         <attribute name="imported" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="synchronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="synchronized" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="synchronizedWithCalendarIdentifier" optional="YES" attributeType="String"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
         <relationship name="foreverEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ForeverEvent" inverseName="calendar" inverseEntity="ForeverEvent"/>
