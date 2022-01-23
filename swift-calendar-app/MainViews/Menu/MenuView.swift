@@ -13,7 +13,7 @@ struct MenuView: View {
     let accentColorModes = ["AccentColorRed", "AccentColorGreen", "AccentColorBlue"]
     
     @AppStorage("colorScheme") private var colorScheme = "red"
-        
+    
     @Binding var currentlySelectedView: ContainedView
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
@@ -26,8 +26,7 @@ struct MenuView: View {
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ],
-        predicate: NSPredicate(format: "defaultCalendar == %@", "NO")
+        ]
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.dismiss) var dismiss
@@ -48,8 +47,8 @@ struct MenuView: View {
                     }
                     Spacer()
                     Button(action: {
-                            currentlySelectedView = .sync; title = "Sync Calendars"; withAnimation{menuOpen = false}
-                        }) {
+                        currentlySelectedView = .sync; title = "Sync Calendars"; withAnimation{menuOpen = false}
+                    }) {
                         Image(systemName: "arrow.triangle.2.circlepath")
                             .foregroundColor(.white)
                             .imageScale(.large)
@@ -115,27 +114,27 @@ struct MenuView: View {
             }
             ScrollView(){
                 VStack(alignment: .leading) {
-                    HStack{
+                    ForEach((0..<calendars.count),id: \.self) { index in
+                        HStack{
                             Image(systemName: "square.fill")
-                                .foregroundColor(.yellow)
+                                .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                 .imageScale(.large)
-                            Text("Default")
+                            Text("\(calendars[index].name!)")
                                 .foregroundColor(.white)
                                 .lineLimit(1)
                                 .frame(maxWidth: .infinity)
                                 .padding([.leading, .trailing])
-                    }
-                    .padding([.top, .bottom])
-                    ForEach((0..<calendars.count),id: \.self) { index in
-                        HStack{
-                                Image(systemName: "square.fill")
-                                    .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
-                                    .imageScale(.large)
-                                Text("\(calendars[index].name!)")
-                                    .foregroundColor(.white)
-                                    .lineLimit(1)
-                                    .frame(maxWidth: .infinity)
-                                    .padding([.leading, .trailing])
+                            if(calendars[index].synchronized){
+                                Button(action: {
+                                    currentlySelectedView = .sync
+                                    withAnimation{
+                                        menuOpen = false
+                                    }
+                                }){
+                                    Image(systemName: "dot.radiowaves.up.forward")
+                                        .foregroundColor(.white)
+                                }
+                            }
                         }
                         .padding([.top, .bottom])
                     }
@@ -168,12 +167,12 @@ struct MenuView: View {
                 .padding()
             }
         }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .edgesIgnoringSafeArea(.all)
-            .background(Color(getAccentColorString(from: colorScheme)))
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .edgesIgnoringSafeArea(.all)
+        .background(Color(getAccentColorString(from: colorScheme)))
         
-            
+        
     }
 }
 

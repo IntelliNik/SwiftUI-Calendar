@@ -50,12 +50,14 @@
         <attribute name="imported" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="synchronized" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="synchronizedWithCalendarIdentifier" optional="YES" attributeType="String"/>
         <relationship name="events" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Event" inverseName="calendar" inverseEntity="Event"/>
         <relationship name="foreverEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ForeverEvent" inverseName="calendar" inverseEntity="ForeverEvent"/>
     </entity>
     <elements>
         <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="359"/>
-        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="119"/>
         <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="284"/>
+        <element name="MCalendar" positionX="-63" positionY="99" width="128" height="164"/>
     </elements>
 </model>

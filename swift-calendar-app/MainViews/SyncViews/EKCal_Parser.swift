@@ -33,14 +33,14 @@ class EKCal_Parser: ObservableObject
         
         $selectedCalendars.sink( receiveValue: { calendars in
             if calendars != nil {
-                self.parseAndSaveCalendars(calendars)
+                self.exportCalendar(calendars)
             }
             
         }).store(in: &calendarSubscribers)
         
     }
     
-    private func parseAndSaveCalendars(_ calendars: Set<EKCalendar>?) {
+    private func exportCalendar(_ calendars: Set<EKCalendar>?) {
         //read EKCalendars array and make it an MCalendar
         for ekCal in calendars! {
             
@@ -50,6 +50,9 @@ class EKCal_Parser: ObservableObject
             mCalendar.color = getRandomCalendarColor()
             mCalendar.defaultCalendar = false
             mCalendar.imported = true
+            
+            mCalendar.synchronized = true
+            mCalendar.synchronizedWithCalendarIdentifier = ekCal.calendarIdentifier
             
             try! viewContext.save()
             
@@ -115,6 +118,12 @@ class EKCal_Parser: ObservableObject
     
     func exportCalendar(_ mCalendar: MCalendar){
         let ekCalendar = EKCalendar(for: .event, eventStore: eventStore)
+        
+        mCalendar.synchronized = true
+        mCalendar.synchronizedWithCalendarIdentifier = ekCalendar.calendarIdentifier
+        
+        try! viewContext.save()
+        
         ekCalendar.title = mCalendar.name ?? "Calendar"
         ekCalendar.cgColor = UIColor.random.cgColor
         
@@ -157,28 +166,6 @@ class EKCal_Parser: ObservableObject
             try! eventStore.save(ekEvent, span: .futureEvents, commit: true)
         }
     }
-    
-    private func caseInternalChange_syncImported(){
-        //sync means take all selected calendars
-        //alle mcalendars die attribut imported auf true haben
-        //guck events durch pro calendar
-    }
-    
-    private func caseExternalChange_syncImported(){
-        //sync means take all selected calendars
-        //alle mcalendars die attribut imported auf true haben
-        //guck events durch pro calendar
-    }
-    
-    private func syncExported(){
-        //TODO: Put in fetch request
-        //TODO: get access to our calendar list
-        //alle mcalendars die attribut imported auf false haben
-        //guck events durch pro calendar
-    }
-    
-    
-    
     
     private func saveSelectedCalendars(_ calendars: Set<EKCalendar>?) {
         if let identifiers = calendars?.compactMap({ $0.calendarIdentifier }) {

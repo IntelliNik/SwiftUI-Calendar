@@ -23,6 +23,10 @@ struct SyncCalendarsView: View {
     @State var showConfirmation = false
     @State var confirmationText = ""
     
+    @State var showAlert = false
+    @State var stopSyncName = ""
+    @State var stopSyncIndex = 0
+    
     @State var selectedCalendars: Set<EKCalendar>?
     
     @Environment(\.managedObjectContext) var moc
@@ -33,6 +37,14 @@ struct SyncCalendarsView: View {
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
         ]
     ) var calendars: FetchedResults<MCalendar>
+    
+    @FetchRequest(
+        entity: MCalendar.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
+        ],
+        predicate: NSPredicate(format: "synchronized == true")
+    ) var syncedCalendars: FetchedResults<MCalendar>
     
     var body: some View {
         if(parser.accessGranted){
@@ -48,14 +60,16 @@ struct SyncCalendarsView: View {
                 NavigationView{
                     Form{
                         Section{
-                            Picker("", selection: $selectedCalendarExport){
+                            Text("Connect to an Apple Calendar")
+                                .font(.headline)
+                            Picker("Choose a calendar", selection: $selectedCalendarExport){
                                 ForEach(Array(zip(calendars.indices, calendars)), id: \.0) { index, calendar in
                                     Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
                             }
                             HStack{
                                 Button(action: {
-                                    textLoading = "Export in progress..."
+                                    textLoading = "Connecting to an Apple Calendar..."
                                     withAnimation{
                                         showLoading = true
                                     }
@@ -64,7 +78,7 @@ struct SyncCalendarsView: View {
                                         withAnimation{
                                             showLoading = false
                                         }
-                                        confirmationText = "Export successful"
+                                        confirmationText = "Connected"
                                         withAnimation{
                                             showConfirmation = true
                                         }
@@ -76,7 +90,7 @@ struct SyncCalendarsView: View {
                                     }
                                 }) {
                                     HStack{
-                                        Text("Export Calendar")
+                                        Text("Connect")
                                         Spacer()
                                         Image(systemName: "square.and.arrow.up")
                                             .imageScale(.large)
@@ -85,16 +99,56 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
+                            Text("Connect an Apple Calendar")
+                                .font(.headline)
                             HStack{
                                 Button(action: {
                                     selectedCalendarImport.toggle()
                                 }) {
                                     HStack{
-                                        Text("Import Calendars")
+                                        Text("Connect")
                                         Spacer()
                                         Image(systemName: "square.and.arrow.down")
                                             .imageScale(.large)
                                     }
+                                }
+                            }
+                        }
+                        Section{
+                            Text("Currently synchronized Calendars")
+                                .font(.headline)
+                                .confirmationDialog("Stop synchronizing Calendar \(stopSyncName) ?", isPresented: $showAlert, titleVisibility: .visible) {
+                                    Button("Yes", role: .destructive) {
+                                        syncedCalendars[stopSyncIndex].synchronized = false
+                                        try! moc.save()
+                                    }
+                                    Button("No") { }
+                                }
+                            if(syncedCalendars.count != 0){
+                                List{
+                                    ForEach(Array(zip(syncedCalendars.indices, syncedCalendars)), id: \.0) { index, calendar in
+                                        Button(action: {
+                                            stopSyncIndex = index
+                                            stopSyncName = calendars[index].name ?? "Unkown"
+                                            showAlert = true
+                                        }){
+                                            HStack{
+                                                Spacer()
+                                                Text(calendar.name ?? "Unknown Calendar").tag(index)
+                                            }
+                                        }
+                                    }
+                                }
+                                HStack{
+                                    Spacer()
+                                    Text("Tap a calendar to stop synchronizing")
+                                        .font(.caption)
+                                }
+                            } else{
+                                HStack{
+                                    Spacer()
+                                    Text("None")
+                                        .font(.caption)
                                 }
                             }
                         }
@@ -106,7 +160,7 @@ struct SyncCalendarsView: View {
             }
             .onChange(of: selectedCalendars){ newValue in
                 if(selectedCalendars != nil){
-                    textLoading = "Import in progress..."
+                    textLoading = "Connecting your selected calendars..."
                     withAnimation{
                         showLoading = true
                     }
@@ -116,7 +170,7 @@ struct SyncCalendarsView: View {
                         withAnimation{
                             showLoading = false
                         }
-                        confirmationText = "Import successful"
+                        confirmationText = "Connected"
                         withAnimation{
                             showConfirmation = true
                         }
