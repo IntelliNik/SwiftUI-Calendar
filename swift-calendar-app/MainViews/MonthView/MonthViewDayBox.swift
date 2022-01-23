@@ -28,7 +28,7 @@ struct MonthViewDayBox: View {
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
                 .overlay(Text(String(date))
-                            .foregroundColor((viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
+                            .foregroundColor((viewModel.displayedMonth?.year == currentTime.components.year && viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
                 .font(.system(size: fontSize ?? 20))
         }
     }
