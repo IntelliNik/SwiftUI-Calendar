@@ -63,9 +63,9 @@ struct SyncCalendarsView: View {
                 NavigationView{
                     Form{
                         Section{
-                            Text("Connect to an Apple Calendar")
+                            Text("Connect to an iPhone calendar")
                                 .font(.headline)
-                            Picker("Choose a calendar", selection: $selectedCalendarExport){
+                            Picker("In-app Calendar", selection: $selectedCalendarExport){
                                 ForEach(Array(zip(calendarsToSync.indices, calendarsToSync)), id: \.0) { index, calendar in
                                     Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
@@ -102,7 +102,7 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
-                            Text("Import from an Apple Calendar")
+                            Text("Connect an iPhone calendar")
                                 .font(.headline)
                             HStack{
                                 Button(action: {
@@ -118,7 +118,7 @@ struct SyncCalendarsView: View {
                             }
                         }
                         Section{
-                            Text("Currently synchronized Calendars")
+                            Text("Currently connected Calendars")
                                 .font(.headline)
                                 .confirmationDialog("Stop synchronizing Calendar \(stopSyncName) ?", isPresented: $showAlert, titleVisibility: .visible) {
                                     Button("Yes", role: .destructive) {
