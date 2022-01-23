@@ -86,6 +86,8 @@ struct AddCalendarView: View {
         calendar.name = name
         calendar.color = color
         calendar.defaultCalendar = false
+        calendar.imported = false
+        calendar.synchronized = false
         
         try? moc.save()
     }

@@ -41,36 +41,6 @@ struct AllEventsView: View {
     
     var body: some View {
         VStack{
-            HStack{
-                Button(action:{
-                    if(offset >= limit){
-                        withAnimation{
-                            offset = offset - limit
-                        }
-                    }else{
-                        withAnimation{
-                        offset = 0
-                        }
-                    }
-                }){
-                    Image(systemName: "arrow.left")
-                        .padding(.leading)
-                }
-                Spacer()
-                Text("Showing \(offset) - \(offset + limit) of \(events.count) stored events")
-                    .lineLimit(1)
-                    .font(.caption)
-                        .padding()
-                Spacer()
-                Button(action:{
-                    withAnimation{
-                        offset = min(offset + limit, events.count - limit)
-                    }
-                }){
-                    Image(systemName: "arrow.right")
-                        .padding(.trailing)
-                }
-            }
             if(events.count == 0){
                 GeometryReader{geo in
                     HStack(alignment: .top){
@@ -88,12 +58,45 @@ struct AllEventsView: View {
                         }
                     }
                 }
+            }else{
+                HStack{
+                    Button(action:{
+                        if(offset >= limit){
+                            withAnimation{
+                                offset = offset - limit
+                            }
+                        }else{
+                            withAnimation{
+                                offset = 0
+                            }
+                        }
+                    }){
+                        Image(systemName: "arrow.left")
+                            .padding(.leading)
+                    }
+                    Spacer()
+                    Text("Showing \(offset) - \(events.count <= offset + limit ? events.count : offset + limit) of \(events.count) stored events")
+                        .lineLimit(1)
+                        .font(.caption)
+                        .padding()
+                    Spacer()
+                    Button(action:{
+                        withAnimation{
+                            if(events.count >= limit){
+                                offset = min(offset + limit, events.count - limit)
+                            }
+                        }
+                    }){
+                        Image(systemName: "arrow.right")
+                            .padding(.trailing)
+                    }
+                }
             }
             ZStack(alignment: .leading){
                 ScrollViewReader { reader in
                     ScrollView() {
                         VStack(alignment: .leading){
-                            ForEach(offset..<offset+limit, id: \.self) { index in
+                            ForEach(min(offset, min(events.count, offset+limit))..<min(events.count, offset+limit), id: \.self) { index in
                                 if(currentlyExtended == events[index]){
                                     ExtendedEventCard(event: events[index]).onTapGesture(){
                                         withAnimation{
