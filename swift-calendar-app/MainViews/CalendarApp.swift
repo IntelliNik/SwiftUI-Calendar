@@ -21,8 +21,8 @@ struct CalendarApp: App {
     @State private var showConfirmationBox = false
     @State private var confirmationBoxText = ""
     
-    @State var selectedView: ContainedView = .week
-    @State var title = "Week View"
+    @State var selectedView: ContainedView = .allEvents
+    @State var title = "All Events"
     
     @StateObject private var dataController = DataController()
     

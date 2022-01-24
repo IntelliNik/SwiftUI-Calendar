@@ -31,9 +31,9 @@ struct YearView: View {
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousYear(components: dateComponents, next: true)
                 let previous = getNextOrPreviousYear(components: dateComponents, next: false)
-                Text("\(previous!.year!)").tag(PickerSelection.previous)
-                Text("\(dateComponents.year!)").tag(PickerSelection.current)
-                Text("\(next!.year!)").tag(PickerSelection.next)
+                Text(String((previous!.year!) as Int)).tag(PickerSelection.previous)
+                Text(String((dateComponents.year!) as Int)).tag(PickerSelection.current)
+                Text(String((next!.year!) as Int)).tag(PickerSelection.next)
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
