@@ -118,6 +118,9 @@ private func createNotificationContent(name: String) -> UNMutableNotificationCon
 }
 
 func updateNotification(event: Event) {
-    removeNotificationByUUID(eventuuid: event.key!.uuidString)
+    scheduleNotification(event: event)
+}
+
+func updateNotification(event: ForeverEvent) {
     scheduleNotification(event: event)
 }

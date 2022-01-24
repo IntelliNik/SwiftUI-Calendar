@@ -389,6 +389,7 @@ struct EditForeverEventView: View {
                         event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                     } else {
                         event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                        event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                     }
                     
                 } else{
@@ -397,7 +398,10 @@ struct EditForeverEventView: View {
                 
                 calendars[calendar].addToForeverEvents(event)
                 
+                updateNotification(event: event)
+                
                 try? moc.save()
+                
                 
                 withAnimation{
                     showConfirmation = true
@@ -444,6 +448,7 @@ struct EditForeverEventView: View {
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
 }
