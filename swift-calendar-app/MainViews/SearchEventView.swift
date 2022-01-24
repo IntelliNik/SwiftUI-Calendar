@@ -13,6 +13,7 @@ struct SearchEventView: View {
     @State var saveSucessful = true
     @State var showAddEventSheet = false
     @State var confirmationShown = false
+    @State var confirmationForeverEventShown = false
     
     @State var selectedEvent = 0
     @State var saveEvent = 0
@@ -21,6 +22,9 @@ struct SearchEventView: View {
 
     @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
     private var events: FetchedResults<Event>
+    
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
            
     var body: some View {
         NavigationView {
@@ -46,6 +50,22 @@ struct SearchEventView: View {
                             }
                         }
                     }
+                    ForEach((0..<foreverEvents.count), id: \.self) { index in
+                        if (index < foreverEvents.count) {
+                           /* NavigationLink(
+                                destination: EditEventView(event: events[index], locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true)).navigationBarBackButtonHidden(true)
+                            ) {
+                                Text("Name: \(events[index].name ?? "") in Calendar: \(events[index].calendar?.name ?? "No Calendar")")
+                            }
+                             */
+                            Button(action: {confirmationForeverEventShown = true
+                                selectedEvent = foreverEvents.firstIndex {$0 == foreverEvents[index] }!
+                            }){
+                                Text("Name: \(foreverEvents[index].name ?? "") in Calendar: \(foreverEvents[index].calendar?.name ?? "No Calendar")")
+                                    .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                            }
+                        }
+                    }
                 }
             }
             if self.query != "" {
@@ -61,9 +81,13 @@ struct SearchEventView: View {
         .sheet(isPresented: $confirmationShown) {
             ShowEventView(event:events[selectedEvent])
         }
+        .sheet(isPresented: $confirmationForeverEventShown) {
+            ShowForeverEventView(event:foreverEvents[selectedEvent])
+        }
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .automatic), prompt: "Search events")
         .onChange(of: query) { newValue in
             events.nsPredicate = searchPredicate(query: newValue)
+            foreverEvents.nsPredicate = searchPredicateForeverEvents(query: newValue)
          }
         
     }
@@ -71,6 +95,11 @@ struct SearchEventView: View {
     private func searchPredicate(query: String) -> NSPredicate? {
         if query.isEmpty { return nil }
         return NSPredicate(format: "name contains[c] %@", query)
+    }
+    
+    private func searchPredicateForeverEvents(query: String) -> NSPredicate? {
+        if query.isEmpty { return nil }
+        return NSPredicate(format: "name BEGINSWITH %@", query)
     }
 }
 

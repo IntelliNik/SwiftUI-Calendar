@@ -8,40 +8,40 @@
 import SwiftUI
 
 struct MonthViewCalendar: View {
+    var daysOfMonth : [String?]
+    
+    let columns = [
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible()),
+            GridItem(.flexible())
+    ]
+    
     var body: some View {
-        VStack {
-            HStack(alignment: .center) { //#warning: in case of localization, change!
-                
-                ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
-                    Spacer()
-                    Text(weekday)
-                        .font(.subheadline)
-                    Spacer()
-                }
-                
-            }
-            
-            VStack {
-                ForEach([0,7,14,21,28], id:\.self)  { row in
-                    HStack {
-                        ForEach([1,2,3,4,5,6,7], id:\.self) { dayofweek in
-                            NavigationLink {
-                                Text("Open Day View for the Day here!")
-                            } label: {
-                                MonthViewDayBox(date: dayofweek + row, width: 45, length: 45)
+        VStack() {
+            LazyVGrid(columns: columns, spacing: 15) {
+                ForEach(daysOfMonth, id: \.self) { dc in
+                    if(dc == nil){
+                        Text(dc ?? "")
+                    }
+                    else {
+                        MonthViewDayBox(date: Int(dc!) ?? 0, width: 45, length: 45)
                             .padding(1)
-                            }
-                        }
+                    }
+                     
+                     //Text(dc ?? "")
                     }
                 }
-            }
+                .padding(.horizontal)
         }
-        
     }
 }
 
-struct MonthViewCalendar_Previews: PreviewProvider {
+/*struct MonthViewCalendar_Previews: PreviewProvider {
     static var previews: some View {
-        MonthViewCalendar()
+        MonthViewCalendar(dateComponents: .constant(Calendar.current.dateComponents([.month, .year], from: Date.now)))
     }
-}
+}*/

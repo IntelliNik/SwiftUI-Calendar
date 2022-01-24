@@ -21,10 +21,13 @@ struct CalendarApp: App {
     @State private var showConfirmationBox = false
     @State private var confirmationBoxText = ""
     
-    @State var selectedView: ContainedView = .week
-    @State var title = "Week View"
+    @State var selectedView: ContainedView = .allEvents
+    @State var title = "All Events"
     
     @StateObject private var dataController = DataController()
+    
+    @StateObject private var currentTime = CurrentTime()
+    @Environment(\.scenePhase) var scenePhase
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
@@ -103,6 +106,18 @@ struct CalendarApp: App {
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)
+            .environmentObject(currentTime)
+            .onChange(of: scenePhase) { newPhase in
+                            if newPhase == .active {
+                                print("Active")
+                                currentTime.activate()
+                            } else if newPhase == .inactive {
+                                print("Inactive")
+                            } else if newPhase == .background {
+                                print("Background")
+                                currentTime.enterBackground()
+                            }
+                        }
         }
     }
 }

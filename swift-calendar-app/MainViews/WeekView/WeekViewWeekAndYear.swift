@@ -16,7 +16,7 @@ struct WeekViewWeekAndYear: View {
                 .frame(width: 10, alignment: .leading)
                 TodayButton(dateComponents: $dateComponents)
                 Spacer()
-                Text("W" + String(dateComponents.weekOfYear!))
+                Text("W" + String(dateComponents.weekOfYear ?? getCurrentWeekOfYear()))
                     .font(.system(size: 30, weight: .bold, design: .monospaced))
             
             Spacer()

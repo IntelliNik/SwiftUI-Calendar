@@ -37,9 +37,10 @@ struct AddEventView: View {
     @State private var repetition = false
     let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
     @State private var repetitionInterval = "Daily"
-    let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
-    @State private var repeatUntil = "Forever"
+    let repeatUntilModes = ["Repetitions", "End Date","Forever"]
+    @State private var repeatUntil = "Repetitions"
     @State private var amountOfRepetitions = "10"
+    @State private var foreverEvent = false
     
     @State private var notification = false
     @State private var notificationPermission = false
@@ -438,26 +439,15 @@ struct AddEventView: View {
                             event.location = false
                         }
                         
-                        if repetition {
-                            event.repetition = true
-                            event.repetitionUntil = repeatUntil
-                            event.repetitionInterval = repetitionInterval
-                            if(repeatUntil == "Repetitions"){
-                                event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
+                        /*if notification {
+                            event.notification = true
+                            if(!wholeDay){
+                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            } else {
+                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
                             }
-                            if(repeatUntil == "End Date"){
-                                event.repetitionEndDate = endRepetitionDate
-                            }
-                            event.repetitionSkip = false
-                            // TODO: Calculate the next date for the repetation and generate a event in Core Data. Store here the id of the next event in the next line
-                            event.repetitionNext = "Test"
-                        } else {
-                            event.repetition = false
                             
-                            //TODO: Check whether it breaks something to have items as nil
-                            // event.nextRepetition = ""
-                        }
-                        
+                        }*/
                         if notification {
                             event.notification = true
                             if(!wholeDay){
@@ -469,7 +459,123 @@ struct AddEventView: View {
                         } else {
                             event.notification = false
                         }
-                        calendars[calendar].addToEvents(event)
+                        
+                        if repetition {
+                            event.repetition = true
+                            event.repetitionUntil = repeatUntil
+                            event.repetitionInterval = repetitionInterval
+                            let repetitionID = UUID()
+                            event.repetitionID = repetitionID
+                            let myCalendar = Calendar.current
+                            if(repeatUntil == "Repetitions"){
+                                event.repetitionAmount = Int16(amountOfRepetitions) ?? 10
+                                let repetitionsNumber = event.repetitionAmount
+                                if repetitionsNumber > 1{
+                                    for i in 1...(repetitionsNumber-1) {
+                                        var eventR = Event(context: moc)
+                                        eventR.key = UUID()
+                                        eventR = CopyEvent(event1: eventR, event2: event)
+                                        switch repetitionInterval{
+                                        case "Weekly":
+                                            eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
+                                        case "Daily":
+                                            eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
+                                            
+                                        case "Monthly":
+                                            eventR.startdate = myCalendar.date(byAdding: .month, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .month, value: Int(i), to: event.enddate!)
+                                            
+                                        case "Yearly":
+                                            eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
+                                            
+                                        default:
+                                            break
+                                        }
+                                        calendars[calendar].addToEvents(eventR)
+                                    }
+                                }
+                            }
+                            if(repeatUntil == "End Date"){
+                                event.repetitionEndDate = endRepetitionDate
+                                var currentDate = event.startdate
+                                var i = 1
+                                while currentDate! < endRepetitionDate{
+                                    var eventR = Event(context: moc)
+                                    eventR.key = UUID()
+                                    eventR = CopyEvent(event1: eventR, event2: event)
+                                    switch repetitionInterval{
+                                    case "Weekly":
+                                        eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
+                                    case "Daily":
+                                        eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
+                                        
+                                    case "Monthly":
+                                        eventR.startdate = myCalendar.date(byAdding: .month, value: i, to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .month, value: i, to: event.enddate!)
+                                        
+                                    case "Yearly":
+                                        eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
+                                        
+                                    default:
+                                        break
+                                    }
+                                    currentDate = eventR.startdate
+                                    if currentDate! <= endRepetitionDate{
+                                        calendars[calendar].addToEvents(eventR)
+                                        i = i + 1
+                                    } else{
+                                        moc.delete(eventR)
+                                    }
+                                }
+                            }
+                            if(repeatUntil == "Forever"){
+                                let eventForever = ForeverEvent(context: moc)
+                                eventForever.key = UUID()
+                                eventForever.startdate = event.startdate!
+                                eventForever.enddate = event.enddate!
+                                eventForever.name = event.name
+                                eventForever.url = event.url
+                                eventForever.notes = event.notes
+                                
+                                if event.location{
+                                    eventForever.location = true
+                                    eventForever.latitude = event.latitude
+                                    eventForever.longitude = event.longitude
+                                    eventForever.latitudeDelta = event.latitudeDelta
+                                    eventForever.longitudeDelta = event.longitudeDelta
+                                }else{
+                                    eventForever.location = false
+                                }
+                                if event.notification{
+                                    eventForever.notification = true
+                                    if(!event.wholeDay){
+                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                    } else {
+                                        eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                    }
+                                }else{
+                                    eventForever.notification = false
+                                }
+                                
+                                eventForever.repetitionInterval = repetitionInterval
+                                
+                                calendars[calendar].addToForeverEvents(eventForever)
+                                moc.delete(event)
+                                foreverEvent = true
+                            }
+                        } else {
+                            event.repetition = false
+                        }
+                        
+                        if !foreverEvent{
+                            calendars[calendar].addToEvents(event)
+                        }
                         
                         try! moc.save()
                         //schedule notification
@@ -496,6 +602,45 @@ struct AddEventView: View {
             requestNotificationPermission()
             locationManager.requestWhenInUseAuthorization()
         }
+    }
+    
+    func CopyEvent(event1: Event, event2: Event) -> Event{
+        event1.name = event2.name
+        event1.wholeDay = event2.wholeDay
+        event1.url = event2.url
+        event1.notes = event2.notes
+        if event2.location{
+            event1.location = true
+            event1.latitude = event2.latitude
+            event1.longitude = event2.longitude
+            event1.latitudeDelta = event2.latitudeDelta
+            event1.longitudeDelta = event2.longitudeDelta
+        }else{
+            event1.location = false
+        }
+        if event2.notification{
+            event1.notification = true
+            if(!event2.wholeDay){
+                event1.notificationMinutesBefore = event2.notificationMinutesBefore
+            } else {
+                event1.notificationTimeAtWholeDay = event2.notificationTimeAtWholeDay
+            }
+        }else{
+            event1.notification = false
+        }
+        event1.repetition = event2.repetition
+        if event2.repetition{
+            event1.repetitionUntil = event2.repetitionUntil
+            event1.repetitionInterval = event2.repetitionInterval
+            event1.repetitionID = event2.repetitionID
+            if(repeatUntil == "Repetitions"){
+                event1.repetitionAmount = event2.repetitionAmount
+            }else{
+                event1.repetitionEndDate = event2.repetitionEndDate
+            }
+        }
+        
+        return event1
     }
 }
 

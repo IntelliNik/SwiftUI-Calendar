@@ -16,30 +16,58 @@ struct YearView: View {
     @Binding var updateView: Bool
     @State var pickerSelection: PickerSelection = .current
     
+    @State var offset = CGSize(width: 0, height: 0)
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         VStack {
             YearViewYearAndToday(dateComponents: $dateComponents)
+                .offset(offset)
             Spacer()
             YearViewCalendar(dateComponents: $dateComponents, updateView: $updateView)
+                .offset(offset)
             Spacer()
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousYear(components: dateComponents, next: true)
                 let previous = getNextOrPreviousYear(components: dateComponents, next: false)
-                Text("\(previous!.year!)").tag(PickerSelection.previous)
-                Text("\(dateComponents.year!)").tag(PickerSelection.current)
-                Text("\(next!.year!)").tag(PickerSelection.next)
+                Text(String((previous!.year!) as Int)).tag(PickerSelection.previous)
+                Text(String((dateComponents.year!) as Int)).tag(PickerSelection.current)
+                Text(String((next!.year!) as Int)).tag(PickerSelection.next)
             }
             .onChange(of: pickerSelection){ _ in
                 if(pickerSelection == .previous){
+                    withAnimation{
+                        offset.width = 400
+                    }
                     dateComponents = getNextOrPreviousYear(components: dateComponents, next: false)!
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        offset.width = -400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 if(pickerSelection == .next){
+                    withAnimation{
+                        offset.width = -400
+                    }
                     dateComponents = getNextOrPreviousYear(components: dateComponents, next: true)!
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        offset.width = 400
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        withAnimation{
+                            offset.width = 0
+                        }
+                    }
                 }
                 // reset picker
-                pickerSelection = .current
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    pickerSelection = .current
+                }
             }
             .pickerStyle(.segmented)
             .colorMultiply(Color(getAccentColorString(from: colorScheme)))
@@ -49,9 +77,9 @@ struct YearView: View {
                 DragGesture()
                     .onEnded(){gesture in
                         print(gesture)
-                        if(gesture.translation.width < 0){
+                        if(gesture.translation.width > 0){
                             pickerSelection = .previous
-                        } else if(gesture.translation.width > 0){
+                        } else if(gesture.translation.width < 0){
                             pickerSelection = .next
                         }
                     }
