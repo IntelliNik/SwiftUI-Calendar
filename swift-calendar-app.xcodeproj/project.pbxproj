@@ -39,12 +39,12 @@
 		77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06962780AEAF00767504 /* ShowEventView.swift */; };
 		77B3C96C2792102000571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
 		77B3C96D2792199E00571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
+		77BEA215279B415400535471 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77EA32DA278F5E9A00093312 /* Assets.xcassets */; };
 		77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77DAC8EA277C6C09000D8BCD /* Settings.bundle */; };
 		77DAC8EF277CA0EC000D8BCD /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DAC8EE277CA0EC000D8BCD /* MainView.swift */; };
 		77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E08BC127970DBA00D4791A /* DayViewEachHour.swift */; };
 		77EA32D5278F5E9800093312 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 775244292789C89500FE7206 /* WidgetKit.framework */; };
 		77EA32D6278F5E9800093312 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7752442B2789C89500FE7206 /* SwiftUI.framework */; };
-		77EA32DB278F5E9A00093312 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77EA32DA278F5E9A00093312 /* Assets.xcassets */; };
 		77EA32DF278F5E9A00093312 /* DailyWidgetExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 77EA32D4278F5E9800093312 /* DailyWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		77EA32E3278F5ECB00093312 /* DailyWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7752442E2789C89500FE7206 /* DailyWidget.swift */; };
 		77EA32E4278F5ECD00093312 /* SmallDailyOverviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */; };
@@ -242,6 +242,7 @@
 			children = (
 				A0D30B222796F1C700EB1F22 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
+				35EE958D27982D7C00B6F7CD /* EditForeverEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
 				35B6832D277A182E00D9EBAC /* MonthView */,
 				35FC5CAB2779C56E009033C5 /* YearView */,
@@ -468,7 +469,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				77F2742C27901B760021AC42 /* Assets.xcassets in Resources */,
-				77EA32DB278F5E9A00093312 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -477,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77DAC8EB277C6C09000D8BCD /* Settings.bundle in Resources */,
+				77BEA215279B415400535471 /* Assets.xcassets in Resources */,
 				77F466AA2768FF720034C68B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
