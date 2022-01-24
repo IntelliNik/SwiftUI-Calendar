@@ -71,6 +71,8 @@
 		A0D30B292796F26500EB1F22 /* DayViewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B282796F26500EB1F22 /* DayViewTime.swift */; };
 		A0D30B2B2796F28E00EB1F22 /* DayViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */; };
 		A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DED9722790A8C1001AE9EF /* WeekEventView.swift */; };
+		A0E101A0279F2C12008E3011 /* AllRepeatingEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E1019F279F2C12008E3011 /* AllRepeatingEventsView.swift */; };
+		A0E101A2279F319A008E3011 /* ForeverEventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E101A1279F319A008E3011 /* ForeverEventCardView.swift */; };
 		A0F09B9E279AF21E00458FA2 /* CurrentTimePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */; };
 		A0F09B9F279AF87500458FA2 /* MonthViewDayBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */; };
 		A0F09BA0279AF8A500458FA2 /* MonthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FA2D18279712E3001BA750 /* MonthViewModel.swift */; };
@@ -161,6 +163,8 @@
 		A0D30B282796F26500EB1F22 /* DayViewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
 		A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewHeader.swift; sourceTree = "<group>"; };
 		A0DED9722790A8C1001AE9EF /* WeekEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventView.swift; sourceTree = "<group>"; };
+		A0E1019F279F2C12008E3011 /* AllRepeatingEventsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllRepeatingEventsView.swift; sourceTree = "<group>"; };
+		A0E101A1279F319A008E3011 /* ForeverEventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverEventCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -242,7 +246,6 @@
 			children = (
 				A0D30B222796F1C700EB1F22 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
-				35EE958D27982D7C00B6F7CD /* EditForeverEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
 				35B6832D277A182E00D9EBAC /* MonthView */,
 				35FC5CAB2779C56E009033C5 /* YearView */,
@@ -290,7 +293,9 @@
 			isa = PBXGroup;
 			children = (
 				770FB6B5276FA1C700D38A07 /* AllEventsView.swift */,
+				A0E1019F279F2C12008E3011 /* AllRepeatingEventsView.swift */,
 				779BF16C2781B42000DCFBEB /* EventCardView.swift */,
+				A0E101A1279F319A008E3011 /* ForeverEventCardView.swift */,
 			);
 			path = AllEventsView;
 			sourceTree = "<group>";
@@ -523,7 +528,9 @@
 				775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */,
 				773691FC277DAA980056DFDB /* ConfirmationBoxView.swift in Sources */,
 				A0D30B2B2796F28E00EB1F22 /* DayViewHeader.swift in Sources */,
+				A0E101A2279F319A008E3011 /* ForeverEventCardView.swift in Sources */,
 				A0069AB727998DCF00A07105 /* CurrentTimePublisher.swift in Sources */,
+				A0E101A0279F2C12008E3011 /* AllRepeatingEventsView.swift in Sources */,
 				77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */,
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
 				3579ED9D278DA70400B46AD0 /* (null) in Sources */,
@@ -591,7 +598,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "lfw.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -622,7 +629,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "lfw.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -776,7 +783,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "lfw.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -813,7 +820,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "lfw.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
