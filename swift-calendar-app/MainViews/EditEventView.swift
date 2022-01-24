@@ -403,17 +403,22 @@ struct EditEventView: View {
                 }
             }
             .navigationBarItems(leading: Button(action : {
+                // TODO: Check that notes is set everywhere
                 if event.repetition && repetition{
                     // In this case event was a repeating event and should still be one
                     // How should such events be modified ?
                     
                     modifyID = event.repetitionID!
+                    modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
                     name = self.event.name!
+                    
+                    print(modifyEvents.count)
                     
                     // TODO: Abfrage hinzufügen ob alle zugehörigen darauffolgenden events ebenfalls verändert werden sollen.
                     for mevent in modifyEvents{
                         mevent.setValue(name, forKey: "name")
                         mevent.setValue(wholeDay,forKey:"wholeDay")
+                        mevent.setValue(self.event.notes,forKey:"notes")
                         
                         // TODO: Wie sollen das Datum verändert werden?
                         // mevent.setValue(startDate,forKey:"startdate")
@@ -503,6 +508,7 @@ struct EditEventView: View {
                         foreverEvent = true
                         
                         deleteID = modifyID
+                        deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
                         
                         for devent in deleteEvents{
                             moc.delete(devent)
@@ -576,6 +582,8 @@ struct EditEventView: View {
             
                     calendars[calendar].addToEvents(newEvent)
                     
+                    deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
+                    
                     for devent in deleteEvents{
                         moc.delete(devent)
                     }
@@ -587,6 +595,7 @@ struct EditEventView: View {
                         event.setValue(wholeDay,forKey:"wholeDay")
                         event.setValue(startDate,forKey:"startdate")
                         event.setValue(endDate,forKey:"enddate")
+                        event.setValue(self.event.notes,forKey:"notes")
                         
                         if(urlString != ""){
                             event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
@@ -833,12 +842,6 @@ struct EditEventView: View {
                 }
             }
         }
-        .onChange(of: deleteID) { newValue in
-            deleteEvents.nsPredicate = searchPredicateRepetitionID(query: newValue)
-         }
-        .onChange(of: modifyID) { newValue in
-            modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: newValue)
-         }
     }
     
     func deleteEvent(id: UUID)  {
@@ -855,7 +858,7 @@ struct EditEventView: View {
     }
     
     private func searchPredicateRepetitionIDModify(query: UUID) -> NSPredicate? {
-        return NSPredicate(format: "repetitionID == %@ && stardate >= %@", query as CVarArg, event.startdate! as NSDate)
+        return NSPredicate(format: "repetitionID == %@ && startdate >= %@", query as CVarArg, event.startdate! as NSDate)
     }
     
     func CopyEvent(event1: Event, event2: Event) -> Event{
