@@ -39,19 +39,19 @@ struct ShowForeverEventView: View {
                 }.padding()
                 Section{
                     HStack{
-                        Text(event.startdate!, style: .date)
+                        Text(event.startdate ?? Date.now, style: .date)
                         Spacer()
                         Image(systemName: "arrow.forward")
                         Spacer()
-                        Text(event.enddate!, style: .date)
+                        Text(event.enddate ?? Date.now, style: .date)
                     }.padding()
-                    if(!event.wholeDay){
+                    if(event.wholeDay){
                         HStack{
-                            Text(event.startdate!, style: .time)
+                            Text(event.startdate ?? Date.now, style: .time)
                             Spacer()
                             Image(systemName: "clock.fill")
                             Spacer()
-                            Text(event.enddate!, style: .time)
+                            Text(event.enddate ?? Date.now, style: .time)
                         }.padding()
                     }
                 }
@@ -72,15 +72,11 @@ struct ShowForeverEventView: View {
                             Text("None")
                         }
                     }
-                    /*HStack{
+                    HStack{
                         Image(systemName: "repeat")
                         Spacer()
-                        if(event.repetition){
-                            Text("\(event.repetitionInterval!)")
-                        }else {
-                            Text("None")
-                        }
-                    }
+                        Text("\(event.repetitionInterval ?? "Daily")")
+                    }/*
                     if(event.repetition){
                         if(event.repetitionUntil! == "Repetitions"){
                             HStack{
@@ -172,10 +168,18 @@ struct ShowForeverEventView: View {
                     }
                     .sheet(isPresented: $confirmationShown) {
                         EditForeverEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+                            .onDisappear(perform: {
+                            confirmationShown = false
+                        })
                     }
                 }
             }
         }
+        .onChange(of: confirmationShown, perform: {_ in
+            if event.key == nil {
+                dismiss()
+            }
+        })
     }
 }
 

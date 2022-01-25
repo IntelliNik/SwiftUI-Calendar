@@ -253,6 +253,7 @@
 				77DAC8EE277CA0EC000D8BCD /* MainView.swift */,
 				7719874E2775F60E0061CF34 /* AddEventView.swift */,
 				77F6637C2791C47D007ACCC4 /* EditEventView.swift */,
+				35EE958D27982D7C00B6F7CD /* EditForeverEventView.swift */,
 				775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */,
 				773691FB277DAA980056DFDB /* ConfirmationBoxView.swift */,
 				77535AEB2780E0E1003FAD80 /* SearchEventView.swift */,
