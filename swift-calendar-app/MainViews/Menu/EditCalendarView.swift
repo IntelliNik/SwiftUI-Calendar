@@ -18,7 +18,8 @@ struct EditCalendarView: View {
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ]
+        ],
+        predicate: NSPredicate(format: "defaultCalendar == NO")
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.managedObjectContext) var moc
