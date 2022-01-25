@@ -68,6 +68,8 @@ struct SyncCalendarsView: View {
                                     Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
                             }
+                            .navigationBarTitle("")
+                            .navigationBarHidden(true)
                             HStack{
                                 Button(action: {
                                     if(calendarsToSync.count != 0){

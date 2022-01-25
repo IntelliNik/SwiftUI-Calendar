@@ -57,7 +57,7 @@ class EKCal_Parser: ObservableObject
             
             try! viewContext.save()
             
-            let ekCalEvents = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal)
+            let ekCalEvents = getEventsEKCal100Years(ekCal: ekCal)
             
             // Create Events, store them in the newly created calendar
             ekCalEvents.forEach{ ekCalEvent in
@@ -118,15 +118,15 @@ class EKCal_Parser: ObservableObject
     }
     
     
-    private func getEventsInEKCalendar(yearsPast: Int, yearsFuture: Int, calendar: EKCalendar) -> [EKEvent]{
+    private func getEventsInEKCalendar(offsetStartFromToday: Int, offsetEndFromToday: Int, calendar: EKCalendar) -> [EKEvent]{
         let currentCalendar = Calendar.current
         
         var pastComponents = DateComponents()
-        pastComponents.year = -yearsPast
+        pastComponents.year = offsetStartFromToday
         let past = currentCalendar.date(byAdding: pastComponents, to: Date())
         
         var futureComponents = DateComponents()
-        futureComponents.year = yearsFuture
+        futureComponents.year = offsetEndFromToday
         let future = currentCalendar.date(byAdding: futureComponents, to: Date())
         
         var predicate: NSPredicate? = nil
@@ -224,6 +224,21 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    private func getEventsEKCal100Years(ekCal: EKCalendar)->[EKEvent]{
+        var eventEKCalPast100Years: [EKEvent] = []
+        for iteration in 1...25{
+            eventEKCalPast100Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal))
+        }
+        
+        var eventEKCalFuture100Years: [EKEvent] = []
+        for iteration in 1...25{
+            eventEKCalFuture100Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal))
+        }
+        
+        // Merge past and future
+        return eventEKCalPast100Years + eventEKCalFuture100Years
+    }
+    
     func synchronizeCalendars(){
         let fr = MCalendar.fetchRequest()
         let predicate = NSPredicate(format: "synchronized == true")
@@ -235,7 +250,8 @@ class EKCal_Parser: ObservableObject
             
             let ekCal = eventStore.calendar(withIdentifier: mCalendar.synchronizedWithCalendarIdentifier!)
             
-            let eventsEKCal = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal!)
+            let eventsEKCal = getEventsEKCal100Years(ekCal: ekCal!)
+            
             let eventsMCal = getEventsInMCalendar(mCalendar: mCalendar)
             let uuidsEKCal = eventsEKCal.map{ $0.eventIdentifier }
             let uuidsMCal = eventsMCal.map{ $0.importedFromUUID }
@@ -281,6 +297,8 @@ class EKCal_Parser: ObservableObject
                 //saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
                 saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
             }
+            
+            // CHECK FOR CHANGED EVENTS
             
             
             print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
