@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CoreLocation
-
 @main
 struct CalendarApp: App {
     @State var saveSucessful = true
@@ -45,7 +44,7 @@ struct CalendarApp: App {
         WindowGroup {
             ZStack{
                 if(showConfirmationBox){
-                    ConfirmationBoxView(success: saveSucessful, text: confirmationBoxText)
+                    ConfirmationBoxView(mode: saveSucessful ? .success : .fail, text: confirmationBoxText)
                     // show on top, even on top of menu
                         .zIndex(2)
                 }
@@ -74,6 +73,8 @@ struct CalendarApp: App {
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
+                            .environment(\.managedObjectContext, dataController.container.viewContext)
+                        
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true

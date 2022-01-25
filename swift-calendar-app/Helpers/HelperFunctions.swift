@@ -26,6 +26,21 @@ func getColorFromString(stringColor: String?) -> Color{
     }
 }
 
+func getRandomCalendarColor() -> String{
+    return colorStrings.randomElement()!
+}
+
+extension UIColor {
+    static var random: UIColor {
+        return UIColor(
+            red: .random(in: 0...1),
+            green: .random(in: 0...1),
+            blue: .random(in: 0...1),
+            alpha: 1
+        )
+    }
+}
+
 // helper function to translate the string representing the current color scheme
 // as stored in UserDefaults to the string needed to initialize Color correctly
 func getAccentColorString(from: String) -> String{

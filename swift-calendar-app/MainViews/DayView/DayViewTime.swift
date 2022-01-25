@@ -24,6 +24,7 @@ struct DayViewTime: View {
             }
         }
         return foundEvents
+      
     }
     
     var body: some View {
