@@ -197,7 +197,7 @@ struct SyncCalendarsView: View {
                                         .foregroundColor(.red)
                                     Spacer()
                                     Image(systemName: "arrow.triangle.2.circlepath")
-                                }.padding(.bottom)
+                                }
                             }
                             HStack{
                                 Image(systemName: "exclamationmark.triangle.fill")

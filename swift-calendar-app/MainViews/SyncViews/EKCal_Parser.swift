@@ -298,8 +298,8 @@ class EKCal_Parser: ObservableObject
                 saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
             }
             
-            // CHECK FOR CHANGED EVENTS
-            
+            // CHECK FOR CHANGES INSIDE EVENTS
+            // TODO
             
             print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
         }
