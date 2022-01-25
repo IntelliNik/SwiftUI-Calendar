@@ -197,7 +197,15 @@ struct SyncCalendarsView: View {
                                         .foregroundColor(.red)
                                     Spacer()
                                     Image(systemName: "arrow.triangle.2.circlepath")
-                                }
+                                }.padding(.bottom)
+                            }
+                            HStack{
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .padding(.trailing)
+                                    .foregroundColor(.yellow)
+                                Spacer()
+                                Text("Caution: in case of sync conflicts the iPhone calendar will be overwritten!")
+                                    .font(.caption)
                             }
                         }
                     }
