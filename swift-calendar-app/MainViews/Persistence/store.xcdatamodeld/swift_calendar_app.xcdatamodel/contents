@@ -28,6 +28,7 @@
     </entity>
     <entity name="ForeverEvent" representedClassName="ForeverEvent" syncable="YES" codeGenerationType="class">
         <attribute name="enddate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="importedFromUUID" optional="YES" attributeType="String"/>
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
@@ -59,7 +60,7 @@
     </entity>
     <elements>
         <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="389"/>
-        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="284"/>
+        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="299"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="179"/>
     </elements>
 </model>

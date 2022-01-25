@@ -26,6 +26,13 @@ class EKCal_Parser: ObservableObject
     private var calendarSubscribers: Set<AnyCancellable> = []
     private let viewContext: NSManagedObjectContext
     
+    @FetchRequest(
+        entity: ForeverEvent.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \ForeverEvent.startdate, ascending: true),
+        ]
+    ) var allForeverEvents: FetchedResults<ForeverEvent>
+    
     init(viewContext: NSManagedObjectContext){
         self.viewContext = viewContext
         
@@ -68,6 +75,8 @@ class EKCal_Parser: ObservableObject
     
     private func saveEventinMCalendar(ekCalEvent: EKEvent, mCalendar: MCalendar, saveSyncUuidAt: Bool? = nil){
         let mEvent = Event(context: viewContext)
+        let eventForever = ForeverEvent(context: viewContext)
+        var foreverEvent = false
         mEvent.name = ekCalEvent.title
         
         mEvent.importedFromUUID = ekCalEvent.eventIdentifier
@@ -76,8 +85,16 @@ class EKCal_Parser: ObservableObject
         mEvent.enddate = ekCalEvent.endDate
         
         //location
-        mEvent.location = ekCalEvent.structuredLocation != nil
-        // TODO: convert location somehow
+        //mEvent.location = ekCalEvent.structuredLocation != nil
+        if (ekCalEvent.structuredLocation != nil && ekCalEvent.structuredLocation?.geoLocation != nil){
+            mEvent.location = true
+            mEvent.longitude = (ekCalEvent.structuredLocation?.geoLocation?.coordinate.longitude)!
+            mEvent.latitude = (ekCalEvent.structuredLocation?.geoLocation?.coordinate.latitude)!
+            mEvent.latitudeDelta = 0.01
+            mEvent.longitudeDelta = 0.01
+        }else{
+            mEvent.location = false
+        }
         
         mEvent.notes = ekCalEvent.notes
         
@@ -93,18 +110,73 @@ class EKCal_Parser: ObservableObject
             mEvent.notificationDates = notificationDates
         }
         
-        // repetition
-        // TODO: convert repetition somehow
-        mEvent.repetition = ekCalEvent.isDetached
-        
         mEvent.url = ekCalEvent.url?.absoluteString
         
         mEvent.wholeDay = ekCalEvent.isAllDay
         
-        mCalendar.addToEvents(mEvent)
+        if ekCalEvent.hasRecurrenceRules{
+            var numberHits = 0
+            let fetch = ForeverEvent.fetchRequest()
+            fetch.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
+            do{
+                let results = try viewContext.fetch(fetch)
+                numberHits = results.count
+                print(numberHits)
+            } catch {
+                print("requesting error")
+            }
+            //allForeverEvents.nsPredicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier ?? "")
+            if numberHits == 0 {
+                let rule = ekCalEvent.recurrenceRules![0]
+                if rule.recurrenceEnd == nil{
+                    eventForever.key = UUID()
+                    eventForever.startdate = mEvent.startdate!
+                    eventForever.enddate = mEvent.enddate!
+                    eventForever.name = mEvent.name
+                    eventForever.url = mEvent.url
+                    eventForever.notes = mEvent.notes
+                    
+                    if mEvent.location{
+                        eventForever.location = true
+                        eventForever.latitude = mEvent.latitude
+                        eventForever.longitude = mEvent.longitude
+                        eventForever.latitudeDelta = mEvent.latitudeDelta
+                        eventForever.longitudeDelta = mEvent.longitudeDelta
+                    }else{
+                        eventForever.location = false
+                    }
+                    if mEvent.notification{
+                        eventForever.notification = true
+                        if(!mEvent.wholeDay){
+                            eventForever.notificationMinutesBefore = mEvent.notificationMinutesBefore
+                        } else {
+                            eventForever.notificationTimeAtWholeDay = mEvent.notificationTimeAtWholeDay
+                        }
+                    }else{
+                        eventForever.notification = false
+                    }
+                    
+                    eventForever.repetitionInterval = transformFrequencToString(fre: rule.frequency)
+                    
+                    mCalendar.addToForeverEvents(eventForever)
+                    viewContext.delete(mEvent)
+                    foreverEvent = true
+                }else{
+                    
+                }
+            }
+        }
+        
+        if !foreverEvent{
+            mCalendar.addToEvents(mEvent)
+        }
         
         if(saveSyncUuidAt == true){
-            mEvent.importedFromUUID = ekCalEvent.eventIdentifier
+            if !foreverEvent{
+                mEvent.importedFromUUID = ekCalEvent.eventIdentifier
+            }else{
+                eventForever.importedFromUUID = ekCalEvent.eventIdentifier
+            }
         }
         
         try! viewContext.save()
@@ -187,6 +259,21 @@ class EKCal_Parser: ObservableObject
             return false
         @unknown default:
             return false
+        }
+    }
+    
+    func transformFrequencToString(fre: EKRecurrenceFrequency) -> String {
+        switch fre{
+        case .daily:
+            return "Daily"
+        case .weekly:
+            return "Weekly"
+        case .monthly:
+            return "Monthly"
+        case .yearly:
+            return "Yearly"
+        default:
+            return "Daily"
         }
     }
     
