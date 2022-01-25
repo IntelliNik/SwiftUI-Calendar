@@ -96,7 +96,7 @@ struct Part3View: View {
         {
             if (row <= 28)
             {
-                Divider()
+                Rectangle().fill(Color(UIColor.lightGray)).frame(height: 0.75).padding(.trailing, 0.5)
             }
         }
     }
@@ -126,7 +126,7 @@ struct Part4View: View {
                 }
             }
         }
-        Divider()
+        Rectangle().fill(Color(UIColor.lightGray)).frame(height: 0.75).padding(.trailing, 0.5)
     }
 }
 
