@@ -224,6 +224,25 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    private func searchForEventInEKCal(ekCal: EKCalendar, uuidEKEvent: String)->[EKEvent]{
+        //search in past
+        for iteration in 1...25{
+            let fetched = getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal)
+            if let found = fetched.first(where: {$0.eventIdentifier == uuidEKEvent}) {
+                return [found]
+            }
+        }
+        // seach in future
+        for iteration in 1...25{
+            let fetched = getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal)
+            if let found = fetched.first(where: {$0.eventIdentifier == uuidEKEvent}) {
+                return [found]
+            }
+        }
+        // nothing found...
+        return []
+    }
+    
     private func getEventsEKCal100Years(ekCal: EKCalendar)->[EKEvent]{
         var eventEKCalPast100Years: [EKEvent] = []
         for iteration in 1...25{
@@ -259,17 +278,17 @@ class EKCal_Parser: ObservableObject
             // COMPARING UUIDs OF THE EVENTS TO DERTERMINE WHICH TO IMPORT/EXPORT
             // EXPORT
             var eventsToAddInEkCal: [Event] = []
+            var eventsToCheckForUpdates: [Event] = []
             for eventMCal in eventsMCal {
                 if(uuidsEKCal.contains(eventMCal.importedFromUUID)){
-                    // skip existing events
-                    continue
+                    // collect existing events to check for updates later on
+                    eventsToCheckForUpdates.append(eventMCal)
                 }else{
                     // collect events to add
                     eventsToAddInEkCal.append(eventMCal)
                 }
             }
             print("TO EXPORT", eventsToAddInEkCal.map{$0.name})
-            
             // Export new events to EKCal and save syncUUID to remember the event synced with
             if(!ekCal!.isImmutable){
                 for mEvent in eventsToAddInEkCal{
@@ -298,10 +317,27 @@ class EKCal_Parser: ObservableObject
                 saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
             }
             
-            // CHECK FOR CHANGES INSIDE EVENTS
-            // TODO
+            // CHECK FOR CHANGES INSIDE THE REMAINING
+            for mEvent in eventsToCheckForUpdates{
+                alignEvents(mEvent: mEvent, ekCal: ekCal!)
+            }
             
             print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
         }
+    }
+    
+    private func alignEvents(mEvent: Event, ekCal: EKCalendar){
+        let ekEventUUID = mEvent.importedFromUUID
+        let ekEventSearchResults = searchForEventInEKCal(ekCal: ekCal, uuidEKEvent: ekEventUUID!)
+        
+        if(ekEventSearchResults.count != 1){
+            print("Warning, corresponding event in the iPhone calendar not found!")
+            return
+        }
+        
+        let ekEvent = ekEventSearchResults[0]
+        
+        // COMPARE EVENT PROPERTIES HERE
+        
     }
 }
