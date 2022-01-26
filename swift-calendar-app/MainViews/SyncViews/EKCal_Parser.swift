@@ -278,11 +278,10 @@ class EKCal_Parser: ObservableObject
             // COMPARING UUIDs OF THE EVENTS TO DERTERMINE WHICH TO IMPORT/EXPORT
             // EXPORT
             var eventsToAddInEkCal: [Event] = []
-            var eventsToCheckForUpdates: [Event] = []
             for eventMCal in eventsMCal {
                 if(uuidsEKCal.contains(eventMCal.importedFromUUID)){
-                    // collect existing events to check for updates later on
-                    eventsToCheckForUpdates.append(eventMCal)
+                    // skip the events that are existing in both calendars
+                    continue
                 }else{
                     // collect events to add
                     eventsToAddInEkCal.append(eventMCal)
@@ -317,27 +316,7 @@ class EKCal_Parser: ObservableObject
                 saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
             }
             
-            // CHECK FOR CHANGES INSIDE THE REMAINING
-            for mEvent in eventsToCheckForUpdates{
-                alignEvents(mEvent: mEvent, ekCal: ekCal!)
-            }
-            
             print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
         }
-    }
-    
-    private func alignEvents(mEvent: Event, ekCal: EKCalendar){
-        let ekEventUUID = mEvent.importedFromUUID
-        let ekEventSearchResults = searchForEventInEKCal(ekCal: ekCal, uuidEKEvent: ekEventUUID!)
-        
-        if(ekEventSearchResults.count != 1){
-            print("Warning, corresponding event in the iPhone calendar not found!")
-            return
-        }
-        
-        let ekEvent = ekEventSearchResults[0]
-        
-        // COMPARE EVENT PROPERTIES HERE
-        
     }
 }

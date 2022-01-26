@@ -259,7 +259,6 @@
 				75048904279B32ED00B92F4C /* SyncViews */,
 				A0D30B222796F1C700EB1F22 /* DayView */,
 				7727CC50278F522800C9B7FE /* WeekView */,
-				35EE958D27982D7C00B6F7CD /* EditForeverEventView.swift */,
 				779BF16B2781B40600DCFBEB /* AllEventsView */,
 				35B6832D277A182E00D9EBAC /* MonthView */,
 				35FC5CAB2779C56E009033C5 /* YearView */,
@@ -599,7 +598,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DailyWidget/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Daily Overview";
@@ -611,7 +610,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app.DailyWidget";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app.DailyWidget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
@@ -780,7 +779,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = UQGM52CY44;
+				DEVELOPMENT_TEAM = QMQ5R6KV6T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "swift-calendar-app/Info.plist";
@@ -798,7 +797,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "lw.swift-calendar-app";
+				PRODUCT_BUNDLE_IDENTIFIER = "niklas.swift-calendar-app";
 				PRODUCT_NAME = Calendar;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
