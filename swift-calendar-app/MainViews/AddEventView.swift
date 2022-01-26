@@ -37,8 +37,8 @@ struct AddEventView: View {
     @State private var repetition = false
     let repetitionIntevals = ["Daily", "Weekly", "Monthly", "Yearly"]
     @State private var repetitionInterval = "Daily"
-    let repeatUntilModes = ["Repetitions", "End Date","Forever"]
-    @State private var repeatUntil = "Repetitions"
+    let repeatUntilModes = ["Forever", "Repetitions", "End Date"]
+    @State private var repeatUntil = "Forever"
     @State private var amountOfRepetitions = "10"
     @State private var foreverEvent = false
     
@@ -396,12 +396,15 @@ struct AddEventView: View {
                         saveEvent = true
                         
                         let event = Event(context: moc)
+                        
                         event.key = UUID()
+                        
                         if name != ""{
                             event.name = name
                         } else {
                             event.name = "Event"
                         }
+                        
                         event.startdate = startDate
                         
                         if(endDate < startDate){
@@ -411,6 +414,7 @@ struct AddEventView: View {
                         }
                         
                         event.wholeDay = wholeDay
+                        
                         // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
                             event.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
@@ -419,6 +423,7 @@ struct AddEventView: View {
                         if(notes != ""){
                             event.notes = notes
                         }
+                        
                         if (location == "Current"){
                             if saveCurrentLocation{
                                 event.location = true

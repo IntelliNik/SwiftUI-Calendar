@@ -39,19 +39,19 @@ struct ShowEventView: View {
                 }.padding()
                 Section{
                     HStack{
-                        Text(event.startdate!, style: .date)
+                        Text(event.startdate ?? Date.now, style: .date)
                         Spacer()
                         Image(systemName: "arrow.forward")
                         Spacer()
-                        Text(event.enddate!, style: .date)
+                        Text(event.enddate ?? Date.now, style: .date)
                     }.padding()
                     if(!event.wholeDay){
                         HStack{
-                            Text(event.startdate!, style: .time)
+                            Text(event.startdate ?? Date.now, style: .time)
                             Spacer()
                             Image(systemName: "clock.fill")
                             Spacer()
-                            Text(event.enddate!, style: .time)
+                            Text(event.enddate ?? Date.now, style: .time)
                         }.padding()
                     }
                 }
@@ -76,7 +76,7 @@ struct ShowEventView: View {
                         Image(systemName: "repeat")
                         Spacer()
                         if(event.repetition){
-                            Text("\(event.repetitionInterval!)")
+                            Text("\(event.repetitionInterval ?? "Daily")")
                         }else {
                             Text("None")
                         }
@@ -134,12 +134,6 @@ struct ShowEventView: View {
             .toolbar{
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    /*
-                     NavigationView{
-                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                     */
-                    
                     Button(action: {dismiss()}){
                         HStack{
                             Image(systemName: "chevron.left")
@@ -164,10 +158,18 @@ struct ShowEventView: View {
                     }
                     .sheet(isPresented: $confirmationShown) {
                         EditEventView(event: event, locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
+                            .onDisappear(perform: {
+                            confirmationShown = false
+                        })
                     }
                 }
             }
         }
+        .onChange(of: confirmationShown, perform: {_ in
+            if event.key == nil {
+                dismiss()
+            }
+        })
     }
 }
 

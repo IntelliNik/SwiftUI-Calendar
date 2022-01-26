@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CoreLocation
-
 @main
 struct CalendarApp: App {
     @State var saveSucessful = true
@@ -45,7 +44,7 @@ struct CalendarApp: App {
         WindowGroup {
             ZStack{
                 if(showConfirmationBox){
-                    ConfirmationBoxView(success: saveSucessful, text: confirmationBoxText)
+                    ConfirmationBoxView(mode: saveSucessful ? .success : .fail, text: confirmationBoxText)
                     // show on top, even on top of menu
                         .zIndex(2)
                 }
@@ -74,6 +73,8 @@ struct CalendarApp: App {
                         .environment(\.managedObjectContext, dataController.container.viewContext)
                     ZStack(alignment: .leading){
                         MainView(containedView: $selectedView)
+                            .environment(\.managedObjectContext, dataController.container.viewContext)
+                        
                             .sheet(isPresented: $showAddEventSheet, onDismiss: {
                                 confirmationBoxText = saveSucessful ? "Event saved" : "Event discarded"
                                 showConfirmationBox = true
@@ -103,6 +104,19 @@ struct CalendarApp: App {
                             }
                     }
                 }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
+                    UIApplication.shared.applicationIconBadgeNumber = 0
+                    if let appiconcolor =  UserDefaults.standard.string(forKey: "appIcon") {
+                        let current_icon = UIApplication.shared.alternateIconName == nil ? "AppIcon-Light" : UIApplication.shared.alternateIconName
+                        if ((appiconcolor=="AppIcon-Dark") && !(current_icon == "AppIcon-Dark")) {
+                            UIApplication.shared.setAlternateIconName("AppIcon-Dark")
+                        }
+                        else if ((appiconcolor=="AppIcon-Light") && !(current_icon == "AppIcon-Light")) {
+                            UIApplication.shared.setAlternateIconName(nil)
+                        }
+                    }
+                        }
+                
             }
             .gesture(drag)
             .animation(.easeInOut, value: showConfirmationBox)

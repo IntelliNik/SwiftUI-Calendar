@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MonthViewMonthAndYear: View {
     @Binding var dateComponents: DateComponents
+    @AppStorage("weekNumbers") private var showWeekNumbers = true
     
     let columns = [
             GridItem(.flexible()),
@@ -18,6 +19,17 @@ struct MonthViewMonthAndYear: View {
             GridItem(.flexible()),
             GridItem(.flexible()),
             GridItem(.flexible())
+    ]
+    
+    let columnsWithWeekNumber = [
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible()),
+        GridItem(.flexible())
     ]
     
     var body: some View {
@@ -36,12 +48,19 @@ struct MonthViewMonthAndYear: View {
                     
             }.padding(.horizontal)
             Spacer()
-                .frame(minHeight: 10, maxHeight: 10)
+                .frame(minHeight: 10, maxHeight: 15)
             //weekdays
-            LazyVGrid(columns: columns, spacing: 15) {
-                ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
-                    Text(weekday)
-                        .font(.subheadline)
+            LazyVGrid(columns: showWeekNumbers ? columnsWithWeekNumber : columns, spacing: 15) {
+                if showWeekNumbers {
+                    ForEach(["", "Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
+                        Text(weekday)
+                            .font(.subheadline)
+                    }
+                } else {
+                    ForEach(["Mo", "Tu", "Wed", "Thu", "Fri", "Sat", "Sun"], id:\.self) { weekday in
+                        Text(weekday)
+                            .font(.subheadline)
+                    }
                 }
             }.padding(.horizontal)
         }

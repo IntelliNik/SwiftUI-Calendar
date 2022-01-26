@@ -17,6 +17,7 @@ class MonthViewModel: ObservableObject
     private var endDayOfMonth: DateComponents?
     
     @Published var daysOfMonth = [String?]()
+    @Published var daysOfMonthWithWeek = [String?]()
 
     init(dateComponents: DateComponents) {
         initMonths(dateComponents: dateComponents)
@@ -38,17 +39,27 @@ class MonthViewModel: ObservableObject
         //we need too transform the weekday component so monday is mapped to 1 instead of sunday
         let transformedStartWeekday = transformWeekdays(date: Calendar.current.date(from: startDayOfMonth!)!)
         
+        daysOfMonthWithWeek.append("W\(self.startDayOfMonth?.weekOfYear ?? 0)")
+        
         //put in nils so the view is filled accordingly
         if(transformedStartWeekday != 1){
             for _ in 1...(transformedStartWeekday! - 1) {
                 daysOfMonth.append(nil)
+                daysOfMonthWithWeek.append(nil)
             }
         }
         
         var iterateDay = startDayOfMonth
+        var lastWeekOfYear = self.startDayOfMonth?.weekOfYear
         
         for index in 1...(endDayOfMonth?.day)! {
             daysOfMonth.append( "\(index)" )
+            
+            if lastWeekOfYear != iterateDay?.weekOfYear {
+                lastWeekOfYear = iterateDay?.weekOfYear
+                daysOfMonthWithWeek.append("W\(lastWeekOfYear ?? 0)")
+            }
+            daysOfMonthWithWeek.append( "\(index)" )
             iterateDay = getNextDay(components: iterateDay!)
         }
     }

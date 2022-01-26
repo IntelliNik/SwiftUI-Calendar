@@ -10,11 +10,10 @@ import SwiftUI
 struct MonthViewDayBox: View {
     var date : Int //Todo: replace with actual day
     
-    @State var width: CGFloat
-    @State var length: CGFloat
-    @State var fontSize: CGFloat?
-    @State var rectangle: Bool?
-    @State var markToday: Bool?
+    var width: CGFloat
+    var length: CGFloat
+    @State var fontSize: CGFloat? = nil
+    @State var rectangle: Bool? = nil
     
     @EnvironmentObject var currentTime: CurrentTime
     @EnvironmentObject var viewModel: MonthViewModel
@@ -29,7 +28,7 @@ struct MonthViewDayBox: View {
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
                 .overlay(Text(String(date))
-                            .foregroundColor((viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
+                            .foregroundColor((viewModel.displayedMonth?.year == currentTime.components.year && viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
                 .font(.system(size: fontSize ?? 20))
         }
     }

@@ -18,7 +18,8 @@ struct EditCalendarView: View {
         entity: MCalendar.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
-        ]
+        ],
+        predicate: NSPredicate(format: "defaultCalendar == NO")
     ) var calendars: FetchedResults<MCalendar>
     
     @Environment(\.managedObjectContext) var moc
@@ -27,7 +28,7 @@ struct EditCalendarView: View {
     var body: some View {
         ZStack{
             if(showConfirmation){
-                ConfirmationBoxView(success: true, text: "Changes saved").zIndex(2)
+                ConfirmationBoxView(mode: .success, text: "Changes saved").zIndex(2)
             }
             NavigationView {
                 List {

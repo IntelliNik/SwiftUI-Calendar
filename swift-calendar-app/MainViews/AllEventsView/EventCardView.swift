@@ -106,8 +106,8 @@ struct EventCardView: View {
             return Alert(
                 title: Text(event.name ?? ""),
                    message: Text("Delete event?"),
-                   primaryButton:
-                        .cancel(),
+                primaryButton: .destructive(Text("Cancel")),
+            
                    secondaryButton: .destructive(
                        Text("Delete"),
                        action: {
@@ -115,7 +115,7 @@ struct EventCardView: View {
                            dismiss()
                        }
                    )
-                )
+            )
             }
     }
     
@@ -173,7 +173,7 @@ struct ExtendedEventCard: View{
     
     struct EventListView_Previews: PreviewProvider {
         static var previews: some View {
-            let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
+            let _ = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
             VStack{
                 //EventCardView(calendarColor: .red, name: "Event 1", wholeDay: true, startDate: //Date.now, endDate: Date.now, repetition: true)
                 /*

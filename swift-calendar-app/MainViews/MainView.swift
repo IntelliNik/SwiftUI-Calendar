@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import EventKit
+import EventKitUI
 
 enum ContainedView{
     case day
@@ -13,12 +15,15 @@ enum ContainedView{
     case month
     case year
     case allEvents
+    case sync
 }
 
 struct MainView: View {
     @Binding var containedView: ContainedView
     @State var updateView = false
     @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
+
+    @Environment(\.managedObjectContext) var moc
     
     var body: some View {
         switch containedView{
@@ -43,9 +48,18 @@ struct MainView: View {
         case .allEvents:
             AllEventsView()
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+            
+        case .sync:
+            SyncCalendarsView(parser: EKCal_Parser(viewContext: moc))
+                .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+            
         }
+        
+        
+
     }
 }
+
 
 struct CalendarView_Previews: PreviewProvider {
     static var previews: some View {
