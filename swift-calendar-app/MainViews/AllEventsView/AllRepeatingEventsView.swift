@@ -112,14 +112,14 @@ struct AllRepeatingEventsView: View {
         ZStack(alignment: .leading){
             ScrollViewReader { reader in
                 ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading){
+                    VStack(alignment: .leading) {
                         if (eventsDaily.count > 0) {
                             Text("Current daily events")
                             
                             ForEach(eventsDaily, id: \.self) { event in
                                 
                                 //event.repetitionInterval
-                                if(currentlyExtended.0 == event){
+                                if (currentlyExtended.0 == event) {
                                     ExtendedEventCard(event: event).onTapGesture(){
                                         withAnimation{
                                             currentlyExtended = (nil,nil)
@@ -129,7 +129,7 @@ struct AllRepeatingEventsView: View {
                                     .onAppear {
                                         self.refreshID = UUID()
                                     }
-                                } else{
+                                } else {
                                     EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
                                         withAnimation{
                                             currentlyExtended = (event,nil)
@@ -152,7 +152,7 @@ struct AllRepeatingEventsView: View {
                             
                             ForEach(fEventsDaily, id: \.self) { event in
                                 
-                                if(currentlyExtended.1 == event){
+                                if (currentlyExtended.1 == event) {
                                     ExtendedForeverEventCard(event: event).onTapGesture(){
                                         withAnimation{
                                             currentlyExtended = (nil,nil)
@@ -162,7 +162,7 @@ struct AllRepeatingEventsView: View {
                                     .onAppear {
                                         self.refreshID = UUID()
                                     }
-                                } else{
+                                } else {
                                     ForeverEventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
                                         withAnimation{
                                             currentlyExtended = (nil,event)
