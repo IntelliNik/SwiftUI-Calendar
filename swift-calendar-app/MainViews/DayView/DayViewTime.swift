@@ -15,6 +15,7 @@ struct DayViewTime: View {
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     @EnvironmentObject var currentTime: CurrentTime
+    @Environment(\.colorScheme) var darkMode
     
     func filterEventsForHour(hour: Int) -> [Event]{
         var foundEvents: [Event] = []
@@ -36,9 +37,15 @@ struct DayViewTime: View {
                             GeometryReader{ geometry in
                                 HStack{
                                     ZStack{
+                                        if darkMode == .light {
                                         Text("\(String(hour)):00")
                                             .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
                                             .foregroundColor((currentTime.components.day == dateComponents.day && currentTime.components.hour == hour) ? Color(getAccentColorString(from: colorScheme)) : .black)
+                                        } else {
+                                            Text("\(String(hour)):00")
+                                                .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
+                                                .foregroundColor((currentTime.components.day == dateComponents.day && currentTime.components.hour == hour) ? Color(getAccentColorString(from: colorScheme)) : .white)
+                                        }
                                     }
                                     ZStack{
                                         VStack(alignment: .leading){
