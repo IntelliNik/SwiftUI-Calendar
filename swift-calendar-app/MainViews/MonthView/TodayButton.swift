@@ -20,7 +20,7 @@ struct TodayButton: View {
         ZStack{
             Capsule()
                 .fill(Color(getAccentColorString(from: colorScheme)))
-                .frame(width: expand ? 1500 : 100, height: expand ? 1500 : 60)
+                .frame(width: expand ? 1500 : 80, height: expand ? 1500 : 40)
             Text("Today")
                 .foregroundColor(.white)
                 .font(.custom("MyToday", size: 25))
