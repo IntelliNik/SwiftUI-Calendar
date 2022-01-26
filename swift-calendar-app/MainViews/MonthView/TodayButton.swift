@@ -13,24 +13,33 @@ struct TodayButton: View {
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
+    @State var expand = false
+    @State var showText = true
+    
     var body: some View {
-        Button(action: {
-            dateComponents = getToday()
-        }, label: {
+        ZStack{
+            Capsule()
+                .fill(Color(getAccentColorString(from: colorScheme)))
+                .frame(width: expand ? 1500 : 100, height: expand ? 1500 : 60)
             Text("Today")
                 .foregroundColor(.white)
                 .font(.custom("MyToday", size: 25))
                 .fontWeight(.heavy)
-        })
-        .padding(5)
-        .background(
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(Color(getAccentColorString(from: colorScheme)))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .strokeBorder(Color(getAccentColorString(from: colorScheme)), lineWidth: 1)
-        )
-        
+                .opacity(showText ? 1 : 0)
+        }
+        .onTapGesture {
+            showText = false
+            withAnimation{
+                expand = true
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, qos: .background) {
+                dateComponents = getToday()
+                withAnimation{
+                    expand = false
+                }
+                showText = true
+            }
+        }
     }
 }
 
