@@ -394,6 +394,7 @@ struct EditForeverEventView: View {
                             event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                         } else {
                             event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                            event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                         }
                         
                     } else{
@@ -457,6 +458,7 @@ struct EditForeverEventView: View {
                             event2.notificationMinutesBefore = Int32(notificationMinutesBefore)
                         } else {
                             event2.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                            event2.notificationMinutesBefore = Int32(notificationMinutesBefore)
                         }
                         
                     } else {
@@ -545,7 +547,8 @@ struct EditForeverEventView: View {
                     
                     moc.delete(event)
                 }
-                    
+
+                updateNotification(event: event)    
                 try? moc.save()
                     
                 withAnimation{
@@ -597,6 +600,7 @@ struct EditForeverEventView: View {
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
     
@@ -620,6 +624,8 @@ struct EditForeverEventView: View {
                 event1.notificationMinutesBefore = event2.notificationMinutesBefore
             } else {
                 event1.notificationTimeAtWholeDay = event2.notificationTimeAtWholeDay
+                event1.notificationMinutesBefore = event2.notificationMinutesBefore
+
             }
         }else{
             event1.notification = false

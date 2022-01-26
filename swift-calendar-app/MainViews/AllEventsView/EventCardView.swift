@@ -125,6 +125,7 @@ struct EventCardView: View {
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
 }

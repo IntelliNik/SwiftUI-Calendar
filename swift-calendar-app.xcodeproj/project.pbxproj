@@ -236,6 +236,7 @@
 		77046DC2278455FF001DA0DA /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				36DEFCC6279E2E5800AA9D9F /* NotificationManager.swift */,
 				77046DC0278455FC001DA0DA /* HelperFunctions.swift */,
 				77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */,
 			);
@@ -530,6 +531,7 @@
 				779BF16D2781B42000DCFBEB /* EventCardView.swift in Sources */,
 				7706517527847ADF008390EC /* EditCalendarView.swift in Sources */,
 				7727CC56278F523500C9B7FE /* WeekViewCalendar.swift in Sources */,
+				36DEFCC7279E2E5800AA9D9F /* NotificationManager.swift in Sources */,
 				7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */,
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
 				77046DC1278455FC001DA0DA /* HelperFunctions.swift in Sources */,

@@ -406,6 +406,7 @@ struct EditEventView: View {
                                     mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     mevent.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -448,6 +449,7 @@ struct EditEventView: View {
                                     eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 } else {
                                     eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 }
                             }else{
                                 eventForever.notification = false
@@ -524,6 +526,7 @@ struct EditEventView: View {
                                 newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             } else {
                                 newEvent.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             }
                             
                         } else {
@@ -579,6 +582,7 @@ struct EditEventView: View {
                                     event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -682,6 +686,7 @@ struct EditEventView: View {
                                         eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                     } else {
                                         eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                     }
                                 }else{
                                     eventForever.notification = false
@@ -732,6 +737,7 @@ struct EditEventView: View {
                                     event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -1158,6 +1164,7 @@ struct EditEventView: View {
                                     mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     mevent.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -1200,6 +1207,7 @@ struct EditEventView: View {
                                     eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 } else {
                                     eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 }
                             }else{
                                 eventForever.notification = false
@@ -1276,6 +1284,7 @@ struct EditEventView: View {
                                 newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             } else {
                                 newEvent.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             }
                             
                         } else {
@@ -1331,6 +1340,7 @@ struct EditEventView: View {
                                     event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -1434,6 +1444,7 @@ struct EditEventView: View {
                                         eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                     } else {
                                         eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                     }
                                 }else{
                                     eventForever.notification = false
@@ -1484,6 +1495,7 @@ struct EditEventView: View {
                                     event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 } else {
                                     event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
                                 }
                                 
                             } else{
@@ -1559,6 +1571,7 @@ struct EditEventView: View {
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
     
@@ -1590,6 +1603,7 @@ struct EditEventView: View {
                 event1.notificationMinutesBefore = event2.notificationMinutesBefore
             } else {
                 event1.notificationTimeAtWholeDay = event2.notificationTimeAtWholeDay
+                event1.notificationMinutesBefore = event2.notificationMinutesBefore
             }
         }else{
             event1.notification = false
