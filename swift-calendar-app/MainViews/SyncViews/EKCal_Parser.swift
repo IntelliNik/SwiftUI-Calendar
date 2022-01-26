@@ -57,7 +57,7 @@ class EKCal_Parser: ObservableObject
             
             try! viewContext.save()
             
-            let ekCalEvents = getEventsEKCal100Years(ekCal: ekCal)
+            let ekCalEvents = getEventsEKCal40Years(ekCal: ekCal)
             
             // Create Events, store them in the newly created calendar
             ekCalEvents.forEach{ ekCalEvent in
@@ -243,19 +243,19 @@ class EKCal_Parser: ObservableObject
         return []
     }
     
-    private func getEventsEKCal100Years(ekCal: EKCalendar)->[EKEvent]{
-        var eventEKCalPast100Years: [EKEvent] = []
-        for iteration in 1...25{
-            eventEKCalPast100Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal))
+    private func getEventsEKCal40Years(ekCal: EKCalendar)->[EKEvent]{
+        var eventEKCalPast20Years: [EKEvent] = []
+        for iteration in 1...5{
+            eventEKCalPast20Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal))
         }
         
-        var eventEKCalFuture100Years: [EKEvent] = []
-        for iteration in 1...25{
-            eventEKCalFuture100Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal))
+        var eventEKCalFuture20Years: [EKEvent] = []
+        for iteration in 1...5{
+            eventEKCalFuture20Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal))
         }
         
         // Merge past and future
-        return eventEKCalPast100Years + eventEKCalFuture100Years
+        return eventEKCalPast20Years + eventEKCalFuture20Years
     }
     
     func synchronizeCalendars(){
@@ -269,7 +269,7 @@ class EKCal_Parser: ObservableObject
             
             let ekCal = eventStore.calendar(withIdentifier: mCalendar.synchronizedWithCalendarIdentifier!)
             
-            let eventsEKCal = getEventsEKCal100Years(ekCal: ekCal!)
+            let eventsEKCal = getEventsEKCal40Years(ekCal: ekCal!)
             
             let eventsMCal = getEventsInMCalendar(mCalendar: mCalendar)
             let uuidsEKCal = eventsEKCal.map{ $0.eventIdentifier }
