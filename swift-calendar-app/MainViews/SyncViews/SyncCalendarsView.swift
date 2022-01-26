@@ -68,6 +68,8 @@ struct SyncCalendarsView: View {
                                     Text(calendar.name ?? "Unknown Calendar").tag(index)
                                 }
                             }
+                            .navigationBarTitle("")
+                            .navigationBarHidden(true)
                             HStack{
                                 Button(action: {
                                     if(calendarsToSync.count != 0){
@@ -120,7 +122,7 @@ struct SyncCalendarsView: View {
                         Section{
                             Text("Currently connected Calendars")
                                 .font(.headline)
-                                .confirmationDialog("Stop synchronizing Calendar \(stopSyncName) ?", isPresented: $showAlert, titleVisibility: .visible) {
+                                .confirmationDialog("Cut the connection for \(stopSyncName) ?", isPresented: $showAlert, titleVisibility: .visible) {
                                     Button("Yes", role: .destructive) {
                                         syncedCalendars[stopSyncIndex!].synchronized = false
                                         try! moc.save()
@@ -153,7 +155,7 @@ struct SyncCalendarsView: View {
                                 }
                                 HStack{
                                     Spacer()
-                                    Text("Tap a calendar to stop synchronizing")
+                                    Text("Tap on a calendar inside the list to cut the connection to the iPhone calendar.")
                                         .font(.caption)
                                 }
                             } else{
@@ -166,7 +168,7 @@ struct SyncCalendarsView: View {
                         }
                         Section{
                             Button(action: {
-                                textLoading = "Sync in progress..."
+                                textLoading = "Transfer in progress..."
                                 withAnimation{
                                     showLoading = true
                                 }
@@ -178,7 +180,7 @@ struct SyncCalendarsView: View {
                                     
                                     parser.synchronizeCalendars()
                                     
-                                    confirmationText = "Sync completed"
+                                    confirmationText = "Transfer completed"
                                     withAnimation{
                                         showConfirmation = true
                                     }
@@ -191,12 +193,13 @@ struct SyncCalendarsView: View {
                                 }
                             }){
                                 HStack{
-                                    Text("Synchronize Calendars now")
-                                        .foregroundColor(.red)
+                                    Text("Transfer newly created events")
                                     Spacer()
-                                    Image(systemName: "arrow.triangle.2.circlepath")
+                                    Image(systemName: "arrow.left.arrow.right")
                                 }
                             }
+                            Text("This action will import newly created events from your iPhone calendar and export newly created events from you app calendar.")
+                                .font(.caption)
                         }
                     }
                 }
