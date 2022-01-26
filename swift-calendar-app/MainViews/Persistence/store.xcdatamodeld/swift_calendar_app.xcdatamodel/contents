@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21C52" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Event" representedClassName="Event" syncable="YES" codeGenerationType="class">
-        <attribute name="enddate" attributeType="Date" usesScalarValueType="NO"/>
+    <entity name="AbstractEvent" representedClassName="AbstractEvent" isAbstract="YES" syncable="YES" codeGenerationType="class">
         <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+    </entity>
+    <entity name="Event" representedClassName="Event" parentEntity="AbstractEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="enddate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="location" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -24,9 +26,8 @@
         <attribute name="wholeDay" attributeType="Boolean" usesScalarValueType="YES"/>
         <relationship name="calendar" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="MCalendar" inverseName="events" inverseEntity="MCalendar"/>
     </entity>
-    <entity name="ForeverEvent" representedClassName="ForeverEvent" syncable="YES" codeGenerationType="class">
+    <entity name="ForeverEvent" representedClassName="ForeverEvent" parentEntity="AbstractEvent" syncable="YES" codeGenerationType="class">
         <attribute name="enddate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="key" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitudeDelta" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="location" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -52,8 +53,9 @@
         <relationship name="foreverEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="ForeverEvent" inverseName="calendar" inverseEntity="ForeverEvent"/>
     </entity>
     <elements>
-        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="359"/>
+        <element name="Event" positionX="-369.4104614257812" positionY="145.0928955078125" width="128" height="344"/>
+        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="269"/>
         <element name="MCalendar" positionX="-63" positionY="99" width="128" height="119"/>
-        <element name="ForeverEvent" positionX="-216" positionY="261" width="128" height="284"/>
+        <element name="AbstractEvent" positionX="-216" positionY="261" width="128" height="44"/>
     </elements>
 </model>

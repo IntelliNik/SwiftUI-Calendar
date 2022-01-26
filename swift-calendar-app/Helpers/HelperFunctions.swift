@@ -132,7 +132,7 @@ let Months = ["January", "February", "March", "April", "May", "June", "July", "A
 
 
 enum RepetitionInterval : String {
-    case daily, weekly, monthly, yearly
+    case Daily, Weekly, Monthly, Yearly
 }
 
 let Month_short = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]

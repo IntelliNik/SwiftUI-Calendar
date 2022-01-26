@@ -16,7 +16,7 @@ struct AllEventsView: View {
     
     @State private var refreshID = UUID()
     
-    @State var currentlyExtended: Event?
+    @State var currentlyExtended: (Event?, ForeverEvent?) = (nil, nil)
     
     @FetchRequest(
         entity: Event.entity(),
@@ -24,6 +24,13 @@ struct AllEventsView: View {
             NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
         ]
     ) var events: FetchedResults<Event>
+    
+    @FetchRequest(
+        entity: ForeverEvent.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \ForeverEvent.startdate, ascending: true),
+        ]
+    ) var fEvents: FetchedResults<ForeverEvent>
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -54,26 +61,50 @@ struct AllEventsView: View {
             ScrollViewReader { reader in
                 ScrollView(showsIndicators: false) {
                     VStack(alignment: .leading){
-                        ForEach(events, id: \.self) { event in
-                            if(currentlyExtended == event){
-                                ExtendedEventCard(event: event).onTapGesture(){
-                                    withAnimation{
-                                        currentlyExtended = nil
+                        ForEach(combine(events, and: fEvents), id: \.self) { abstractEvent in
+                            if let event = abstractEvent as? Event {
+                                if(currentlyExtended.0 == event) {
+                                    ExtendedEventCard(event: event).onTapGesture(){
+                                        withAnimation{
+                                            currentlyExtended = (nil, nil)
+                                        }
+                                    }
+                                    .transition(.slide)
+                                    .onAppear {
+                                        self.refreshID = UUID()
+                                    }
+                                } else {
+                                    EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
+                                        withAnimation{
+                                            currentlyExtended = (event, nil)
+                                        }
+                                    }
+                                    .transition(.slide)
+                                    .onAppear {
+                                        self.refreshID = UUID()
                                     }
                                 }
-                                .transition(.slide)
-                                .onAppear {
-                                    self.refreshID = UUID()
-                                }
-                            } else{
-                                EventCardView(event: event, editButton: false, deleteButton: false).onTapGesture(){
-                                    withAnimation{
-                                        currentlyExtended = event
+                            } else if let fEvent = abstractEvent as? ForeverEvent {
+                                if(currentlyExtended.1 == fEvent){
+                                    ExtendedForeverEventCard(event: fEvent).onTapGesture(){
+                                        withAnimation{
+                                            currentlyExtended = (nil, nil)
+                                        }
                                     }
-                                }
-                                .transition(.slide)
-                                .onAppear {
-                                    self.refreshID = UUID()
+                                    .transition(.slide)
+                                    .onAppear {
+                                        self.refreshID = UUID()
+                                    }
+                                } else {
+                                    ForeverEventCardView(event: fEvent, editButton: false, deleteButton: false).onTapGesture(){
+                                        withAnimation{
+                                            currentlyExtended = (nil, fEvent)
+                                        }
+                                    }
+                                    .transition(.slide)
+                                    .onAppear {
+                                        self.refreshID = UUID()
+                                    }
                                 }
                             }
                         }
