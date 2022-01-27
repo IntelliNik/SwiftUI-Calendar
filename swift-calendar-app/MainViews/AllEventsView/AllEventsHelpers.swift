@@ -59,6 +59,8 @@ func finStr(_ n: Int) -> String {
         return "st"
     case 2:
         return "nd"
+    case 3:
+        return "rd"
     default:
         return "th"
     }

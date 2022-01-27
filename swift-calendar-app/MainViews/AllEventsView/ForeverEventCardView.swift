@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 let weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
+let months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
 struct ForeverEventCardView: View {
     //@StateObject var model: ForeverEventsCardModel
@@ -92,12 +93,16 @@ struct ForeverEventCardView: View {
                     }
                 case .some(.Monthly):
                     if event.wholeDay {
-                        MonthlyWholeDayPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.weekday], from: event.startdate ?? Date.now), enddateComponents: Calendar.current.dateComponents([.weekday], from: event.enddate ?? Date.now))
+                        MonthlyWholeDayPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: event.startdate ?? Date.now), enddateComponents: Calendar.current.dateComponents([.weekday], from: event.enddate ?? Date.now))
                     } else {
-                        MonthlyPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.weekday], from: event.startdate ?? Date.now))
+                        MonthlyPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: event.startdate ?? Date.now))
                     }
                 case .some(.Yearly):
-                    Text("yearly")
+                    if event.wholeDay {
+                        YearlyPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: event.startdate ?? Date.now))
+                    } else {
+                        YearlyWholeDayPresentationView(startdate: event.startdate ?? Date.now, startDateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: event.startdate ?? Date.now), enddateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: event.enddate ?? Date.now))
+                    }
                 }
             }.padding()
             if(!event.wholeDay){
@@ -219,9 +224,7 @@ struct WeeklyWholeDayPresentationView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text("Every week from \(weekdays[startDateComponents.weekday ?? 0]) until \(weekdays[enddateComponents.weekday ?? 0])")
-            }
+            Text("Every week from \(weekdays[startDateComponents.weekday ?? 0]) until \(weekdays[enddateComponents.weekday ?? 0])")
             Spacer()
             HStack {
                 Text("Starting on:")
@@ -238,10 +241,17 @@ struct MonthlyPresentationView: View {
     let startDateComponents: DateComponents
     
     var body: some View {
-        HStack{
-            Text("Every month on the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0)) starting on:")
+        VStack {
+            HStack {
+                Text("Every month on the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0))")
+                Spacer()
+            }
             Spacer()
-            Text(startdate, style: .date)
+            HStack{
+                Text("starting on:")
+                Spacer()
+                Text(startdate, style: .date)
+            }
         }
     }
 }
@@ -273,7 +283,7 @@ struct YearlyPresentationView: View {
     
     var body: some View {
         HStack{
-            Text("Every month on the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0)) starting on:")
+            Text("Every year on the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0)) of \(months[startDateComponents.month ?? 1]) starting on:")
             Spacer()
             Text(startdate, style: .date)
         }
@@ -288,7 +298,7 @@ struct YearlyWholeDayPresentationView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Every month from the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0)) to the \(enddateComponents.day ?? 1)\(finStr(enddateComponents.day ?? 0))")
+                Text("Every year from the \(startDateComponents.day ?? 1)\(finStr(startDateComponents.day ?? 0)) of \(months[startDateComponents.month ?? 1]) to the \(enddateComponents.day ?? 1)\(finStr(enddateComponents.day ?? 0)) of \(months[enddateComponents.month ?? 1])")
             }
             Spacer()
             HStack {
