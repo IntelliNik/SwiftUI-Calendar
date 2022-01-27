@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct AddCalendarView: View {
     @State var confirmationShown = false
@@ -88,8 +89,9 @@ struct AddCalendarView: View {
         calendar.defaultCalendar = false
         calendar.imported = false
         calendar.synchronized = false
-        
         try? moc.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
     }
     
 }

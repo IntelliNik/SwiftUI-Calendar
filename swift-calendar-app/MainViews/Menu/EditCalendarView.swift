@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct EditCalendarView: View {
     @State var saveSucessful = true
@@ -81,6 +82,8 @@ struct EditCalendarView: View {
             }
     }
     try? moc.save()
+    WidgetCenter.shared.reloadAllTimelines()
+
     }
 }
 

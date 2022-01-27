@@ -7,6 +7,8 @@
 
 import SwiftUI
 import MapKit
+import WidgetKit
+
 
 struct EditForeverEventView: View {
     
@@ -550,6 +552,8 @@ struct EditForeverEventView: View {
 
                 updateNotification(event: event)    
                 try? moc.save()
+                WidgetCenter.shared.reloadAllTimelines()
+
                     
                 withAnimation{
                     showConfirmation = true
@@ -602,6 +606,8 @@ struct EditForeverEventView: View {
         }
         removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
     }
     
     func CopyEvent(event1: Event, event2: Event) -> Event{

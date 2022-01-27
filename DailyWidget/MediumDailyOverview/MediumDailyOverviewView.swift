@@ -15,8 +15,9 @@ struct MediumDailyOverviewView: View {
             HStack(spacing: 0){
                 SmallDailyOverviewView(dateComponents: dateComponents)
                     .frame(width: geometry.size.width * 0.4)
-                MonthView(dateComponents: $dateComponents)
-                    .frame(width: geometry.size.width * 0.6)
+                Text("-")
+                //MonthView(dateComponents: $dateComponents)
+                 //   .frame(width: geometry.size.width * 0.6)
             }
         }
     }

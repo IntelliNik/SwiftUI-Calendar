@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct ModifyCalendar: View {
     @State var mcalendar: MCalendar
@@ -49,8 +50,8 @@ struct ModifyCalendar: View {
         }
         .navigationBarItems(leading: Button(action : {
             mcalendar.setValue(colorStrings[color],forKey:"color")
-            
             try? moc.save()
+            WidgetCenter.shared.reloadAllTimelines()
             
             withAnimation{
                 showConfirmation = true

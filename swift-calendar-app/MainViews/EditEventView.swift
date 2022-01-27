@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import WidgetKit
 
 struct EditEventView: View {
     
@@ -749,7 +750,8 @@ struct EditEventView: View {
                     }
                     
                     try? moc.save()
-                    
+                    WidgetCenter.shared.reloadAllTimelines()
+
                     withAnimation{
                         showConfirmation = true
                     }
@@ -1507,7 +1509,8 @@ struct EditEventView: View {
                     }
                     
                     try? moc.save()
-                    
+                    WidgetCenter.shared.reloadAllTimelines()
+
                     withAnimation{
                         showConfirmation = true
                     }
@@ -1573,6 +1576,8 @@ struct EditEventView: View {
         }
         removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
     }
     
     private func searchPredicateRepetitionID(query: UUID) -> NSPredicate? {

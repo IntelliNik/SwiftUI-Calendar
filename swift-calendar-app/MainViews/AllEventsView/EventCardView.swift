@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import WidgetKit
 
 struct EventCardView: View {
     @State var event: Event
@@ -127,6 +128,8 @@ struct EventCardView: View {
         }
         removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
     }
 }
 
