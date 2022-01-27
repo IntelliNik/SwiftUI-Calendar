@@ -459,6 +459,7 @@ struct AddEventView: View {
                                 event.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             } else {
                                 event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             }
                             
                         } else {
@@ -500,6 +501,7 @@ struct AddEventView: View {
                                             break
                                         }
                                         calendars[calendar].addToEvents(eventR)
+                                        scheduleNotification(event: eventR)
                                     }
                                 }
                             }
@@ -533,6 +535,7 @@ struct AddEventView: View {
                                     currentDate = eventR.startdate
                                     if currentDate! <= endRepetitionDate{
                                         calendars[calendar].addToEvents(eventR)
+                                        scheduleNotification(event: eventR)
                                         i = i + 1
                                     } else{
                                         moc.delete(eventR)
@@ -571,6 +574,7 @@ struct AddEventView: View {
                                 eventForever.repetitionInterval = repetitionInterval
                                 
                                 calendars[calendar].addToForeverEvents(eventForever)
+                                scheduleNotification(event: eventForever)
                                 moc.delete(event)
                                 foreverEvent = true
                             }
@@ -583,6 +587,10 @@ struct AddEventView: View {
                         }
                         
                         try! moc.save()
+
+                        if notification && !foreverEvent{
+                            scheduleNotification(event: event)
+                        }
                         
                         dismiss()
                     }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
@@ -610,6 +618,8 @@ struct AddEventView: View {
         event1.wholeDay = event2.wholeDay
         event1.url = event2.url
         event1.notes = event2.notes
+        event1.notificationMinutesBefore = event2.notificationMinutesBefore
+        
         if event2.location{
             event1.location = true
             event1.latitude = event2.latitude

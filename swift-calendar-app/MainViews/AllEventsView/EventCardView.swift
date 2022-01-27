@@ -106,8 +106,8 @@ struct EventCardView: View {
             return Alert(
                 title: Text(event.name ?? ""),
                    message: Text("Delete event?"),
-                   primaryButton:
-                        .cancel(),
+                primaryButton: .destructive(Text("Cancel")),
+            
                    secondaryButton: .destructive(
                        Text("Delete"),
                        action: {
@@ -115,7 +115,7 @@ struct EventCardView: View {
                            dismiss()
                        }
                    )
-                )
+            )
             }
     }
     
@@ -125,6 +125,7 @@ struct EventCardView: View {
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
 }

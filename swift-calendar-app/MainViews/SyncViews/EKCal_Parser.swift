@@ -64,7 +64,7 @@ class EKCal_Parser: ObservableObject
             
             try! viewContext.save()
             
-            let ekCalEvents = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal)
+            let ekCalEvents = getEventsEKCal40Years(ekCal: ekCal)
             
             // Create Events, store them in the newly created calendar
             ekCalEvents.forEach{ ekCalEvent in
@@ -190,15 +190,15 @@ class EKCal_Parser: ObservableObject
     }
     
     
-    private func getEventsInEKCalendar(yearsPast: Int, yearsFuture: Int, calendar: EKCalendar) -> [EKEvent]{
+    private func getEventsInEKCalendar(offsetStartFromToday: Int, offsetEndFromToday: Int, calendar: EKCalendar) -> [EKEvent]{
         let currentCalendar = Calendar.current
         
         var pastComponents = DateComponents()
-        pastComponents.year = -yearsPast
+        pastComponents.year = offsetStartFromToday
         let past = currentCalendar.date(byAdding: pastComponents, to: Date())
         
         var futureComponents = DateComponents()
-        futureComponents.year = yearsFuture
+        futureComponents.year = offsetEndFromToday
         let future = currentCalendar.date(byAdding: futureComponents, to: Date())
         
         var predicate: NSPredicate? = nil
@@ -311,6 +311,40 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    private func searchForEventInEKCal(ekCal: EKCalendar, uuidEKEvent: String)->[EKEvent]{
+        //search in past
+        for iteration in 1...25{
+            let fetched = getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal)
+            if let found = fetched.first(where: {$0.eventIdentifier == uuidEKEvent}) {
+                return [found]
+            }
+        }
+        // seach in future
+        for iteration in 1...25{
+            let fetched = getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal)
+            if let found = fetched.first(where: {$0.eventIdentifier == uuidEKEvent}) {
+                return [found]
+            }
+        }
+        // nothing found...
+        return []
+    }
+    
+    private func getEventsEKCal40Years(ekCal: EKCalendar)->[EKEvent]{
+        var eventEKCalPast20Years: [EKEvent] = []
+        for iteration in 1...5{
+            eventEKCalPast20Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: -(4 * iteration), offsetEndFromToday: -(4 * (iteration-1)), calendar: ekCal))
+        }
+        
+        var eventEKCalFuture20Years: [EKEvent] = []
+        for iteration in 1...5{
+            eventEKCalFuture20Years.append(contentsOf: getEventsInEKCalendar(offsetStartFromToday: 4 * (iteration-1), offsetEndFromToday: 4 * iteration, calendar: ekCal))
+        }
+        
+        // Merge past and future
+        return eventEKCalPast20Years + eventEKCalFuture20Years
+    }
+    
     func synchronizeCalendars(){
         let fr = MCalendar.fetchRequest()
         let predicate = NSPredicate(format: "synchronized == true")
@@ -322,7 +356,8 @@ class EKCal_Parser: ObservableObject
             
             let ekCal = eventStore.calendar(withIdentifier: mCalendar.synchronizedWithCalendarIdentifier!)
             
-            let eventsEKCal = getEventsInEKCalendar(yearsPast: 2, yearsFuture: 2, calendar: ekCal!)
+            let eventsEKCal = getEventsEKCal40Years(ekCal: ekCal!)
+            
             let eventsMCal = getEventsInMCalendar(mCalendar: mCalendar)
             let uuidsEKCal = eventsEKCal.map{ $0.eventIdentifier }
             let uuidsMCal = eventsMCal.map{ $0.importedFromUUID }
@@ -332,7 +367,7 @@ class EKCal_Parser: ObservableObject
             var eventsToAddInEkCal: [Event] = []
             for eventMCal in eventsMCal {
                 if(uuidsEKCal.contains(eventMCal.importedFromUUID)){
-                    // skip existing events
+                    // skip the events that are existing in both calendars
                     continue
                 }else{
                     // collect events to add
@@ -340,7 +375,6 @@ class EKCal_Parser: ObservableObject
                 }
             }
             print("TO EXPORT", eventsToAddInEkCal.map{$0.name})
-            
             // Export new events to EKCal and save syncUUID to remember the event synced with
             if(!ekCal!.isImmutable){
                 for mEvent in eventsToAddInEkCal{
@@ -368,7 +402,6 @@ class EKCal_Parser: ObservableObject
                 //saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCal!, saveSyncUuidAt: mEvent)
                 saveEventinMCalendar(ekCalEvent: ekCalEvent, mCalendar: mCalendar, saveSyncUuidAt: true)
             }
-            
             
             print("Sanity check: \(ekCal!.title) EkCal:\(eventsEKCal.count) MCal:\(eventsMCal.count)")
         }

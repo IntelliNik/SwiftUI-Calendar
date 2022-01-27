@@ -119,21 +119,21 @@ struct MenuView: View {
                             Image(systemName: "square.fill")
                                 .foregroundColor(getColorFromString(stringColor: calendars[index].color ?? "Yellow"))
                                 .imageScale(.large)
+                                .padding(.trailing, 1)
                             Text("\(calendars[index].name!)")
                                 .foregroundColor(.white)
                                 .lineLimit(1)
                                 .frame(maxWidth: .infinity)
-                            if(calendars[index].synchronized){
                                 Button(action: {
                                     currentlySelectedView = .sync
                                     withAnimation{
                                         menuOpen = false
                                     }
                                 }){
-                                    Image(systemName: "dot.radiowaves.up.forward")
+                                    Image(systemName: "arrow.left.arrow.right")
                                         .foregroundColor(.white)
+                                        .opacity(calendars[index].synchronized ? 1 : 0)
                                 }
-                            }
                         }
                         .padding([.top, .bottom])
                     }
