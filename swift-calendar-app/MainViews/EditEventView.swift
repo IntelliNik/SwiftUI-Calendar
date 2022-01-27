@@ -372,10 +372,6 @@ struct EditEventView: View {
                             mevent.setValue(wholeDay,forKey:"wholeDay")
                             mevent.setValue(self.event.notes,forKey:"notes")
                             
-                            // TODO: Wie sollen das Datum verändert werden?
-                            // mevent.setValue(startDate,forKey:"startdate")
-                            // mevent.setValue(endDate,forKey:"enddate")
-                            
                             if(urlString != ""){
                                 mevent.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
                             }
@@ -413,17 +409,6 @@ struct EditEventView: View {
                                 mevent.setValue(false,forKey:"notification")
                             }
                         }
-                        
-                        // ----- TODO: How to handle these two cases?
-                        event.setValue(repeatUntil, forKey: "repetitionUntil")
-                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                        if(repeatUntil == "Repetitions"){
-                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                        }
-                        if(repeatUntil == "End Date"){
-                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                        }
-                        // ------------------
                         
                         if(repeatUntil == "Forever"){
                             let eventForever = ForeverEvent(context: moc)
@@ -475,7 +460,7 @@ struct EditEventView: View {
                             }
                         }
                         
-                    } else if event.repetition && !repetition{
+                    } else {
                         // In this case event was a repeating event but should not be one anymore
                         // Notice that event cannot be an forever event
                         // Case is finished
@@ -541,210 +526,6 @@ struct EditEventView: View {
                         
                         for devent in deleteEvents{
                             moc.delete(devent)
-                        }
-                    }else{
-                        // In this case event was no repeating event
-                        // Maybe it turns into an repeating event.
-                        // Case is finished
-                        if repetition{
-                            event.setValue(wholeDay,forKey:"wholeDay")
-                            event.setValue(startDate,forKey:"startdate")
-                            event.setValue(endDate,forKey:"enddate")
-                            event.setValue(self.event.notes,forKey:"notes")
-                            
-                            if(urlString != ""){
-                                event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
-                            }
-                            
-                            if (location == "Current"){
-                                if saveCurrentLocation{
-                                    event.setValue(true, forKey: "location")
-                                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
-                                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
-                                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                }
-                            } else if (location == "Custom")
-                            {
-                                event.setValue(true, forKey: "location")
-                                event.setValue(customRegion.center.latitude, forKey: "latitude")
-                                event.setValue(customRegion.center.longitude, forKey: "longitude")
-                                event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
-                            } else {
-                                event.setValue(false, forKey: "location")
-                            }
-                            
-                            if notification {
-                                event.setValue(true,forKey:"notification")
-                                if(!wholeDay){
-                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                                } else {
-                                    event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
-                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                                }
-                                
-                            } else{
-                                event.setValue(false,forKey:"notification")
-                            }
-                            
-                            event.setValue(true, forKey: "repetition")
-                            event.setValue(repeatUntil, forKey: "repetitionUntil")
-                            event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                            let repetitionID = UUID()
-                            event.setValue(repetitionID, forKey: "repetitionID")
-                            let myCalendar = Calendar.current
-                            if(repeatUntil == "Repetitions"){
-                                event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                                let repetitionsNumber = event.repetitionAmount
-                                if repetitionsNumber > 1{
-                                    for i in 1...(repetitionsNumber-1) {
-                                        var eventR = Event(context: moc)
-                                        eventR.key = UUID()
-                                        eventR = CopyEvent(event1: eventR, event2: event)
-                                        switch repetitionInterval{
-                                        case "Weekly":
-                                            eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
-                                            eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
-                                        case "Daily":
-                                            eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
-                                            eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
-                                            
-                                        case "Monthly":
-                                            eventR.startdate = myCalendar.date(byAdding: .month, value: Int(i), to: event.startdate!)
-                                            eventR.enddate = myCalendar.date(byAdding: .month, value: Int(i), to: event.enddate!)
-                                            
-                                        case "Yearly":
-                                            eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
-                                            eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
-                                            
-                                        default:
-                                            break
-                                        }
-                                        calendars[calendar].addToEvents(eventR)
-                                    }
-                                }
-                            }
-                            if(repeatUntil == "End Date"){
-                                event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                                var currentDate = event.startdate
-                                var i = 1
-                                while currentDate! < endRepetitionDate{
-                                    var eventR = Event(context: moc)
-                                    eventR.key = UUID()
-                                    eventR = CopyEvent(event1: eventR, event2: event)
-                                    switch repetitionInterval{
-                                    case "Weekly":
-                                        eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
-                                    case "Daily":
-                                        eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
-                                        
-                                    case "Monthly":
-                                        eventR.startdate = myCalendar.date(byAdding: .month, value: i, to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .month, value: i, to: event.enddate!)
-                                        
-                                    case "Yearly":
-                                        eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
-                                        
-                                    default:
-                                        break
-                                    }
-                                    currentDate = eventR.startdate
-                                    if currentDate! <= endRepetitionDate{
-                                        calendars[calendar].addToEvents(eventR)
-                                        i = i + 1
-                                    } else{
-                                        moc.delete(eventR)
-                                    }
-                                }
-                            }
-                            if(repeatUntil == "Forever"){
-                                let eventForever = ForeverEvent(context: moc)
-                                eventForever.key = UUID()
-                                eventForever.startdate = event.startdate!
-                                eventForever.enddate = event.enddate!
-                                eventForever.name = self.event.name
-                                eventForever.url = event.url
-                                eventForever.notes = event.notes
-                                
-                                if event.location{
-                                    eventForever.location = true
-                                    eventForever.latitude = event.latitude
-                                    eventForever.longitude = event.longitude
-                                    eventForever.latitudeDelta = event.latitudeDelta
-                                    eventForever.longitudeDelta = event.longitudeDelta
-                                }else{
-                                    eventForever.location = false
-                                }
-                                if event.notification{
-                                    eventForever.notification = true
-                                    if(!event.wholeDay){
-                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
-                                    } else {
-                                        eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
-                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
-                                    }
-                                }else{
-                                    eventForever.notification = false
-                                }
-                                
-                                eventForever.repetitionInterval = repetitionInterval
-                                
-                                calendars[calendar].addToForeverEvents(eventForever)
-                                moc.delete(event)
-                                foreverEvent = true
-                            }
-                            
-                            if !foreverEvent{
-                                calendars[calendar].addToEvents(event)
-                            }
-                        }else{
-                            event.setValue(wholeDay,forKey:"wholeDay")
-                            event.setValue(startDate,forKey:"startdate")
-                            event.setValue(endDate,forKey:"enddate")
-                            
-                            if(urlString != ""){
-                                event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
-                            }
-                            
-                            if (location == "Current"){
-                                if saveCurrentLocation{
-                                    event.setValue(true, forKey: "location")
-                                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
-                                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
-                                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                }
-                            } else if (location == "Custom")
-                            {
-                                event.setValue(true, forKey: "location")
-                                event.setValue(customRegion.center.latitude, forKey: "latitude")
-                                event.setValue(customRegion.center.longitude, forKey: "longitude")
-                                event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
-                            } else {
-                                event.setValue(false, forKey: "location")
-                            }
-                            
-                            if notification {
-                                event.setValue(true,forKey:"notification")
-                                if(!wholeDay){
-                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                                } else {
-                                    event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
-                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                                }
-                                
-                            } else{
-                                event.setValue(false,forKey:"notification")
-                            }
-                                
-                            event.setValue(false, forKey: "repetition")
                         }
                     }
                     
