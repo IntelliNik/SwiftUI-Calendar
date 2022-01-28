@@ -77,7 +77,9 @@ class EKCal_Parser: ObservableObject
         let mEvent = Event(context: viewContext)
         let eventForever = ForeverEvent(context: viewContext)
         var foreverEvent = false
+        var save = true
         mEvent.name = ekCalEvent.title
+        mEvent.key = UUID()
         
         mEvent.importedFromUUID = ekCalEvent.eventIdentifier
         
@@ -115,20 +117,22 @@ class EKCal_Parser: ObservableObject
         mEvent.wholeDay = ekCalEvent.isAllDay
         
         if ekCalEvent.hasRecurrenceRules{
+            mEvent.repetition = true
             var numberHits = 0
-            let fetch = ForeverEvent.fetchRequest()
-            fetch.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
-            do{
-                let results = try viewContext.fetch(fetch)
-                numberHits = results.count
+            let rule = ekCalEvent.recurrenceRules![0]
+            if rule.recurrenceEnd == nil {
+                print("forever")
+                let fetch = ForeverEvent.fetchRequest()
+                fetch.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
+                do{
+                    let results = try viewContext.fetch(fetch)
+                    numberHits = results.count
+                } catch {
+                    print("requesting error")
+                }
                 print(numberHits)
-            } catch {
-                print("requesting error")
-            }
-            //allForeverEvents.nsPredicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier ?? "")
-            if numberHits == 0 {
-                let rule = ekCalEvent.recurrenceRules![0]
-                if rule.recurrenceEnd == nil{
+                if numberHits == 0{
+                    eventForever.importedFromUUID = mEvent.importedFromUUID
                     eventForever.key = UUID()
                     eventForever.startdate = mEvent.startdate!
                     eventForever.enddate = mEvent.enddate!
@@ -162,9 +166,68 @@ class EKCal_Parser: ObservableObject
                     viewContext.delete(mEvent)
                     foreverEvent = true
                 }else{
-                    
+                    save = false
+                }
+            }else{
+                let fetch2 = Event.fetchRequest()
+                print("here")
+                //fetch2.predicate = NSPredicate(format: "name == %@", ekCalEvent.title)
+                fetch2.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
+                do{
+                    let results2 = try viewContext.fetch(fetch2)
+                    numberHits = results2.count
+                } catch {
+                    print("requesting error")
+                }
+                print(numberHits)
+                if numberHits < 2{
+                    let repetitionID = UUID()
+                    let myCalendar = Calendar.current
+                    mEvent.repetitionID = repetitionID
+                    mEvent.repetitionEndDate = rule.recurrenceEnd?.endDate
+                    mEvent.repetitionInterval = transformFrequencToString(fre: rule.frequency)
+                    mEvent.repetitionUntil = "End Date"
+                    var currentDate = mEvent.startdate
+                    var i = 1
+                    while currentDate! < mEvent.repetitionEndDate!{
+                        var eventR = Event(context: viewContext)
+                        eventR.key = UUID()
+                        eventR.importedFromUUID = mEvent.importedFromUUID
+                        eventR = CopyMEvent(event1: eventR, event2: mEvent)
+                        switch mEvent.repetitionInterval{
+                        case "Weekly":
+                            eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: mEvent.startdate!)
+                            eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: mEvent.enddate!)
+                        case "Daily":
+                            eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: mEvent.startdate!)
+                            eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: mEvent.enddate!)
+                            
+                        case "Monthly":
+                            eventR.startdate = myCalendar.date(byAdding: .month, value: i, to: mEvent.startdate!)
+                            eventR.enddate = myCalendar.date(byAdding: .month, value: i, to: mEvent.enddate!)
+                            
+                        case "Yearly":
+                            eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: mEvent.startdate!)
+                            eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: mEvent.enddate!)
+                            
+                        default:
+                            break
+                        }
+                        currentDate = eventR.startdate
+                        if currentDate! <= mEvent.repetitionEndDate!{
+                            mCalendar.addToEvents(eventR)
+                            scheduleNotification(event: eventR)
+                            i = i + 1
+                        } else{
+                            viewContext.delete(eventR)
+                        }
+                    }
+                }else{
+                    save = false
                 }
             }
+        }else{
+            mEvent.repetition = false
         }
         
         if !foreverEvent{
@@ -179,7 +242,52 @@ class EKCal_Parser: ObservableObject
             }
         }
         
+        if !save {
+            viewContext.delete(mEvent)
+        }
+        
+        if foreverEvent {
+            viewContext.delete(mEvent)
+        }
+        
         try! viewContext.save()
+    }
+    
+    func CopyMEvent(event1: Event, event2: Event) -> Event{
+        event1.name = event2.name
+        event1.wholeDay = event2.wholeDay
+        event1.url = event2.url
+        event1.notes = event2.notes
+        event1.notificationMinutesBefore = event2.notificationMinutesBefore
+        
+        if event2.location{
+            event1.location = true
+            event1.latitude = event2.latitude
+            event1.longitude = event2.longitude
+            event1.latitudeDelta = event2.latitudeDelta
+            event1.longitudeDelta = event2.longitudeDelta
+        }else{
+            event1.location = false
+        }
+        if event2.notification{
+            event1.notification = true
+            if(!event2.wholeDay){
+                event1.notificationMinutesBefore = event2.notificationMinutesBefore
+            } else {
+                event1.notificationTimeAtWholeDay = event2.notificationTimeAtWholeDay
+            }
+        }else{
+            event1.notification = false
+        }
+        event1.repetition = event2.repetition
+        if event2.repetition{
+            event1.repetitionUntil = event2.repetitionUntil
+            event1.repetitionInterval = event2.repetitionInterval
+            event1.repetitionID = event2.repetitionID
+            event1.repetitionEndDate = event2.repetitionEndDate
+        }
+        
+        return event1
     }
     
     private func getEventsInMCalendar(mCalendar: MCalendar) -> [Event]{
@@ -188,7 +296,6 @@ class EKCal_Parser: ObservableObject
         fr.predicate = predicate
         return try! viewContext.fetch(fr)
     }
-    
     
     private func getEventsInEKCalendar(offsetStartFromToday: Int, offsetEndFromToday: Int, calendar: EKCalendar) -> [EKEvent]{
         let currentCalendar = Calendar.current
