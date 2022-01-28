@@ -15,7 +15,7 @@ struct MonthView: View {
             ForEach([0,7,14,21,28], id:\.self)  { row in
                 HStack {
                     ForEach([1,2,3,4,5,6,7], id:\.self) { dayofweek in
-                        MonthViewDayBox(date: dayofweek + row, width: 20, length: 20, fontSize: 12, rectangle: true)
+                       // MonthViewDayBox(date: dayofweek + row, width: 20, length: 20, fontSize: 12, rectangle: true)
                     }
                 }
             }

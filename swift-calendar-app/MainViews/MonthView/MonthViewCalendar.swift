@@ -8,7 +8,12 @@
 import SwiftUI
 
 struct MonthViewCalendar: View {
-    var daysOfMonth : [String?]
+    @Binding var daysOfMonth : [String?]
+    @Binding var events : [String? : [String?]?]
+    
+    
+    //@Binding var daysAndEvents : [(String?, [String?])]
+    
     @AppStorage("weekNumbers") private var showWeekNumbers = true
     
     let columns = [
@@ -36,25 +41,25 @@ struct MonthViewCalendar: View {
     
     var body: some View {
         GeometryReader { geo in
-            VStack() {
-                LazyVGrid(columns: showWeekNumbers ? columnsWithWeekNumber : columns, spacing: 15) {
-                    ForEach(daysOfMonth, id: \.self) { dc in
-                        if let dc = dc {
-                            if dc[dc.startIndex] == "W" {
-                                Text(dc).font(.custom("Calender", size: 14))
-                                    .foregroundColor(.gray)
-                            } else {
-                                MonthViewDayBox(date: Int(dc) ?? 0, width: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5), length: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5))
-                                    .padding(1)
+                    VStack() {
+                        LazyVGrid(columns: showWeekNumbers ? columnsWithWeekNumber : columns, spacing: 15) {
+                            ForEach(daysOfMonth, id: \.self) { dc in
+                                if let dc = dc {
+                                    if dc[dc.startIndex] == "W" {
+                                        Text(dc).font(.custom("Calender", size: 14))
+                                            .foregroundColor(.gray)
+                                    } else {
+                                        MonthViewDayBox(date: Int(dc) ?? 0, eventsOnDay: (events[dc] ?? [])!, width: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5), length: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5))
+                                            .padding(1)
+                                    }
+                                } else {
+                                    Text(dc ?? "")
+                                }
                             }
-                        } else {
-                            Text(dc ?? "")
                         }
+                        .padding(.horizontal)
                     }
                 }
-                .padding(.horizontal)
-            }
-        }
     }
 }
 
