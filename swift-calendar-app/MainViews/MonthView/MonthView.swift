@@ -11,7 +11,8 @@ struct MonthView: View {
     @Binding var displayedMonth: DateComponents
     @State private var pickerSelection: PickerSelection = .current
     @ObservedObject var viewModel: MonthViewModel
-    
+    @Binding var updateView: Bool
+
     @State var offset = CGSize(width: 0, height: 0)
     
     @AppStorage("colorScheme") private var colorScheme = "red"
@@ -23,7 +24,7 @@ struct MonthView: View {
                 .offset(offset)
             Spacer()
                 .frame(minHeight: 10, maxHeight: 10)
-            MonthViewCalendar(daysOfMonth: showWeekNumbers ? viewModel.daysOfMonthWithWeek : viewModel.daysOfMonth)
+            MonthViewCalendar(daysOfMonth: showWeekNumbers ? viewModel.daysOfMonthWithWeek : viewModel.daysOfMonth, updateView: $updateView, displayedMonth: $displayedMonth)
                 .offset(offset)
             Spacer()
             
@@ -92,6 +93,6 @@ struct MonthView: View {
 
 struct MonthView_Previews: PreviewProvider {
     static var previews: some View {
-        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), viewModel: MonthViewModel(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
+        MonthView(displayedMonth: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), viewModel: MonthViewModel(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
     }
 }

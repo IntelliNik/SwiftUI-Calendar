@@ -116,6 +116,14 @@ func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
     return newDateComponents
 }
 
+func setDay(dateComponents: DateComponents, day: Int) -> DateComponents{
+    var newDateComponents = DateComponents()
+    newDateComponents.year = dateComponents.year
+    newDateComponents.month = dateComponents.month
+    newDateComponents.day = day
+    return newDateComponents
+}
+
 func getToday() -> DateComponents{
     return Calendar.current.dateComponents([.hour, .day, .month, .year, .weekOfYear], from: Date.now)
 }
