@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeekView: View {
     
+    @Binding var updateView: Bool
     @Binding var dateComponents: DateComponents
     @State var pickerSelection: PickerSelection = .current
     
@@ -25,7 +26,7 @@ struct WeekView: View {
                 HStack {
                     Spacer()
                         .frame(width: 10, alignment: .leading)
-                    WeekViewCalendar(dateComponents: dateComponents, height: geo.size.height, width: geo.size.width - 20)
+                    WeekViewCalendar(updateView: $updateView, dateComponents: $dateComponents, height: geo.size.height, width: geo.size.width - 20)
                         .offset(offset)
                     Spacer()
                         .frame(width: 10, alignment: .trailing)
@@ -97,7 +98,7 @@ struct WeekView_Previews: PreviewProvider {
         Group {
             //WeekView(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now))
               //  .previewDevice(PreviewDevice(rawValue: "iPhone 13"))
-            WeekView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
+            WeekView(updateView: .constant(false), dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)))
                 .previewDevice(PreviewDevice(rawValue: "iPhone 11 Pro"))
         }
     }

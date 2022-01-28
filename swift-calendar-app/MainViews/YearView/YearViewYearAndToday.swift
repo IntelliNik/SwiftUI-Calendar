@@ -21,6 +21,8 @@ struct YearViewYearAndToday: View {
             }.font(.system(size: 30, weight: .bold,
                            design: .monospaced))
         }
+        Spacer().frame(height: 30)
+
     }
 }
 

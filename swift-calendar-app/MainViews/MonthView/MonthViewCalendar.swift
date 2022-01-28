@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MonthViewCalendar: View {
     var daysOfMonth : [String?]
+    @Binding var updateView: Bool
+    @Binding var displayedMonth: DateComponents
     @AppStorage("weekNumbers") private var showWeekNumbers = true
     
     let columns = [
@@ -44,8 +46,13 @@ struct MonthViewCalendar: View {
                                 Text(dc).font(.custom("Calender", size: 14))
                                     .foregroundColor(.gray)
                             } else {
+                                Button(action: {
+                                    displayedMonth = setDay(dateComponents: displayedMonth, day: Int(dc) ?? 0 )
+                                    updateView = true
+                                }){
                                 MonthViewDayBox(date: Int(dc) ?? 0, width: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5), length: (geo.size.width)/(showWeekNumbers ? 9.5 : 8.5))
                                     .padding(1)
+                                }
                             }
                         } else {
                             Text(dc ?? "")
