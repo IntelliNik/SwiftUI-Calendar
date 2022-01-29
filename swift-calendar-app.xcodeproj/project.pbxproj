@@ -64,6 +64,7 @@
 		77F466AA2768FF720034C68B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F466A92768FF720034C68B /* Assets.xcassets */; };
 		77FB1855278CDAB600C63286 /* AllEventsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 770FB6B5276FA1C700D38A07 /* AllEventsView.swift */; };
 		A0069AB727998DCF00A07105 /* CurrentTimePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */; };
+		A062ECC027A5AE9A007D67EA /* WeekOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A062ECBF27A5AE9A007D67EA /* WeekOverView.swift */; };
 		A0A8E22A279B05DF0046087D /* ViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A8E229279B05DF0046087D /* ViewExtension.swift */; };
 		A0CB453C2792E63800E6DBC9 /* EditEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F6637C2791C47D007ACCC4 /* EditEventView.swift */; };
 		A0D30B252796F1ED00EB1F22 /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B242796F1ED00EB1F22 /* DayView.swift */; };
@@ -157,6 +158,7 @@
 		77F6637C2791C47D007ACCC4 /* EditEventView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditEventView.swift; sourceTree = "<group>"; };
 		77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallDailyOverviewView.swift; sourceTree = "<group>"; };
 		A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CurrentTimePublisher.swift; path = "swift-calendar-app/Helpers/CurrentTimePublisher.swift"; sourceTree = SOURCE_ROOT; };
+		A062ECBF27A5AE9A007D67EA /* WeekOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekOverView.swift; sourceTree = "<group>"; };
 		A0A8E229279B05DF0046087D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
 		A0D30B242796F1ED00EB1F22 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		A0D30B262796F22200EB1F22 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				7727CC52278F523500C9B7FE /* WeekViewCalendar.swift */,
 				7727CC51278F523500C9B7FE /* WeekViewDayBox.swift */,
 				A0DED9722790A8C1001AE9EF /* WeekEventView.swift */,
+				A062ECBF27A5AE9A007D67EA /* WeekOverView.swift */,
 				7727CC54278F523500C9B7FE /* WeekViewWeekAndYear.swift */,
 			);
 			path = WeekView;
@@ -522,6 +525,7 @@
 				7727CC56278F523500C9B7FE /* WeekViewCalendar.swift in Sources */,
 				7719874F2775F60E0061CF34 /* AddEventView.swift in Sources */,
 				77EB10DE277CEB4D00206E60 /* PickerView.swift in Sources */,
+				A062ECC027A5AE9A007D67EA /* WeekOverView.swift in Sources */,
 				77046DC1278455FC001DA0DA /* HelperFunctions.swift in Sources */,
 				A0A8E22A279B05DF0046087D /* ViewExtension.swift in Sources */,
 				77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */,

@@ -24,7 +24,7 @@ struct WeekViewDayBox: View {
         ZStack {
             if todo {
                 WeekViewRoundedRectangleBottomTodo(dateComponents: dateComponents, height: height, width: width)
-                WeekViewRoundedRectangleTopTodo(height: height, width: width)
+                WeekViewRoundedRectangleTopTodo(dateComponents: dateComponents, height: height, width: width)
             } else {
                 WeekViewRoundedRectangleTop(dateComponents: dateComponents, height: height, width: width)
                 WeekViewRoundedRectangleBottom(dateComponents: dateComponents, height: height, width: width)
@@ -121,33 +121,48 @@ struct WeekViewRoundedRectangleBottom: View {
 }
 
 struct WeekViewRoundedRectangleTopTodo: View {
+    let dateComponents: DateComponents
     let height: CGFloat
     let width: CGFloat
     
+    @AppStorage("colorScheme") private var colorScheme = "red"
+    @EnvironmentObject var currentTime: CurrentTime
+    @Environment(\.colorScheme) var darkMode
+    
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 0, style: .continuous)
-                .fill(.thinMaterial)
-                .frame(width: width, height: 10)
-                .offset(x:0 , y: -((height - 20)/2) + 5)
-                .foregroundColor(.gray)
-            
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(.thinMaterial)
-                .frame(width: width, height: 20)
-                .overlay(Text("todo").fontWeight(.heavy))
-                .offset(x:0 , y: -((height - 20)/2))
-                .foregroundColor(.gray)
-            
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .foregroundColor(.gray)
-                .frame(width: width, height: 1)
-                .offset(x:0 , y: -((height - 20)/2) + 10)
+            if darkMode == .dark {
+                Rectangle()
+                    .fill(.thinMaterial)
+                    .colorInvert()
+                    .colorMultiply(.gray)
+                    .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: 0.3))
+                    .cornerRadius(20, corners: [.topLeft, .topRight])
+                    .frame(width: width, height: 20)
+                    .overlay(
+                        Text("Overview").fontWeight(.heavy)
+                    )
+                    .offset(x:0 , y: -((height - 20)/2))
+                    .foregroundColor(.gray)
+            } else {
+                Rectangle()
+                    .fill(.thinMaterial)
+                    .colorMultiply(.gray)
+                    .colorMultiply(Color(.sRGBLinear, red: 1 , green: 1, blue: 1, opacity: 0.3))
+                    .cornerRadius(20, corners: [.topLeft, .topRight])
+                    .frame(width: width, height: 20)
+                    .overlay(
+                        Text("Overview").fontWeight(.heavy)
+                    )
+                    .offset(x:0 , y: -((height - 20)/2))
+                    .foregroundColor(.gray)
+            }
         }
     }
 }
 
 struct WeekViewRoundedRectangleBottomTodo: View {
+    /*
     let dateComponents: DateComponents
     let height: CGFloat
     let width: CGFloat
@@ -159,6 +174,41 @@ struct WeekViewRoundedRectangleBottomTodo: View {
                 .frame(width: width, height: height)
         }
     }
+     */
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
+    @State private var foreverEventsToShow: [ForeverEvent] = []
+    
+    let dateComponents: DateComponents
+    let height: CGFloat
+    let width: CGFloat
+    
+    var body: some View {
+        ZStack {
+            // Fore unwrap here might not be the best idea
+            WeekOverView(filter: dateComponents, foreverEvents: foreverEvents)
+                .frame(width: width - 5, height: height - 30, alignment: .top)
+                .offset(x: 0, y: 10)
+            
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(.gray)
+                .frame(width: width, height: height)
+            
+            Rectangle()
+                .foregroundColor(.gray)
+                .frame(width: width, height: 1)
+                .offset(x:0 , y: -((height - 20)/2) + 10)
+        }
+        .onChange(of: dateComponents) { newvalue in
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: newvalue)
+                }
+        .onChange(of: foreverEvents.count) { _ in
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)
+                }
+        .onAppear(perform: {
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents)
+        })
+    }
 }
 
 struct WeekViewDayBox_Previews: PreviewProvider {
@@ -167,7 +217,7 @@ struct WeekViewDayBox_Previews: PreviewProvider {
             WeekViewDayBox(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), todo: false, height: 220, width: 220)
             ZStack {
                 WeekViewRoundedRectangleBottomTodo(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
-                WeekViewRoundedRectangleTopTodo(height: 220, width: 220)
+                WeekViewRoundedRectangleTopTodo(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)
             }
             WeekViewRoundedRectangleTop(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now) , height: 220, width: 220)
             WeekViewRoundedRectangleBottom(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: Date.now), height: 220, width: 220)

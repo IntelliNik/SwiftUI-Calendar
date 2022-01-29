@@ -91,6 +91,24 @@ func getBeginningOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
 }
 
+func getBeginningOfWeek(from components: DateComponents) -> Date {
+    let date = Calendar.current.date(from: components) ?? Date.now
+    let beginOfWeekDate: Date
+    if Calendar.current.dateComponents([.day, .weekday, .weekOfYear], from: date).weekday == 1 {
+        beginOfWeekDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: date) ?? Date.now
+    } else {
+        beginOfWeekDate = Calendar.current.date(bySetting: .weekday, value: 1, of: date) ?? Date.now
+    }
+    let beginOfGermanWeek = Calendar.current.date(byAdding: .day, value: 1, to: beginOfWeekDate) ?? Date.now
+    
+    return getBeginningOfDay(date: beginOfGermanWeek)
+    //getBeginningOfDay(date: Calendar.current.date(bySetting: .weekday, value: 2, of: Calendar.current.date(from: components) ?? Date.now) ?? Date.now)
+}
+
+func getBeginningOfNextWeek(from components: DateComponents) -> Date {
+    getBeginningOfDay(date: Calendar.current.date(byAdding: .day, value: 7, to: Calendar.current.date(from: components) ?? Date.now) ?? Date.now)
+}
+
 func getEndOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
 }
