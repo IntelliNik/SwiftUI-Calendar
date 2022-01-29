@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DayViewEachHour: View {
-    let eventsThisHour: [Event]
+    let eventsThisHour: [AbstractEvent]
     
     @State var showEventSheet = false
     
@@ -18,18 +18,31 @@ struct DayViewEachHour: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false){
             HStack(){
-                ForEach(Array(zip(eventsThisHour.indices, eventsThisHour)), id: \.0) { index, event in
-                    EventView(event: event)
-                        .onTapGesture(){
-                            eventIndexToShow = index
-                            showEventSheet = true
+                ForEach(Array(zip(eventsThisHour.indices, eventsThisHour)), id: \.0) { index, abstractEvent in
+                    if let event = abstractEvent as? Event {
+                        EventView(event: event)
+                            .onTapGesture(){
+                                eventIndexToShow = index
+                                showEventSheet = true
+                        }
+                    }
+                    if let fEvent = abstractEvent as? ForeverEvent {
+                        ForeverEventView(event: fEvent)
+                            .onTapGesture(){
+                                eventIndexToShow = index
+                                showEventSheet = true
+                        }
                     }
                 }
 
             }
         }.padding(.trailing, 30)
             .sheet(isPresented: $showEventSheet){
-                ShowEventView(event: eventsThisHour[eventIndexToShow])
+                if eventsThisHour[eventIndexToShow] is Event {
+                    ShowEventView(event: eventsThisHour[eventIndexToShow] as! Event)
+                } else {
+                    ShowForeverEventView(event: eventsThisHour[eventIndexToShow] as! ForeverEvent)
+                }
             }
     }
 }

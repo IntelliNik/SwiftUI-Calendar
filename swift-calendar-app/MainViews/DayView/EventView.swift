@@ -28,6 +28,27 @@ struct EventView: View {
     }
 }
 
+struct ForeverEventView: View {
+    @State var event: ForeverEvent
+    
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(getColorFromString(stringColor: event.calendar?.color))
+                .frame(width: 95, height: 65)
+                .overlay(
+            VStack{
+                Text(event.name ?? "")
+                    .font(.headline)
+                    .lineLimit(1)
+                HStack{
+                    Text(event.startdate!, style: .time)
+                }
+            })
+        }
+    }
+}
+
 //struct EventView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        EventView()

@@ -21,6 +21,9 @@ struct DayView: View {
         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
     ) var eventsToday: FetchedResults<Event>
     
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+        private var foreverEvents: FetchedResults<ForeverEvent>
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
 
     var body: some View {
@@ -30,8 +33,8 @@ struct DayView: View {
                 .offset(offset)
                 .padding()
             
-            DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
-                .offset(offset)
+            DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday, foreverEventsToday: getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: dateComponents))
+                            .offset(offset)
             
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousDay(components: dateComponents, next: true)
