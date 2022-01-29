@@ -19,6 +19,13 @@ struct NavigationBarView: View {
     
     @Environment(\.managedObjectContext) var moc
     
+    @FetchRequest(
+        entity: MCalendar.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \MCalendar.name, ascending: true),
+        ]
+    ) var calendars: FetchedResults<MCalendar>
+    
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
@@ -51,6 +58,12 @@ struct NavigationBarView: View {
         }
         .onAppear(){
             if(!isAppAlreadyLaunchedOnce()){
+                // delete all previously created calendars
+                for calendar in calendars{
+                    moc.delete(calendar)
+                }
+                try! moc.save()
+
                 let calendar = MCalendar(context: moc)
                 calendar.key = UUID()
                 calendar.name = "Default"
