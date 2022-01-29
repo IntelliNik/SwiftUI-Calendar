@@ -42,7 +42,7 @@ struct MonthViewCalendarWidget: View {
                                 Text(dc).font(.custom("Calender", size: 14))
                                     .foregroundColor(.gray)
                             } else {
-                                DayBoxWidget(date: Int(dc) ?? 0, width: (geo.size.width)/( 12), length: (geo.size.width)/(12))
+                                DayBoxWidget(date: Int(dc) ?? 0, width: (geo.size.width)/( 8), length: (geo.size.width)/(8))
                                     .padding(1)
                             }
                         } else {
