@@ -83,7 +83,11 @@ struct AddCalendarView: View {
     public func saveCalendar(name: String, color: String, defaultCal: Bool){
         let calendar = MCalendar(context: moc)
         calendar.key = UUID()
-        calendar.name = name
+        if (name != ""){
+            calendar.name = name
+        } else{
+            calendar.name = "Calendar"
+        }
         calendar.color = color
         calendar.defaultCalendar = false
         calendar.imported = false
