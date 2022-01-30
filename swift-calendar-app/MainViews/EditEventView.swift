@@ -154,17 +154,6 @@ struct EditEventView: View {
                             .padding()
                         }
                         if(location == "Current"){
-                            
-                            /*Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                                annotationItems: markers) { marker in
-                                marker.location
-                            }.edgesIgnoringSafeArea(.all)
-                                .frame(minHeight: 200)
-                                .onAppear(){
-                                    let annotationCurrent = MKPointAnnotation()
-                                    annotationCurrent.coordinate = currentRegion.center
-                                    markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
-                                }*/
                             if CLLocationManager.locationServicesEnabled() {
                                 switch locationManager.authorizationStatus {
                                     case .notDetermined, .restricted, .denied:
@@ -262,20 +251,6 @@ struct EditEventView: View {
                             .onChange(of: locationSearch) { newValue in
                                 locationService.queryFragment = locationSearch
                             }
-                            /*Section(header: Text("Search")) {
-                             ZStack(alignment: .trailing) {
-                             TextField("Search", text: $locationService.queryFragment)
-                             
-                             // while user is typing input it sends the current query to the location service
-                             // which in turns sets its status to searching; when searching status is set on
-                             // searching then a clock symbol will be shown beside the search box
-                             if locationService.status == .isSearching {
-                             Image(systemName: "clock")
-                             .foregroundColor(Color.gray)
-                             }
-                             }
-                             }*/
-                            
                             Section() {
                                 List {
                                     Group { () -> AnyView in
@@ -355,18 +330,12 @@ struct EditEventView: View {
                     }
                 }
                 .navigationBarItems(leading: Button(action : {
-                    // TODO: Check that notes is set everywhere
                     if event.repetition && repetition{
-                        // In this case event was a repeating event and should still be one
-                        // How should such events be modified ?
                         
                         modifyID = event.repetitionID!
                         modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
                         name = self.event.name!
                         
-                        print(modifyEvents.count)
-                        
-                        // TODO: Abfrage hinzufügen ob alle zugehörigen darauffolgenden events ebenfalls verändert werden sollen.
                         for mevent in modifyEvents{
                             mevent.setValue(name, forKey: "name")
                             mevent.setValue(wholeDay,forKey:"wholeDay")
@@ -390,9 +359,7 @@ struct EditEventView: View {
                                 mevent.setValue(customRegion.center.latitude, forKey: "latitude")
                                 mevent.setValue(customRegion.center.longitude, forKey: "longitude")
                                 mevent.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
-                            } else {
+                                mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")                            } else {
                                 mevent.setValue(false, forKey: "location")
                             }
                             
@@ -501,7 +468,6 @@ struct EditEventView: View {
                             newEvent.longitude = customRegion.center.longitude
                             newEvent.latitudeDelta = customRegion.span.latitudeDelta
                             newEvent.longitudeDelta = customRegion.span.longitudeDelta
-                            // TODO: save the name of the location somehow in event.locationName
                         } else {
                             newEvent.location = false
                         }
@@ -693,17 +659,6 @@ struct EditEventView: View {
                             .padding()
                         }
                         if(location == "Current"){
-                            
-                            /*Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                                annotationItems: markers) { marker in
-                                marker.location
-                            }.edgesIgnoringSafeArea(.all)
-                                .frame(minHeight: 200)
-                                .onAppear(){
-                                    let annotationCurrent = MKPointAnnotation()
-                                    annotationCurrent.coordinate = currentRegion.center
-                                    markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
-                                }*/
                             if CLLocationManager.locationServicesEnabled() {
                                 switch locationManager.authorizationStatus {
                                     case .notDetermined, .restricted, .denied:
@@ -801,20 +756,6 @@ struct EditEventView: View {
                             .onChange(of: locationSearch) { newValue in
                                 locationService.queryFragment = locationSearch
                             }
-                            /*Section(header: Text("Search")) {
-                             ZStack(alignment: .trailing) {
-                             TextField("Search", text: $locationService.queryFragment)
-                             
-                             // while user is typing input it sends the current query to the location service
-                             // which in turns sets its status to searching; when searching status is set on
-                             // searching then a clock symbol will be shown beside the search box
-                             if locationService.status == .isSearching {
-                             Image(systemName: "clock")
-                             .foregroundColor(Color.gray)
-                             }
-                             }
-                             }*/
-                            
                             Section() {
                                 List {
                                     Group { () -> AnyView in
@@ -853,8 +794,6 @@ struct EditEventView: View {
                                         }) {
                                             Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
                                         }
-                                        
-                                        //Text(completionResult.title)
                                     }
                                 }
                             }
@@ -894,26 +833,15 @@ struct EditEventView: View {
                     }
                 }
                 .navigationBarItems(leading: Button(action : {
-                    // TODO: Check that notes is set everywhere
                     if event.repetition && repetition{
-                        // In this case event was a repeating event and should still be one
-                        // How should such events be modified ?
                         
                         modifyID = event.repetitionID!
                         modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
                         name = self.event.name!
-                        
-                        print(modifyEvents.count)
-                        
-                        // TODO: Abfrage hinzufügen ob alle zugehörigen darauffolgenden events ebenfalls verändert werden sollen.
                         for mevent in modifyEvents{
                             mevent.setValue(name, forKey: "name")
                             mevent.setValue(wholeDay,forKey:"wholeDay")
                             mevent.setValue(self.event.notes,forKey:"notes")
-                            
-                            // TODO: Wie sollen das Datum verändert werden?
-                            // mevent.setValue(startDate,forKey:"startdate")
-                            // mevent.setValue(endDate,forKey:"enddate")
                             
                             if(urlString != ""){
                                 mevent.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
@@ -934,7 +862,6 @@ struct EditEventView: View {
                                 mevent.setValue(customRegion.center.longitude, forKey: "longitude")
                                 mevent.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
                                 mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
                             } else {
                                 mevent.setValue(false, forKey: "location")
                             }
@@ -953,7 +880,6 @@ struct EditEventView: View {
                             }
                         }
                         
-                        // ----- TODO: How to handle these two cases?
                         event.setValue(repeatUntil, forKey: "repetitionUntil")
                         event.setValue(repetitionInterval, forKey: "repetitionInterval")
                         if(repeatUntil == "Repetitions"){
@@ -962,7 +888,6 @@ struct EditEventView: View {
                         if(repeatUntil == "End Date"){
                             event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
                         }
-                        // ------------------
                         
                         if(repeatUntil == "Forever"){
                             let eventForever = ForeverEvent(context: moc)
@@ -1055,7 +980,6 @@ struct EditEventView: View {
                             newEvent.longitude = customRegion.center.longitude
                             newEvent.latitudeDelta = customRegion.span.latitudeDelta
                             newEvent.longitudeDelta = customRegion.span.longitudeDelta
-                            // TODO: save the name of the location somehow in event.locationName
                         } else {
                             newEvent.location = false
                         }
@@ -1110,7 +1034,6 @@ struct EditEventView: View {
                                 event.setValue(customRegion.center.longitude, forKey: "longitude")
                                 event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
                                 event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
                             } else {
                                 event.setValue(false, forKey: "location")
                             }
@@ -1265,7 +1188,6 @@ struct EditEventView: View {
                                 event.setValue(customRegion.center.longitude, forKey: "longitude")
                                 event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
                                 event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                                // TODO: save the name of the location somehow in event.locationName
                             } else {
                                 event.setValue(false, forKey: "location")
                             }
@@ -1402,11 +1324,5 @@ struct EditEventView: View {
         }
         
         return event1
-    }
-}
-
-struct EditEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditEventView(event: Event(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
     }
 }

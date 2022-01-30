@@ -88,7 +88,7 @@ struct AddEventView: View {
             
         })
     }
-
+    
     var body: some View {
         NavigationView{
             Form{
@@ -238,7 +238,9 @@ struct AddEventView: View {
                                         .padding()
                                         .foregroundColor(.blue)
                                         .fixedSize(horizontal: false, vertical: true)
-                                        .onAppear(){                                  saveCurrentLocation = false}
+                                        .onAppear(){
+                                            saveCurrentLocation = false
+                                        }
                                     Button(action: {
                                         location = "None"
                                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
@@ -365,11 +367,11 @@ struct AddEventView: View {
                             }
                         }
                         if(locationSearch != ""){
-                        Map(coordinateRegion: $customRegion,
-                            annotationItems: markers) { marker in
-                            marker.location
-                        }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
+                            Map(coordinateRegion: $customRegion,
+                                annotationItems: markers) { marker in
+                                marker.location
+                            }.edgesIgnoringSafeArea(.all)
+                                .frame(minHeight: 200)
                         }
                     }
                 }
@@ -445,14 +447,14 @@ struct AddEventView: View {
                         }
                         
                         /*if notification {
-                            event.notification = true
-                            if(!wholeDay){
-                                event.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                            } else {
-                                event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                            }
-                            
-                        }*/
+                         event.notification = true
+                         if(!wholeDay){
+                         event.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                         } else {
+                         event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                         }
+                         
+                         }*/
                         if notification {
                             event.notification = true
                             if(!wholeDay){
@@ -587,7 +589,7 @@ struct AddEventView: View {
                         }
                         
                         try! moc.save()
-
+                        
                         if notification && !foreverEvent{
                             scheduleNotification(event: event)
                         }
@@ -733,10 +735,4 @@ extension LocationService: MKLocalSearchCompleterDelegate {
 struct Marker: Identifiable {
     let id = UUID()
     var location: MapMarker
-}
-
-struct AddEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddEventView(locationService: LocationService(), saveEvent: .constant(true))
-    }
 }

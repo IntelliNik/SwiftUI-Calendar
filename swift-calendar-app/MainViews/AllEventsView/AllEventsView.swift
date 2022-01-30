@@ -154,8 +154,6 @@ struct AllEventsView: View {
         request.sortDescriptors = [
             NSSortDescriptor(keyPath: \Event.startdate, ascending: true)
         ]
-        
-        //events = FetchRequest(fetchRequest: request)
     }
     
     

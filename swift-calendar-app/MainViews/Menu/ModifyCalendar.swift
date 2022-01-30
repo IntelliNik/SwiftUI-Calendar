@@ -25,14 +25,6 @@ struct ModifyCalendar: View {
                 TextField("Name", text: self.$mcalendar.name ?? "")
                     .padding()
                     .navigationTitle("Configure Calendar")
-/*
-                TextField("Name", text: $name).padding()
-                    .navigationTitle("Reconfigure calendar")
-                    .onAppear {
-                        name = mcalendar.name!
-                        color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
-                    }
-*/
             }
             Section{
                 Picker("Color", selection: $color) {
@@ -69,14 +61,5 @@ struct ModifyCalendar: View {
                 Text("Your Calendars")
             }
         })
-        /*.onAppear {
-            color = colorStrings.firstIndex(where: {$0 == mcalendar.color!})!
-        }*/
-    }
-}
-
-struct ModifyCalendar_Previews: PreviewProvider {
-    static var previews: some View {
-        ModifyCalendar(mcalendar: MCalendar(), color:0, showConfirmation: .constant(true))
     }
 }

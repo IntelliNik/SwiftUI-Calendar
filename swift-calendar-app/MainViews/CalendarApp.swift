@@ -29,10 +29,6 @@ struct CalendarApp: App {
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
-    // TODO: Remove next lines when everything is done
-    // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
-    // Fetch Request only where we need a request?
-    
     var body: some Scene {
         let drag = DragGesture()
             .onEnded { value in

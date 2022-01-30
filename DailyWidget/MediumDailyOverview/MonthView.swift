@@ -22,9 +22,3 @@ struct MonthView: View {
         }
     }
 }
-
-struct MonthView_Previews: PreviewProvider {
-    static var previews: some View {
-        MonthView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month], from: Date.now)))
-    }
-}

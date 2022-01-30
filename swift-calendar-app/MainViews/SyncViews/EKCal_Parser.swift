@@ -407,9 +407,6 @@ class EKCal_Parser: ObservableObject
         }
         
         ekEvent.notes = mEvent.notes
-        
-        // TODO: decide how to set span here
-        // TODO: SHIT, SOME CALENDARS ARE READONLY, E.G. THE BIRTYDAY ONE -> HANDLE THIS
         try! eventStore.save(ekEvent, span: .futureEvents, commit: true)
         
         if(saveSyncUuidAt != nil){
