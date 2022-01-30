@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import EventKitUI
 import EventKit
 
 struct MenuView: View {

@@ -383,7 +383,6 @@ struct EditForeverEventView: View {
                         event.setValue(customRegion.center.longitude, forKey: "longitude")
                         event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
                         event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                        // TODO: save the name of the location somehow in event.locationName
                     } else {
                         event.setValue(false, forKey: "location")
                     }
@@ -438,20 +437,9 @@ struct EditForeverEventView: View {
                         event2.longitude = customRegion.center.longitude
                         event2.latitudeDelta = customRegion.span.latitudeDelta
                         event2.longitudeDelta = customRegion.span.longitudeDelta
-                        // TODO: save the name of the location somehow in event.locationName
                     } else {
                         event2.location = false
                     }
-                    
-                    /*if notification {
-                        event.notification = true
-                        if(!wholeDay){
-                            event.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                        } else {
-                            event.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                        }
-                        
-                    }*/
                     if notification {
                         event2.notification = true
                         if(!wholeDay){
@@ -643,11 +631,5 @@ struct EditForeverEventView: View {
         }
         
         return event1
-    }
-}
-
-struct EditForeverEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditForeverEventView(event: ForeverEvent(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
     }
 }

@@ -61,9 +61,3 @@ func getWeekday() -> String{
     default: return ""
     }
 }
-
-struct SmallDailyOverviewView_Previews: PreviewProvider {
-    static var previews: some View {
-        SmallDailyOverviewView(dateComponents: Calendar.current.dateComponents([.day], from: Date.now))
-    }
-}

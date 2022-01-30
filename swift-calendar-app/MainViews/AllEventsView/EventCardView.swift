@@ -96,9 +96,6 @@ struct EventCardView: View {
         }
         .background(getColorFromString(stringColor: event.calendar?.color))
         .frame(maxWidth: .infinity, maxHeight: 200)
-        /*.sheet(isPresented: $showShowEvent){
-            ShowEventView(event: event)
-        }*/
         .sheet(isPresented: $showShowEvent){
             EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation)
         }
@@ -168,17 +165,5 @@ struct ExtendedEventCard: View{
             .background(getColorFromString(stringColor: event.calendar?.color))
             .frame(maxWidth: .infinity, maxHeight: 800)
             .padding(.bottom)
-        }
-    }
-    
-    struct EventListView_Previews: PreviewProvider {
-        static var previews: some View {
-            let _ = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), span: MKCoordinateSpan(latitudeDelta: 0.5, longitudeDelta: 0.5))
-            VStack{
-                //EventCardView(calendarColor: .red, name: "Event 1", wholeDay: true, startDate: //Date.now, endDate: Date.now, repetition: true)
-                /*
-                 ExtendedEventCard(calendarColor: .blue, name: "Event 1", wholeDay: true, startDate: Date.now, endDate: Date.now, repetition: true, location: true, locationRegion: region,  url: "https:/apple.com", notes: "Hi Mom")
-                 */
-            }.padding()
         }
     }

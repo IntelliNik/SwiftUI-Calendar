@@ -135,7 +135,7 @@ struct SyncCalendarsView: View {
                                         HStack{
                                             Button(action: {
                                                 stopSyncIndex = index
-                                                stopSyncName = syncedCalendars[index].name ?? "Unkown"
+                                                stopSyncName = syncedCalendars[index].name ?? "Calendar"
                                                 if(stopSyncIndex != nil){
                                                     showAlert = true
                                                 }

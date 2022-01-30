@@ -50,11 +50,9 @@ struct DailyWidgetEntryView : View {
             SmallDailyOverviewView(dateComponents: Calendar.current.dateComponents([.day], from: Date.now))
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         } else if (widgetFamily == .systemMedium){
-            // TODO fetch here is not working properly, app crashes
             MediumDailyOverviewView()
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         } else{
-            // TODO fetch here is not working properly, app crashes
             LargeDailyOverviewView()
                 .environment(\.managedObjectContext, dataController.container.viewContext)
         }
@@ -71,16 +69,5 @@ struct CalendarWidget: Widget {
         }
         .configurationDisplayName("Daily Overview")
         .description("This widget keeps you updated with your events today.")
-    }
-}
-
-struct CalendarWidget_Previews: PreviewProvider {
-    static var previews: some View {
-        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemSmall))
-        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemMedium))
-        DailyWidgetEntryView(entry: SimpleEntry(date: Date()))
-            .previewContext(WidgetPreviewContext(family: .systemLarge))
     }
 }
