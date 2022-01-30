@@ -4,6 +4,7 @@
 //
 //  Created by Farhadiba Mohammed on 08.01.22.
 //
+// Header to include Today Button and display current Date
 
 import SwiftUI
 
@@ -14,8 +15,6 @@ struct DayViewHeader: View {
     @AppStorage("weekNumbers") private var showWeekNumbers = true
     
     var body: some View {
-        
-        
         HStack(alignment: .center) {
             VStack(alignment: .leading) { //button
                 TodayButton(dateComponents: $dateComponents)
@@ -24,21 +23,22 @@ struct DayViewHeader: View {
             Spacer()
             
             HStack{
-                Text("\(dateComponents.day!)").font(.system(size: 45, weight: .bold, design: .monospaced))
+                Text("\(dateComponents.day ?? 0)").font(.system(size: 45, weight: .bold, design: .monospaced))
                     .lineLimit(1)
                     .frame(minWidth: 60)
                 
                 Spacer()
                     .frame(width: 15, alignment: .leading)
                 
-                //weekday is Int from 1 - 7 with 1 is Sun
                 let weekday = weekDay[addWeekday(dateComponents: dateComponents).weekday!-1]
                 let weekdayLong = weekDayLong[addWeekday(dateComponents: dateComponents).weekday!-1]
                 let month = Month_short[dateComponents.month!-1]
                 let year = dateComponents.year!
                 let weekOfYear = addWeekOfYear(dateComponents: dateComponents).weekOfYear ?? getCurrentWeekOfYear()
                 let year_formatted = formatYear(year: String(year))
+                
                 VStack(alignment: .leading, spacing: 0) {
+                    // Adjust date display according to week number setting
                     if showWeekNumbers {
                         HStack{
                             Text("\(weekday)")
@@ -64,7 +64,6 @@ struct DayViewHeader: View {
                         }.frame(width: 90, alignment: .leading)
                     }
                 }
-                
                 Spacer()
                     .frame(width: 10, alignment: .trailing)
             }
@@ -72,6 +71,7 @@ struct DayViewHeader: View {
     }
 }
 
+//Display Year in 'XXXX' format
 func formatYear(year: String) -> String{
     var str = year
     let removeCharacters: Set<Character> = ["'"]

@@ -22,7 +22,6 @@ struct CalendarApp: App {
     
     @State var selectedView: ContainedView = .allEvents
     @State var title = "All Events"
-    
     @StateObject private var dataController = DataController()
     
     @StateObject private var currentTime = CurrentTime()

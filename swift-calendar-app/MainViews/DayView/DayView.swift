@@ -4,13 +4,13 @@
 //
 //  Created by Farhadiba Mohammed on 08.01.22.
 //
+//  Main Day View
 
 import SwiftUI
 
 struct DayView: View {
     @Binding var dateComponents: DateComponents
     @State private var pickerSelection: PickerSelection = .current
-    
     @State var offset = CGSize(width: 0, height: 0)
     
     @FetchRequest(
@@ -25,7 +25,6 @@ struct DayView: View {
 
     var body: some View {
         VStack{
-            
             DayViewHeader(dateComponents: $dateComponents)
                 .offset(offset)
                 .padding()

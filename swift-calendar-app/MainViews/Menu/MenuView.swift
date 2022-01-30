@@ -18,7 +18,6 @@ struct MenuView: View {
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
     @Binding var title: String
-    
     @State var calendarEditMode = false
     @State var showSyncSheet = false
     

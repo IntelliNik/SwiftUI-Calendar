@@ -20,6 +20,7 @@ enum ContainedView{
 
 struct MainView: View {
     @Binding var containedView: ContainedView
+    //@Binding var setTime : Bool
     @State var updateView = false
     @State var dateComponents = Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)
 
