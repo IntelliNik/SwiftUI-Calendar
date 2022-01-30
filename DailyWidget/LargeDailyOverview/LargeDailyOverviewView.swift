@@ -13,7 +13,12 @@ struct LargeDailyOverviewView: View {
                  sortDescriptors: [
                     NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
                   ],
-                  predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event> 
+                  predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event>
+    
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
+    
+    @State private var foreverEventsToShow: [ForeverEvent] = []
     
     var body: some View {
         VStack{
@@ -25,18 +30,33 @@ struct LargeDailyOverviewView: View {
                 Text(Date.now, formatter: getDayFormatter())
             }.padding()
             Spacer()
-                ForEach(eventsToday, id:\.self){ event in
-                    HStack{
-                        Text(event.name ?? "")
-                        Spacer()
-                        if let startDate = event.startdate{
-                            Text(startDate, style: .time)
-                        }
+            ForEach(eventsToday, id:\.self){ event in
+                HStack{
+                    Text(event.name ?? "")
+                    Spacer()
+                    if let startDate = event.startdate{
+                        Text(startDate, style: .time)
                     }
-                    .padding()
-                    .background(getColorFromString(stringColor: event.calendar?.color))
                 }
+                .padding()
+                .background(getColorFromString(stringColor: event.calendar?.color))
+            }
+            ForEach(foreverEventsToShow, id:\.self){ event in
+                HStack{
+                    Text(event.name ?? "")
+                    Spacer()
+                    Image(systemName: "repeat")
+                    if let startDate = event.startdate{
+                        Text(startDate, style: .time)
+                    }
+                }
+                .padding()
+                .background(getColorFromString(stringColor: event.calendar?.color))
+            }
         }
+        .onAppear(perform: {
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: Calendar.current.dateComponents([.day,.month,.year,.weekday,.hour,.minute], from: Date.now))
+        })
     }
 }
 

@@ -16,6 +16,11 @@ struct SmallDailyOverviewView: View {
                   ],
                   predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)) var eventsToday: FetchedResults<Event>
     
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.name, order: .forward)])
+    private var foreverEvents: FetchedResults<ForeverEvent>
+    
+    @State private var foreverEventsToShow: [ForeverEvent] = []
+    
     var body: some View {
         VStack{
             HStack{
@@ -29,16 +34,19 @@ struct SmallDailyOverviewView: View {
             }
             Spacer()
             VStack{
-                if(eventsToday.count == 0){
+                if(foreverEventsToShow.count + eventsToday.count == 0){
                     Text("You have no events today.")
-                }else if(eventsToday.count == 1){
+                }else if(foreverEventsToShow.count + eventsToday.count == 1){
                     Text("You have 1 event today.")
-                } else if (eventsToday.count > 1){
-                    Text("You have \(eventsToday.count) events today.")
+                } else if (foreverEventsToShow.count + eventsToday.count > 1){
+                    Text("You have \(foreverEventsToShow.count + eventsToday.count) events today.")
                 }
                 Spacer()
             }.padding()
         }
+        .onAppear(perform: {
+            foreverEventsToShow = getDayEventsFromForeverEvents(events: foreverEvents, datecomponent: Calendar.current.dateComponents([.day,.month,.year,.weekday,.hour,.minute], from: Date.now))
+        })
     }
 }
 
