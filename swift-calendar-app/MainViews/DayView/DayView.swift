@@ -13,15 +13,20 @@ struct DayView: View {
     @State private var pickerSelection: PickerSelection = .current
     @State var offset = CGSize(width: 0, height: 0)
     
-    @FetchRequest(
-        entity: Event.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-        ],
-        predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-    ) var eventsToday: FetchedResults<Event>
+    @FetchRequest var eventsToday: FetchedResults<Event>
     
     @AppStorage("colorScheme") private var colorScheme = "red"
+    
+    init(dateComponents: Binding<DateComponents>){
+        self._dateComponents = dateComponents
+        _eventsToday = FetchRequest<Event>(
+            entity: Event.entity(),
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+            ],
+            predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(dc: dateComponents.wrappedValue) as NSDate, getEndofDay(dateComponents: dateComponents.wrappedValue) as NSDate)
+        )
+    }
 
     var body: some View {
         VStack{

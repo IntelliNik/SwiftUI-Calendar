@@ -106,8 +106,26 @@ func getBeginningOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!
 }
 
+func getBeginningOfDay(dc: DateComponents) -> Date{
+    var newDC = dc
+    newDC.hour = 0
+    newDC.minute = 0
+    newDC.second = 0
+    print(Calendar.current.date(from: newDC)!)
+    return Calendar.current.date(from: newDC)!
+}
+
 func getEndOfDay(date: Date) -> Date{
     return Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: date)!
+}
+
+func getEndofDay(dateComponents: DateComponents) -> Date{
+    var newDC = dateComponents
+    newDC.hour = 23
+    newDC.minute = 59
+    newDC.second = 59
+    print(Calendar.current.date(from: newDC)!)
+    return Calendar.current.date(from: newDC)!
 }
 
 func setYear(dateComponents: DateComponents, year: Int) -> DateComponents{
@@ -246,7 +264,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
                         addEvent = false
                     }
                 })
-                    
+                
                 
                 if addEvent {
                     eventsOfDate.append(event)
@@ -282,7 +300,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
                         addEvent = false
                     }
                 })
-                    
+                
                 
                 if addEvent {
                     eventsOfDate.append(event)
@@ -318,7 +336,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
                         addEvent = false
                     }
                 })
-                    
+                
                 
                 if addEvent {
                     eventsOfDate.append(event)
@@ -329,7 +347,7 @@ func getDayEventsFromForeverEvents(events: FetchedResults<ForeverEvent>, datecom
             break
         }
     }
-        
+    
     return eventsOfDate
 }
 
