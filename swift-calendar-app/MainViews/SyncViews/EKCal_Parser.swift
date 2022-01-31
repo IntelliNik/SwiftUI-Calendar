@@ -120,8 +120,7 @@ class EKCal_Parser: ObservableObject
             mEvent.repetition = true
             var numberHits = 0
             let rule = ekCalEvent.recurrenceRules![0]
-            if rule.recurrenceEnd == nil {
-                print("forever")
+            if rule.recurrenceEnd == nil || rule.recurrenceEnd!.endDate == nil {
                 let fetch = ForeverEvent.fetchRequest()
                 fetch.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
                 do{
@@ -130,7 +129,6 @@ class EKCal_Parser: ObservableObject
                 } catch {
                     print("requesting error")
                 }
-                print(numberHits)
                 if numberHits == 0{
                     eventForever.importedFromUUID = mEvent.importedFromUUID
                     eventForever.key = UUID()
@@ -170,8 +168,6 @@ class EKCal_Parser: ObservableObject
                 }
             }else{
                 let fetch2 = Event.fetchRequest()
-                print("here")
-                //fetch2.predicate = NSPredicate(format: "name == %@", ekCalEvent.title)
                 fetch2.predicate = NSPredicate(format: "importedFromUUID == %@", ekCalEvent.eventIdentifier!)
                 do{
                     let results2 = try viewContext.fetch(fetch2)
@@ -179,12 +175,11 @@ class EKCal_Parser: ObservableObject
                 } catch {
                     print("requesting error")
                 }
-                print(numberHits)
                 if numberHits < 2{
                     let repetitionID = UUID()
                     let myCalendar = Calendar.current
                     mEvent.repetitionID = repetitionID
-                    mEvent.repetitionEndDate = rule.recurrenceEnd?.endDate
+                    mEvent.repetitionEndDate = rule.recurrenceEnd!.endDate
                     mEvent.repetitionInterval = transformFrequencToString(fre: rule.frequency)
                     mEvent.repetitionUntil = "End Date"
                     var currentDate = mEvent.startdate
