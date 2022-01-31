@@ -11,7 +11,7 @@ struct MonthViewDayBox: View {
 
     @FetchRequest var eventsFetch: FetchedResults<Event>
     
-    var date : Int //Todo: replace with actual day
+    var date : Int
     var eventsOnDay: [Event] = []
         
     var width: CGFloat
@@ -77,9 +77,3 @@ struct MonthViewDayBox: View {
         }
     }
 }
-
-/*struct MonthViewDayBox_Previews: PreviewProvider {
-    static var previews: some View {
-        MonthViewDayBox(date: 1, width: 45, length: 45)
-    }
-}*/

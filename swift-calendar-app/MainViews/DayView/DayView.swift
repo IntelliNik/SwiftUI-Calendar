@@ -15,14 +15,6 @@ struct DayView: View {
     @State private var pickerSelection: PickerSelection = .current
     @State var offset = CGSize(width: 0, height: 0)
     @State var refreshID = UUID()
-   /* @FetchRequest(
-        entity: Event.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-        ],
-        predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-    ) var eventsToday: FetchedResults<Event>*/
-    
     @FetchRequest var eventsToday: FetchedResults<Event>
     
     init(dateComponents: Binding<DateComponents>){
@@ -32,7 +24,7 @@ struct DayView: View {
                 sortDescriptors: [
                     NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
                 ],
-                predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
+                predicate: NSPredicate(format: "startdate <= %@ AND %@ <= enddate", getDateForStartdateComparison(from: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: self._dateShown.wrappedValue) )! as CVarArg, getDateForEnddateComparison(from: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: self._dateShown.wrappedValue ))! as CVarArg)
             )
         }
         

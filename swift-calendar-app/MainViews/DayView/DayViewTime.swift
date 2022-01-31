@@ -11,15 +11,6 @@ import WidgetKit
 struct DayViewTime: View {
     @Binding var dateComponents: DateComponents
     @Binding var dateToShow: Date
-    
-    /*
-    @FetchRequest(
-        entity: Event.entity(),
-        sortDescriptors: [
-            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
-        ],
-        predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: dateToShow) as NSDate, getEndOfDay(date: dateToShow) as NSDate)
-    ) var eventsToday: FetchedResults<Event>*/
     @FetchRequest var eventsToday: FetchedResults<Event>
 
     
@@ -42,13 +33,22 @@ struct DayViewTime: View {
         _dateComponents = dateComponents
         _dateToShow = dateToShow
         
-        _eventsToday = FetchRequest<Event>(
+        /*_eventsToday = FetchRequest<Event>(
             entity: Event.entity(),
             sortDescriptors: [
                 NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
             ],
             predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: self._dateToShow.wrappedValue) as NSDate, getEndOfDay(date: self._dateToShow.wrappedValue) as NSDate)
+        ) */
+        
+    _eventsToday = FetchRequest<Event>(
+    sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+        ],
+        // Forceunwrap might break!
+    predicate: NSPredicate(format: "startdate <= %@ AND %@ <= enddate", getDateForStartdateComparison(from: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: self._dateToShow.wrappedValue) )! as CVarArg, getDateForEnddateComparison(from: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: self._dateToShow.wrappedValue ))! as CVarArg)
         )
+
     }
     
     var body: some View {
