@@ -72,6 +72,8 @@
 		A0D30B292796F26500EB1F22 /* DayViewTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B282796F26500EB1F22 /* DayViewTime.swift */; };
 		A0D30B2B2796F28E00EB1F22 /* DayViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */; };
 		A0DED9732790A8C1001AE9EF /* WeekEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0DED9722790A8C1001AE9EF /* WeekEventView.swift */; };
+		A0E8BEB427A826FB003C010F /* DayBoxWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E8BEB327A826FB003C010F /* DayBoxWidget.swift */; };
+		A0E8BEB627A82708003C010F /* MonthViewCalendarWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E8BEB527A82708003C010F /* MonthViewCalendarWidget.swift */; };
 		A0F09B9E279AF21E00458FA2 /* CurrentTimePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */; };
 		A0F09B9F279AF87500458FA2 /* MonthViewDayBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35B68332277A182E00D9EBAC /* MonthViewDayBox.swift */; };
 		A0F09BA0279AF8A500458FA2 /* MonthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FA2D18279712E3001BA750 /* MonthViewModel.swift */; };
@@ -164,6 +166,8 @@
 		A0D30B282796F26500EB1F22 /* DayViewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
 		A0D30B2A2796F28E00EB1F22 /* DayViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewHeader.swift; sourceTree = "<group>"; };
 		A0DED9722790A8C1001AE9EF /* WeekEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekEventView.swift; sourceTree = "<group>"; };
+		A0E8BEB327A826FB003C010F /* DayBoxWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayBoxWidget.swift; sourceTree = "<group>"; };
+		A0E8BEB527A82708003C010F /* MonthViewCalendarWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MonthViewCalendarWidget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -333,6 +337,8 @@
 		77F274352790202B0021AC42 /* MediumDailyOverview */ = {
 			isa = PBXGroup;
 			children = (
+				A0E8BEB527A82708003C010F /* MonthViewCalendarWidget.swift */,
+				A0E8BEB327A826FB003C010F /* DayBoxWidget.swift */,
 				77F2742D27901E4B0021AC42 /* MediumDailyOverviewView.swift */,
 				77F27436279020440021AC42 /* MonthView.swift */,
 			);
@@ -509,9 +515,11 @@
 				A0F09BA0279AF8A500458FA2 /* MonthViewModel.swift in Sources */,
 				77F2742F27901E9E0021AC42 /* MediumDailyOverviewView.swift in Sources */,
 				A0F09B9E279AF21E00458FA2 /* CurrentTimePublisher.swift in Sources */,
+				A0E8BEB627A82708003C010F /* MonthViewCalendarWidget.swift in Sources */,
 				77EA32E4278F5ECD00093312 /* SmallDailyOverviewView.swift in Sources */,
 				777627DE279016980097826F /* HelperFunctions.swift in Sources */,
 				77F2743A279020830021AC42 /* MonthView.swift in Sources */,
+				A0E8BEB427A826FB003C010F /* DayBoxWidget.swift in Sources */,
 				77F2743227901EBE0021AC42 /* LargeDailyOverviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

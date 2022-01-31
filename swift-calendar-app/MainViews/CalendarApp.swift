@@ -7,6 +7,8 @@
 
 import SwiftUI
 import CoreLocation
+import WidgetKit
+
 @main
 struct CalendarApp: App {
     @State var saveSucessful = true
@@ -124,6 +126,7 @@ struct CalendarApp: App {
                                 print("Inactive")
                             } else if newPhase == .background {
                                 print("Background")
+                                WidgetCenter.shared.reloadAllTimelines()
                                 currentTime.enterBackground()
                             }
                         }

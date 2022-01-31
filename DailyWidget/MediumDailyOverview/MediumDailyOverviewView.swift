@@ -15,8 +15,12 @@ struct MediumDailyOverviewView: View {
             HStack(spacing: 0){
                 SmallDailyOverviewView(dateComponents: dateComponents)
                     .frame(width: geometry.size.width * 0.4)
-                MonthView(dateComponents: $dateComponents)
-                    .frame(width: geometry.size.width * 0.6)
+                var monthviewmodel = MonthViewModel(dateComponents: dateComponents)
+                MonthViewCalendarWidget(daysOfMonth: monthviewmodel.daysOfMonth)
+                    .environmentObject(monthviewmodel)
+                    .environmentObject(CurrentTime())
+                //MonthView(dateComponents: $dateComponents)
+                 //   .frame(width: geometry.size.width * 0.6)
             }
         }
     }

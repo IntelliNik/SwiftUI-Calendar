@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import WidgetKit
 
 // Edit view for events
 
@@ -500,7 +501,8 @@ struct EditEventView: View {
                     }
                     
                     try? moc.save()
-                    
+                    WidgetCenter.shared.reloadAllTimelines()
+
                     withAnimation{
                         showConfirmation = true
                     }
@@ -1218,7 +1220,8 @@ struct EditEventView: View {
                     }
                     
                     try? moc.save()
-                    
+                    WidgetCenter.shared.reloadAllTimelines()
+
                     withAnimation{
                         showConfirmation = true
                     }
@@ -1288,6 +1291,8 @@ struct EditEventView: View {
         }
         removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
+        WidgetCenter.shared.reloadAllTimelines()
+
     }
     
     // Search for events which the same repetition id

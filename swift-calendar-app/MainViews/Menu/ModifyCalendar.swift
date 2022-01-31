@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 
 // View to modify a calendar, i.e. rename the calendar or select a new color
@@ -59,6 +60,7 @@ struct ModifyCalendar: View {
             
             // Save the new values in data core
             try? moc.save()
+            WidgetCenter.shared.reloadAllTimelines()
             
             withAnimation{
                 showConfirmation = true
