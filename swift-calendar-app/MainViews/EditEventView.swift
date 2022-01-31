@@ -8,10 +8,13 @@
 import SwiftUI
 import MapKit
 
+// Edit view for events
+
 struct EditEventView: View {
     
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
+    // Event which shold be modified
     @State var event: Event
     @State var confirmationShown = false
     @State private var name: String = ""
@@ -95,617 +98,290 @@ struct EditEventView: View {
     ) var modifyEvents: FetchedResults<Event>
     
     var body: some View {
-        NavigationView{
-            Form{
-                Section{
-                    Picker("Calendar", selection: $calendar) {
-                        ForEach((0..<calendars.count), id: \.self) { index in
-                            HStack{
-                                Image(systemName: "square.fill")
-                                    .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
-                                    .imageScale(.large)
-                                Text("\(calendars[index].name!)")
-                            }.tag(index)
-                        }
-                    }.padding()
-                }
-                Section{
-                    TextField("Name", text: self.$event.name ?? "")
-                        .padding()
-                }
-                Section{
-                    Toggle("Whole Day", isOn: $wholeDay)
-                        .onChange(of: wholeDay) { value in
-                            if(value){
-                                datePickerComponents = [.date]
-                                // set notification default to one day before
-                                notificationMinutesBefore = 24*60
-                            } else {
-                                datePickerComponents = [.date, .hourAndMinute]
-                                // set notification default to 5 minutes before
-                                notificationMinutesBefore = 5
-                            }
-                        }
-                        .padding()
-                    DatePicker(selection: $startDate, displayedComponents: datePickerComponents) {
-                        Text("Start")
-                    }.padding()
-                    DatePicker(selection: $endDate, in: startDate..., displayedComponents: datePickerComponents) {
-                        Text("End")
-                    }.padding()
-                }
-                Section{
-                    Toggle("Notification", isOn: $notification).padding()
-                    if(notification){
-                        Picker("When", selection: $notificationMinutesBefore) {
-                            if(!wholeDay){
-                                Text("On Time").tag(0)
-                                Text("5min before").tag(5)
-                                Text("15min before").tag(15)
-                                Text("30min before").tag(30)
-                                Text("1 hour before").tag(60)
-                                Text("1 day before").tag(24*60)
-                            } else {
-                                Text("1 day before").tag(24*60)
-                                Text("2 days before").tag(2*24*60)
-                                Text("1 week before").tag(7*24*60)
-                            }
-                        }.padding()
-                        if(wholeDay){
-                            DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
-                                Text("At time")
-                            }.padding()
-                        }
-                    }
-                }
-                Section{
-                    Toggle("Repeat", isOn: $repetition).padding()
-                    if(repetition){
-                        Picker("Interval", selection: $repetitionInterval) {
-                            ForEach(repetitionIntevals, id: \.self) {
-                                Text($0)
-                            }
-                        }.padding()
-                        Picker("Until", selection: $repeatUntil) {
-                            ForEach(repeatUntilModes, id: \.self) {
-                                Text($0)
-                            }
-                        }.padding()
-                        if(repeatUntil == "Repetitions"){
-                            HStack{
-                                Text("Repetitions").padding()
-                                Spacer()
-                                TextField("Repetitions", text: $amountOfRepetitions)
-                                    .keyboardType(.numberPad)
-                                    .multilineTextAlignment(.trailing)
-                                    .padding()
-                            }
-                        }
-                        if(repeatUntil == "End Date"){
-                            DatePicker(selection: $endRepetitionDate, in: endDate..., displayedComponents: [.date]){
-                                Text("End Date")
-                            }
-                            .padding()
-                        }
-                    }
-                }
-                Section{
-                    HStack{
-                        Text("Location")
-                            .padding()
-                        Picker("Location", selection: $location) {
-                            ForEach(locationModes, id: \.self) {
-                                Text($0)
-                            }
-                        }
-                        .pickerStyle(.segmented)
-                        .padding()
-                    }
-                    if(location == "Current"){
-                        
-                        /*Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                            annotationItems: markers) { marker in
-                            marker.location
-                        }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
-                            .onAppear(){
-                                let annotationCurrent = MKPointAnnotation()
-                                annotationCurrent.coordinate = currentRegion.center
-                                markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
-                            }*/
-                        if CLLocationManager.locationServicesEnabled() {
-                            switch locationManager.authorizationStatus {
-                                case .notDetermined, .restricted, .denied:
+        if event.repetition{
+            NavigationView{
+                Form{
+                    Section{
+                        Picker("Calendar", selection: $calendar) {
+                            ForEach((0..<calendars.count), id: \.self) { index in
                                 HStack{
-                                    Image(systemName: "exclamationmark.triangle.fill")
+                                    Image(systemName: "square.fill")
+                                        .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
+                                        .imageScale(.large)
+                                    Text("\(calendars[index].name!)")
+                                }.tag(index)
+                            }
+                        }.padding()
+                    }
+                    Section{
+                        TextField("Name", text: self.$event.name ?? "")
+                            .padding()
+                    }
+                    Section{
+                        Toggle("Notification", isOn: $notification).padding()
+                        if(notification){
+                            Picker("When", selection: $notificationMinutesBefore) {
+                                if(!wholeDay){
+                                    Text("On Time").tag(0)
+                                    Text("5min before").tag(5)
+                                    Text("15min before").tag(15)
+                                    Text("30min before").tag(30)
+                                    Text("1 hour before").tag(60)
+                                    Text("1 day before").tag(24*60)
+                                } else {
+                                    Text("1 day before").tag(24*60)
+                                    Text("2 days before").tag(2*24*60)
+                                    Text("1 week before").tag(7*24*60)
+                                }
+                            }.padding()
+                            if(wholeDay){
+                                DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
+                                    Text("At time")
+                                }.padding()
+                            }
+                        }
+                    }
+                    Section{
+                        Toggle("Repeat", isOn: $repetition).padding()
+                    }
+                    Section{
+                        HStack{
+                            Text("Location")
+                                .padding()
+                            Picker("Location", selection: $location) {
+                                ForEach(locationModes, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .padding()
+                        }
+                        if(location == "Current"){
+                            if CLLocationManager.locationServicesEnabled() {
+                                switch locationManager.authorizationStatus {
+                                    case .notDetermined, .restricted, .denied:
+                                    HStack{
+                                        Image(systemName: "exclamationmark.triangle.fill")
+                                            .padding()
+                                            .foregroundColor(.yellow)
+                                        Text("Please allow accurate location services in the settings to use this feature.")
                                         .padding()
-                                        .foregroundColor(.yellow)
-                                    Text("Please allow accurate location services in the settings to use this feature.")
-                                    .padding()
-                                    .foregroundColor(.blue)
-                                    .fixedSize(horizontal: false, vertical: true)
-                                    .onAppear(){                                  saveCurrentLocation = false}
-                                    Button(action: {
-                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                        }) {
-                                Image(systemName: "gear")
-                                    .foregroundColor(.blue)
-                                    .imageScale(.large)
+                                        .foregroundColor(.blue)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .onAppear(){                                  saveCurrentLocation = false}
+                                        Button(action: {
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                            }) {
+                                    Image(systemName: "gear")
+                                        .foregroundColor(.blue)
+                                        .imageScale(.large)
+                                            }
+                                    }
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        switch locationManager.accuracyAuthorization {
+                                                case .fullAccuracy:
+                                                    Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                                                    annotationItems: markers) { marker in
+                                                      marker.location
+                                                  }.edgesIgnoringSafeArea(.all)
+                                                    .frame(minHeight: 200)
+                                                    .onAppear(){
+                                                        saveCurrentLocation = true
+                                                        let annotationCurrent = MKPointAnnotation()
+                                                        annotationCurrent.coordinate = currentRegion.center
+                                                        markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                                                    }
+                                                case .reducedAccuracy:
+                                            HStack{
+                                                Image(systemName: "exclamationmark.triangle.fill")
+                                                    .padding()
+                                                    .foregroundColor(.yellow)
+                                                Text("Please allow accurate location services in the settings to use this feature.")
+                                                .padding()
+                                                .foregroundColor(.blue)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .onAppear(){                                  saveCurrentLocation = false}
+                                                Button(action: {
+                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                                    }) {
+                                            Image(systemName: "gear")
+                                                .foregroundColor(.blue)
+                                                .imageScale(.large)
+                                                    }
+                                            }
+                                                default:
+                                                    Text("Error: This should not happen")
+                                                    .padding()
+                                                    .onAppear(){
+                                                        saveCurrentLocation = false
+                                                    }
+                                            }
+                                    @unknown default:
+                                        Text("Error: This should not happen")
+                                        .padding()
+                                        .onAppear(){
+                                            saveCurrentLocation = false
                                         }
                                 }
-                                case .authorizedAlways, .authorizedWhenInUse:
-                                    switch locationManager.accuracyAuthorization {
-                                            case .fullAccuracy:
-                                                Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
-                                                annotationItems: markers) { marker in
-                                                  marker.location
-                                              }.edgesIgnoringSafeArea(.all)
-                                                .frame(minHeight: 200)
-                                                .onAppear(){
-                                                    saveCurrentLocation = true
-                                                    let annotationCurrent = MKPointAnnotation()
-                                                    annotationCurrent.coordinate = currentRegion.center
-                                                    markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
-                                                }
-                                            case .reducedAccuracy:
-                                        HStack{
-                                            Image(systemName: "exclamationmark.triangle.fill")
-                                                .padding()
-                                                .foregroundColor(.yellow)
-                                            Text("Please allow accurate location services in the settings to use this feature.")
-                                            .padding()
-                                            .foregroundColor(.blue)
-                                            .fixedSize(horizontal: false, vertical: true)
-                                            .onAppear(){                                  saveCurrentLocation = false}
-                                            Button(action: {
-                                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                                                }) {
-                                        Image(systemName: "gear")
-                                            .foregroundColor(.blue)
-                                            .imageScale(.large)
-                                                }
-                                        }
-                                            default:
-                                                Text("Error: This should not happen")
-                                                .padding()
-                                                .onAppear(){
-                                                    saveCurrentLocation = false
-                                                }
-                                        }
-                                @unknown default:
-                                    Text("Error: This should not happen")
+                            } else {
+                                Text("Location services are not enabled")
                                     .padding()
                                     .onAppear(){
                                         saveCurrentLocation = false
                                     }
                             }
-                        } else {
-                            Text("Location services are not enabled")
-                                .padding()
-                                .onAppear(){
-                                    saveCurrentLocation = false
-                                }
                         }
-                    }
-                    if(location == "Custom"){
-                        HStack{
-                            Image(systemName: "magnifyingglass")
-                            TextField("Search for location ...", text: $locationSearch)
-                                .autocapitalization(.none)
-                                .padding()
-                            if locationService.status == .isSearching {
-                                Image(systemName: "clock")
-                                    .foregroundColor(Color.gray)
-                            }
-                            if self.locationSearch != "" {
-                                Button(action: {
-                                    self.locationSearch = ""
-                                })
-                                {
-                                    Image(systemName: "multiply.circle")
+                        if(location == "Custom"){
+                            HStack{
+                                Image(systemName: "magnifyingglass")
+                                TextField("Search for location ...", text: $locationSearch)
+                                    .autocapitalization(.none)
+                                    .padding()
+                                if locationService.status == .isSearching {
+                                    Image(systemName: "clock")
                                         .foregroundColor(Color.gray)
                                 }
-                            }
-                        }
-                        .onChange(of: locationSearch) { newValue in
-                            locationService.queryFragment = locationSearch
-                        }
-                        /*Section(header: Text("Search")) {
-                         ZStack(alignment: .trailing) {
-                         TextField("Search", text: $locationService.queryFragment)
-                         
-                         // while user is typing input it sends the current query to the location service
-                         // which in turns sets its status to searching; when searching status is set on
-                         // searching then a clock symbol will be shown beside the search box
-                         if locationService.status == .isSearching {
-                         Image(systemName: "clock")
-                         .foregroundColor(Color.gray)
-                         }
-                         }
-                         }*/
-                        
-                        Section() {
-                            List {
-                                Group { () -> AnyView in
-                                    switch locationService.status {
-                                    case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
-                                    case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
-                                    default: return AnyView(EmptyView())
-                                    }
-                                }.foregroundColor(Color.gray)
-                                
-                                // display the results as a list
-                                ForEach(locationService.searchResults, id: \.self) {
-                                    completionResult in
+                                if self.locationSearch != "" {
                                     Button(action: {
-                                        self.locationSearch = completionResult.title + ", " + completionResult.subtitle
-                                        let search =  MKLocalSearch(request: MKLocalSearch.Request(__naturalLanguageQuery: (completionResult.title + ", " + completionResult.subtitle)))
-                                        search.start { (response, error) in
-                                            let response = response!
-                                            
-                                            for item in response.mapItems {
-                                                if let name = item.name,
-                                                   let location = item.placemark.location {
-                                                    print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
-                                                    customRegion.center.latitude = location.coordinate.latitude
-                                                    customRegion.center.longitude = location.coordinate.longitude
-                                                    let annotation = MKPointAnnotation()
-                                                    annotation.coordinate = customRegion.center
-                                                }
-                                            }
-                                            
-                                            markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
-                                            
-                                            self.locationService.queryFragment = ""
-                                            self.locationService.clear()
-                                        }
-                                    }) {
-                                        Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
+                                        self.locationSearch = ""
+                                    })
+                                    {
+                                        Image(systemName: "multiply.circle")
+                                            .foregroundColor(Color.gray)
                                     }
-                                    
-                                    //Text(completionResult.title)
                                 }
                             }
+                            .onChange(of: locationSearch) { newValue in
+                                locationService.queryFragment = locationSearch
+                            }
+                            Section() {
+                                List {
+                                    Group { () -> AnyView in
+                                        switch locationService.status {
+                                        case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
+                                        case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
+                                        default: return AnyView(EmptyView())
+                                        }
+                                    }.foregroundColor(Color.gray)
+                                    
+                                    // display the results as a list
+                                    ForEach(locationService.searchResults, id: \.self) {
+                                        completionResult in
+                                        Button(action: {
+                                            self.locationSearch = completionResult.title + ", " + completionResult.subtitle
+                                            let search =  MKLocalSearch(request: MKLocalSearch.Request(__naturalLanguageQuery: (completionResult.title + ", " + completionResult.subtitle)))
+                                            search.start { (response, error) in
+                                                let response = response!
+                                                
+                                                for item in response.mapItems {
+                                                    if let name = item.name,
+                                                       let location = item.placemark.location {
+                                                        print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
+                                                        customRegion.center.latitude = location.coordinate.latitude
+                                                        customRegion.center.longitude = location.coordinate.longitude
+                                                        let annotation = MKPointAnnotation()
+                                                        annotation.coordinate = customRegion.center
+                                                    }
+                                                }
+                                                
+                                                markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+                                                
+                                                self.locationService.queryFragment = ""
+                                                self.locationService.clear()
+                                            }
+                                        }) {
+                                            Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
+                                        }
+                                        
+                                        //Text(completionResult.title)
+                                    }
+                                }
+                            }
+                            Map(coordinateRegion: $customRegion,
+                                annotationItems: markers) { marker in
+                                marker.location
+                            }.edgesIgnoringSafeArea(.all)
+                                .frame(minHeight: 200)
                         }
-                        Map(coordinateRegion: $customRegion,
-                            annotationItems: markers) { marker in
-                            marker.location
-                        }.edgesIgnoringSafeArea(.all)
-                            .frame(minHeight: 200)
                     }
-                }
-                Section{
-                    HStack{
-                        TextField("URL", text: $urlString)
+                    Section{
+                        HStack{
+                            TextField("URL", text: $urlString)
+                                .autocapitalization(.none)
+                                .padding()
+                        }
+                        TextField("Notes", text: self.$event.notes ?? "")
                             .autocapitalization(.none)
                             .padding()
                     }
-                    TextField("Notes", text: self.$event.notes ?? "")
-                        .autocapitalization(.none)
-                        .padding()
                 }
-            }
-            .navigationTitle("Edit Event")
-            .toolbar {
-                Button("Delete") {
-                    confirmationShown = true
+                .navigationTitle("Edit Event")
+                .toolbar {
+                    Button("Delete") {
+                        confirmationShown = true
+                    }
+                    .padding(.trailing, 5)
+                    .foregroundColor(Color("AccentColorRed"))
                 }
-                .padding(.trailing, 5)
-                .foregroundColor(Color("AccentColorRed"))
-            }
-            .confirmationDialog(
-                "Are you sure?",
-                isPresented: $confirmationShown
-            ) {
-                Button("Delete event"){
-                    deleteEvent(id: event.key!)
-                    dismiss()
+                .confirmationDialog(
+                    "Are you sure?",
+                    isPresented: $confirmationShown
+                ) {
+                    Button("Delete event"){
+                        deleteEvent(id: event.key!)
+                        dismiss()
+                    }
                 }
-            }
-            .navigationBarItems(leading: Button(action : {
-                // TODO: Check that notes is set everywhere
-                if event.repetition && repetition{
-                    // In this case event was a repeating event and should still be one
-                    // How should such events be modified ?
-                    
-                    modifyID = event.repetitionID!
-                    modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
-                    name = self.event.name!
-                    
-                    print(modifyEvents.count)
-                    
-                    // TODO: Abfrage hinzufügen ob alle zugehörigen darauffolgenden events ebenfalls verändert werden sollen.
-                    for mevent in modifyEvents{
-                        mevent.setValue(name, forKey: "name")
-                        mevent.setValue(wholeDay,forKey:"wholeDay")
-                        mevent.setValue(self.event.notes,forKey:"notes")
+                .navigationBarItems(leading: Button(action : {
+                    if event.repetition && repetition{
+                        // Event is a repetition event and still be one
+                        // Modify all events of repetition after event.startdate
                         
-                        // TODO: Wie sollen das Datum verändert werden?
-                        // mevent.setValue(startDate,forKey:"startdate")
-                        // mevent.setValue(endDate,forKey:"enddate")
+                        modifyID = event.repetitionID!
+                        modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
+                        name = self.event.name!
                         
-                        if(urlString != ""){
-                            mevent.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
-                        }
-                        
-                        if (location == "Current"){
-                            if saveCurrentLocation{
-                                mevent.setValue(true, forKey: "location")
-                                mevent.setValue(currentRegion.center.latitude, forKey: "latitude")
-                                mevent.setValue(currentRegion.center.longitude, forKey: "longitude")
-                                mevent.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                mevent.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                            }
-                        } else if (location == "Custom")
-                        {
-                            mevent.setValue(true, forKey: "location")
-                            mevent.setValue(customRegion.center.latitude, forKey: "latitude")
-                            mevent.setValue(customRegion.center.longitude, forKey: "longitude")
-                            mevent.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                            mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                            // TODO: save the name of the location somehow in event.locationName
-                        } else {
-                            mevent.setValue(false, forKey: "location")
-                        }
-                        
-                        if notification {
-                            mevent.setValue(true,forKey:"notification")
-                            if(!wholeDay){
-                                mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                            } else {
-                                mevent.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
-                            }
-                            
-                        } else{
-                            mevent.setValue(false,forKey:"notification")
-                        }
-                    }
-                    
-                    // ----- TODO: How to handle these two cases?
-                    event.setValue(repeatUntil, forKey: "repetitionUntil")
-                    event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                    if(repeatUntil == "Repetitions"){
-                        event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                    }
-                    if(repeatUntil == "End Date"){
-                        event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                    }
-                    // ------------------
-                    
-                    if(repeatUntil == "Forever"){
-                        let eventForever = ForeverEvent(context: moc)
-                        eventForever.key = UUID()
-                        eventForever.startdate = event.startdate!
-                        eventForever.enddate = event.enddate!
-                        eventForever.name = self.event.name
-                        eventForever.url = event.url
-                        eventForever.notes = event.notes
-                        
-                        if event.location{
-                            eventForever.location = true
-                            eventForever.latitude = event.latitude
-                            eventForever.longitude = event.longitude
-                            eventForever.latitudeDelta = event.latitudeDelta
-                            eventForever.longitudeDelta = event.longitudeDelta
-                        }else{
-                            eventForever.location = false
-                        }
-                        if event.notification{
-                            eventForever.notification = true
-                            if(!event.wholeDay){
-                                eventForever.notificationMinutesBefore = event.notificationMinutesBefore
-                            } else {
-                                eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
-                            }
-                        }else{
-                            eventForever.notification = false
-                        }
-                        
-                        eventForever.repetitionInterval = repetitionInterval
-                        
-                        calendars[calendar].addToForeverEvents(eventForever)
-                        moc.delete(event)
-                        foreverEvent = true
-                        
-                        deleteID = modifyID
-                        deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
-                        
-                        for devent in deleteEvents{
-                            moc.delete(devent)
-                        }
-                    }
-                    
-                    if !foreverEvent{
                         for mevent in modifyEvents{
-                            calendars[calendar].addToEvents(mevent)
-                        }
-                    }
-                    
-                } else if event.repetition && !repetition{
-                    // In this case event was a repeating event but should not be one anymore
-                    // Notice that event cannot be an forever event
-                    // Case is finished
-                    deleteID = event.repetitionID!
-                    
-                    let newEvent = Event(context: moc)
-                    newEvent.key = UUID()
-                    newEvent.name = self.event.name
-                    newEvent.startdate = startDate
-                    
-                    if(endDate < startDate){
-                        newEvent.enddate = startDate
-                    } else{
-                        newEvent.enddate = endDate
-                    }
-                    
-                    newEvent.wholeDay = wholeDay
-                    // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
-                    if(urlString != ""){
-                        newEvent.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
-                        
-                    }
-                    if(notes != ""){
-                        newEvent.notes = notes
-                    }
-                    if (location == "Current"){
-                        if saveCurrentLocation{
-                            newEvent.location = true
-                            newEvent.latitude = currentRegion.center.latitude
-                            newEvent.longitude = currentRegion.center.longitude
-                            newEvent.latitudeDelta = currentRegion.span.latitudeDelta
-                            newEvent.longitudeDelta = currentRegion.span.longitudeDelta
-                        }
-                    } else if (location == "Custom")
-                    {
-                        newEvent.location = true
-                        newEvent.latitude = customRegion.center.latitude
-                        newEvent.longitude = customRegion.center.longitude
-                        newEvent.latitudeDelta = customRegion.span.latitudeDelta
-                        newEvent.longitudeDelta = customRegion.span.longitudeDelta
-                        // TODO: save the name of the location somehow in event.locationName
-                    } else {
-                        newEvent.location = false
-                    }
-                    if notification {
-                        newEvent.notification = true
-                        if(!wholeDay){
-                            newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
-                        } else {
-                            newEvent.notificationTimeAtWholeDay = notficationTimeAtWholeDay
-                        }
-                        
-                    } else {
-                        newEvent.notification = false
-                    }
-                    
-                    newEvent.repetition = false
-            
-                    calendars[calendar].addToEvents(newEvent)
-                    
-                    deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
-                    
-                    for devent in deleteEvents{
-                        moc.delete(devent)
-                    }
-                }else{
-                    // In this case event was no repeating event
-                    // Maybe it turns into an repeating event.
-                    // Case is finished
-                    if repetition{
-                        event.setValue(wholeDay,forKey:"wholeDay")
-                        event.setValue(startDate,forKey:"startdate")
-                        event.setValue(endDate,forKey:"enddate")
-                        event.setValue(self.event.notes,forKey:"notes")
-                        
-                        if(urlString != ""){
-                            event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
-                        }
-                        
-                        if (location == "Current"){
-                            if saveCurrentLocation{
-                                event.setValue(true, forKey: "location")
-                                event.setValue(currentRegion.center.latitude, forKey: "latitude")
-                                event.setValue(currentRegion.center.longitude, forKey: "longitude")
-                                event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                            }
-                        } else if (location == "Custom")
-                        {
-                            event.setValue(true, forKey: "location")
-                            event.setValue(customRegion.center.latitude, forKey: "latitude")
-                            event.setValue(customRegion.center.longitude, forKey: "longitude")
-                            event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                            event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                            // TODO: save the name of the location somehow in event.locationName
-                        } else {
-                            event.setValue(false, forKey: "location")
-                        }
-                        
-                        if notification {
-                            event.setValue(true,forKey:"notification")
-                            if(!wholeDay){
-                                event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
-                            } else {
-                                event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                            mevent.setValue(name, forKey: "name")
+                            mevent.setValue(wholeDay,forKey:"wholeDay")
+                            mevent.setValue(self.event.notes,forKey:"notes")
+                            
+                            if(urlString != ""){
+                                mevent.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
                             }
                             
-                        } else{
-                            event.setValue(false,forKey:"notification")
+                            if (location == "Current"){
+                                if saveCurrentLocation{
+                                    mevent.setValue(true, forKey: "location")
+                                    mevent.setValue(currentRegion.center.latitude, forKey: "latitude")
+                                    mevent.setValue(currentRegion.center.longitude, forKey: "longitude")
+                                    mevent.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                    mevent.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                                }
+                            } else if (location == "Custom")
+                            {
+                                mevent.setValue(true, forKey: "location")
+                                mevent.setValue(customRegion.center.latitude, forKey: "latitude")
+                                mevent.setValue(customRegion.center.longitude, forKey: "longitude")
+                                mevent.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")                            } else {
+                                mevent.setValue(false, forKey: "location")
+                            }
+                            
+                            if notification {
+                                mevent.setValue(true,forKey:"notification")
+                                if(!wholeDay){
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                } else {
+                                    mevent.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                }
+                                
+                            } else{
+                                mevent.setValue(false,forKey:"notification")
+                            }
                         }
                         
-                        event.setValue(true, forKey: "repetition")
-                        event.setValue(repeatUntil, forKey: "repetitionUntil")
-                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
-                        let repetitionID = UUID()
-                        event.setValue(repetitionID, forKey: "repetitionID")
-                        let myCalendar = Calendar.current
-                        if(repeatUntil == "Repetitions"){
-                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
-                            let repetitionsNumber = event.repetitionAmount
-                            if repetitionsNumber > 1{
-                                for i in 1...(repetitionsNumber-1) {
-                                    var eventR = Event(context: moc)
-                                    eventR.key = UUID()
-                                    eventR = CopyEvent(event1: eventR, event2: event)
-                                    switch repetitionInterval{
-                                    case "Weekly":
-                                        eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
-                                    case "Daily":
-                                        eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
-                                        
-                                    case "Monthly":
-                                        eventR.startdate = myCalendar.date(byAdding: .month, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .month, value: Int(i), to: event.enddate!)
-                                        
-                                    case "Yearly":
-                                        eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
-                                        eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
-                                        
-                                    default:
-                                        break
-                                    }
-                                    calendars[calendar].addToEvents(eventR)
-                                }
-                            }
-                        }
-                        if(repeatUntil == "End Date"){
-                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
-                            var currentDate = event.startdate
-                            var i = 1
-                            while currentDate! < endRepetitionDate{
-                                var eventR = Event(context: moc)
-                                eventR.key = UUID()
-                                eventR = CopyEvent(event1: eventR, event2: event)
-                                switch repetitionInterval{
-                                case "Weekly":
-                                    eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
-                                    eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
-                                case "Daily":
-                                    eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
-                                    eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
-                                    
-                                case "Monthly":
-                                    eventR.startdate = myCalendar.date(byAdding: .month, value: i, to: event.startdate!)
-                                    eventR.enddate = myCalendar.date(byAdding: .month, value: i, to: event.enddate!)
-                                    
-                                case "Yearly":
-                                    eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
-                                    eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
-                                    
-                                default:
-                                    break
-                                }
-                                currentDate = eventR.startdate
-                                if currentDate! <= endRepetitionDate{
-                                    calendars[calendar].addToEvents(eventR)
-                                    i = i + 1
-                                } else{
-                                    moc.delete(eventR)
-                                }
-                            }
-                        }
                         if(repeatUntil == "Forever"){
                             let eventForever = ForeverEvent(context: moc)
                             eventForever.key = UUID()
@@ -730,6 +406,7 @@ struct EditEventView: View {
                                     eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 } else {
                                     eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
                                 }
                             }else{
                                 eventForever.notification = false
@@ -740,127 +417,892 @@ struct EditEventView: View {
                             calendars[calendar].addToForeverEvents(eventForever)
                             moc.delete(event)
                             foreverEvent = true
+                            
+                            deleteID = modifyID
+                            deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
+                            
+                            for devent in deleteEvents{
+                                moc.delete(devent)
+                            }
                         }
                         
                         if !foreverEvent{
-                            calendars[calendar].addToEvents(event)
+                            for mevent in modifyEvents{
+                                calendars[calendar].addToEvents(mevent)
+                            }
                         }
-                    }else{
-                        event.setValue(wholeDay,forKey:"wholeDay")
-                        event.setValue(startDate,forKey:"startdate")
-                        event.setValue(endDate,forKey:"enddate")
                         
+                    } else {
+                        // In this case event was a repeating event but should not be one anymore
+                        // Notice that event cannot be an forever event
+                        deleteID = event.repetitionID!
+                        
+                        let newEvent = Event(context: moc)
+                        newEvent.key = UUID()
+                        newEvent.name = self.event.name
+                        newEvent.startdate = startDate
+                        
+                        if(endDate < startDate){
+                            newEvent.enddate = startDate
+                        } else{
+                            newEvent.enddate = endDate
+                        }
+                        
+                        newEvent.wholeDay = wholeDay
+                        // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                         if(urlString != ""){
-                            event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                            newEvent.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
+                            
                         }
-                        
+                        if(notes != ""){
+                            newEvent.notes = notes
+                        }
                         if (location == "Current"){
                             if saveCurrentLocation{
-                                event.setValue(true, forKey: "location")
-                                event.setValue(currentRegion.center.latitude, forKey: "latitude")
-                                event.setValue(currentRegion.center.longitude, forKey: "longitude")
-                                event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                                event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                                newEvent.location = true
+                                newEvent.latitude = currentRegion.center.latitude
+                                newEvent.longitude = currentRegion.center.longitude
+                                newEvent.latitudeDelta = currentRegion.span.latitudeDelta
+                                newEvent.longitudeDelta = currentRegion.span.longitudeDelta
                             }
                         } else if (location == "Custom")
                         {
-                            event.setValue(true, forKey: "location")
-                            event.setValue(customRegion.center.latitude, forKey: "latitude")
-                            event.setValue(customRegion.center.longitude, forKey: "longitude")
-                            event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
-                            event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
-                            // TODO: save the name of the location somehow in event.locationName
+                            newEvent.location = true
+                            newEvent.latitude = customRegion.center.latitude
+                            newEvent.longitude = customRegion.center.longitude
+                            newEvent.latitudeDelta = customRegion.span.latitudeDelta
+                            newEvent.longitudeDelta = customRegion.span.longitudeDelta
                         } else {
-                            event.setValue(false, forKey: "location")
+                            newEvent.location = false
                         }
-                        
                         if notification {
-                            event.setValue(true,forKey:"notification")
+                            newEvent.notification = true
                             if(!wholeDay){
-                                event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             } else {
-                                event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                newEvent.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
                             }
                             
-                        } else{
-                            event.setValue(false,forKey:"notification")
+                        } else {
+                            newEvent.notification = false
                         }
-                            
-                        event.setValue(false, forKey: "repetition")
+                        
+                        newEvent.repetition = false
+                
+                        calendars[calendar].addToEvents(newEvent)
+                        
+                        deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
+                        
+                        for devent in deleteEvents{
+                            moc.delete(devent)
+                        }
                     }
-                }
-                
-                try? moc.save()
-                
-                withAnimation{
-                    showConfirmation = true
-                }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    
+                    try? moc.save()
+                    
                     withAnimation{
-                        showConfirmation = false
+                        showConfirmation = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation{
+                            showConfirmation = false
+                        }
+                    }
+                    
+                    self.mode.wrappedValue.dismiss()
+                }){
+                    HStack{
+                        Image(systemName: "chevron.left")
+                            .font(Font.headline.weight(.bold))
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                        Text("Back")
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                    }
+                })
+            }
+            .onAppear {
+                if event.key == nil{
+                    dismiss()
+                }else{
+                    calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
+                    wholeDay = event.wholeDay
+                    notification = event.notification
+                    startDate = event.startdate!
+                    endDate = event.enddate!
+                    notification = event.notification
+                    notificationMinutesBefore = Int(event.notificationMinutesBefore)
+                    notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
+                    urlString = event.url ?? ""
+                    notes = event.notes ?? ""
+                    endRepetitionDate = event.repetitionEndDate ?? Date()
+                    locationBool = event.location
+                    if locationBool{
+                        location = "Custom"
+                        customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                        markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+                    }
+                    repetition = event.repetition
+                    if repetition{
+                        repeatUntil = event.repetitionUntil!
+                        repetitionInterval = event.repetitionInterval!
+                        if(repeatUntil == "Repetitions"){
+                            amountOfRepetitions = String(event.repetitionAmount)
+                        }
+                        if(repeatUntil == "End Date"){
+                            endRepetitionDate = event.repetitionEndDate!
+                        }
                     }
                 }
-                
-                self.mode.wrappedValue.dismiss()
-            }){
-                HStack{
-                    Image(systemName: "chevron.left")
-                        .font(Font.headline.weight(.bold))
-                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                    Text("Back")
-                        .foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                }
-            })
-        }
-        .onAppear {
-            calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
-            wholeDay = event.wholeDay
-            notification = event.notification
-            startDate = event.startdate!
-            endDate = event.enddate!
-            notification = event.notification
-            notificationMinutesBefore = Int(event.notificationMinutesBefore)
-            notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
-            urlString = event.url ?? ""
-            notes = event.notes ?? ""
-            endRepetitionDate = event.repetitionEndDate ?? Date()
-            locationBool = event.location
-            if locationBool{
-                location = "Custom"
-                customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-                markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
             }
-            repetition = event.repetition
-            if repetition{
-                repeatUntil = event.repetitionUntil!
-                repetitionInterval = event.repetitionInterval!
-                if(repeatUntil == "Repetitions"){
-                    amountOfRepetitions = String(event.repetitionAmount)
+        }else{
+            NavigationView{
+                Form{
+                    Section{
+                        Picker("Calendar", selection: $calendar) {
+                            ForEach((0..<calendars.count), id: \.self) { index in
+                                HStack{
+                                    Image(systemName: "square.fill")
+                                        .foregroundColor( getColorFromString(stringColor: calendars[index].color ?? "Yellow") )
+                                        .imageScale(.large)
+                                    Text("\(calendars[index].name!)")
+                                }.tag(index)
+                            }
+                        }.padding()
+                    }
+                    Section{
+                        TextField("Name", text: self.$event.name ?? "")
+                            .padding()
+                    }
+                    Section{
+                        Toggle("Whole Day", isOn: $wholeDay)
+                            .onChange(of: wholeDay) { value in
+                                if(value){
+                                    datePickerComponents = [.date]
+                                    // set notification default to one day before
+                                    notificationMinutesBefore = 24*60
+                                } else {
+                                    datePickerComponents = [.date, .hourAndMinute]
+                                    // set notification default to 5 minutes before
+                                    notificationMinutesBefore = 5
+                                }
+                            }
+                            .padding()
+                        DatePicker(selection: $startDate, displayedComponents: datePickerComponents) {
+                            Text("Start")
+                        }.padding()
+                        DatePicker(selection: $endDate, in: startDate..., displayedComponents: datePickerComponents) {
+                            Text("End")
+                        }.padding()
+                    }
+                    Section{
+                        Toggle("Notification", isOn: $notification).padding()
+                        if(notification){
+                            Picker("When", selection: $notificationMinutesBefore) {
+                                if(!wholeDay){
+                                    Text("On Time").tag(0)
+                                    Text("5min before").tag(5)
+                                    Text("15min before").tag(15)
+                                    Text("30min before").tag(30)
+                                    Text("1 hour before").tag(60)
+                                    Text("1 day before").tag(24*60)
+                                } else {
+                                    Text("1 day before").tag(24*60)
+                                    Text("2 days before").tag(2*24*60)
+                                    Text("1 week before").tag(7*24*60)
+                                }
+                            }.padding()
+                            if(wholeDay){
+                                DatePicker(selection: $notficationTimeAtWholeDay, displayedComponents: [.hourAndMinute]) {
+                                    Text("At time")
+                                }.padding()
+                            }
+                        }
+                    }
+                    Section{
+                        Toggle("Repeat", isOn: $repetition).padding()
+                        if(repetition){
+                            Picker("Interval", selection: $repetitionInterval) {
+                                ForEach(repetitionIntevals, id: \.self) {
+                                    Text($0)
+                                }
+                            }.padding()
+                            Picker("Until", selection: $repeatUntil) {
+                                ForEach(repeatUntilModes, id: \.self) {
+                                    Text($0)
+                                }
+                            }.padding()
+                            if(repeatUntil == "Repetitions"){
+                                HStack{
+                                    Text("Repetitions").padding()
+                                    Spacer()
+                                    TextField("Repetitions", text: $amountOfRepetitions)
+                                        .keyboardType(.numberPad)
+                                        .multilineTextAlignment(.trailing)
+                                        .padding()
+                                }
+                            }
+                            if(repeatUntil == "End Date"){
+                                DatePicker(selection: $endRepetitionDate, in: endDate..., displayedComponents: [.date]){
+                                    Text("End Date")
+                                }
+                                .padding()
+                            }
+                        }
+                    }
+                    Section{
+                        HStack{
+                            Text("Location")
+                                .padding()
+                            Picker("Location", selection: $location) {
+                                ForEach(locationModes, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .padding()
+                        }
+                        if(location == "Current"){
+                            if CLLocationManager.locationServicesEnabled() {
+                                switch locationManager.authorizationStatus {
+                                    case .notDetermined, .restricted, .denied:
+                                    HStack{
+                                        Image(systemName: "exclamationmark.triangle.fill")
+                                            .padding()
+                                            .foregroundColor(.yellow)
+                                        Text("Please allow accurate location services in the settings to use this feature.")
+                                        .padding()
+                                        .foregroundColor(.blue)
+                                        .fixedSize(horizontal: false, vertical: true)
+                                        .onAppear(){                                  saveCurrentLocation = false}
+                                        Button(action: {
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                            }) {
+                                    Image(systemName: "gear")
+                                        .foregroundColor(.blue)
+                                        .imageScale(.large)
+                                            }
+                                    }
+                                    case .authorizedAlways, .authorizedWhenInUse:
+                                        switch locationManager.accuracyAuthorization {
+                                                case .fullAccuracy:
+                                                    Map(coordinateRegion: $currentRegion, showsUserLocation: true, userTrackingMode: .constant(.follow),
+                                                    annotationItems: markers) { marker in
+                                                      marker.location
+                                                  }.edgesIgnoringSafeArea(.all)
+                                                    .frame(minHeight: 200)
+                                                    .onAppear(){
+                                                        saveCurrentLocation = true
+                                                        let annotationCurrent = MKPointAnnotation()
+                                                        annotationCurrent.coordinate = currentRegion.center
+                                                        markers = [Marker(location: MapMarker(coordinate: currentRegion.center, tint: .red))]
+                                                    }
+                                                case .reducedAccuracy:
+                                            HStack{
+                                                Image(systemName: "exclamationmark.triangle.fill")
+                                                    .padding()
+                                                    .foregroundColor(.yellow)
+                                                Text("Please allow accurate location services in the settings to use this feature.")
+                                                .padding()
+                                                .foregroundColor(.blue)
+                                                .fixedSize(horizontal: false, vertical: true)
+                                                .onAppear(){                                  saveCurrentLocation = false}
+                                                Button(action: {
+                                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                                    }) {
+                                            Image(systemName: "gear")
+                                                .foregroundColor(.blue)
+                                                .imageScale(.large)
+                                                    }
+                                            }
+                                                default:
+                                                    Text("Error: This should not happen")
+                                                    .padding()
+                                                    .onAppear(){
+                                                        saveCurrentLocation = false
+                                                    }
+                                            }
+                                    @unknown default:
+                                        Text("Error: This should not happen")
+                                        .padding()
+                                        .onAppear(){
+                                            saveCurrentLocation = false
+                                        }
+                                }
+                            } else {
+                                Text("Location services are not enabled")
+                                    .padding()
+                                    .onAppear(){
+                                        saveCurrentLocation = false
+                                    }
+                            }
+                        }
+                        if(location == "Custom"){
+                            HStack{
+                                Image(systemName: "magnifyingglass")
+                                TextField("Search for location ...", text: $locationSearch)
+                                    .autocapitalization(.none)
+                                    .padding()
+                                if locationService.status == .isSearching {
+                                    Image(systemName: "clock")
+                                        .foregroundColor(Color.gray)
+                                }
+                                if self.locationSearch != "" {
+                                    Button(action: {
+                                        self.locationSearch = ""
+                                    })
+                                    {
+                                        Image(systemName: "multiply.circle")
+                                            .foregroundColor(Color.gray)
+                                    }
+                                }
+                            }
+                            .onChange(of: locationSearch) { newValue in
+                                locationService.queryFragment = locationSearch
+                            }
+                            Section() {
+                                List {
+                                    Group { () -> AnyView in
+                                        switch locationService.status {
+                                        case .noResults: return AnyView(Text("No Results").foregroundColor(Color(getAccentColorString())))
+                                        case .error(let description): return AnyView(Text("Error: \(description)").foregroundColor(Color(getAccentColorString())))
+                                        default: return AnyView(EmptyView())
+                                        }
+                                    }.foregroundColor(Color.gray)
+                                    
+                                    // display the results as a list
+                                    ForEach(locationService.searchResults, id: \.self) {
+                                        completionResult in
+                                        Button(action: {
+                                            self.locationSearch = completionResult.title + ", " + completionResult.subtitle
+                                            let search =  MKLocalSearch(request: MKLocalSearch.Request(__naturalLanguageQuery: (completionResult.title + ", " + completionResult.subtitle)))
+                                            search.start { (response, error) in
+                                                let response = response!
+                                                
+                                                for item in response.mapItems {
+                                                    if let name = item.name,
+                                                       let location = item.placemark.location {
+                                                        print("\(name): \(location.coordinate.latitude),\(location.coordinate.longitude)")
+                                                        customRegion.center.latitude = location.coordinate.latitude
+                                                        customRegion.center.longitude = location.coordinate.longitude
+                                                        let annotation = MKPointAnnotation()
+                                                        annotation.coordinate = customRegion.center
+                                                    }
+                                                }
+                                                
+                                                markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+                                                
+                                                self.locationService.queryFragment = ""
+                                                self.locationService.clear()
+                                            }
+                                        }) {
+                                            Text(completionResult.title + ", " + completionResult.subtitle).foregroundColor(Color(getAccentColorString()))
+                                        }
+                                    }
+                                }
+                            }
+                            Map(coordinateRegion: $customRegion,
+                                annotationItems: markers) { marker in
+                                marker.location
+                            }.edgesIgnoringSafeArea(.all)
+                                .frame(minHeight: 200)
+                        }
+                    }
+                    Section{
+                        HStack{
+                            TextField("URL", text: $urlString)
+                                .autocapitalization(.none)
+                                .padding()
+                        }
+                        TextField("Notes", text: self.$event.notes ?? "")
+                            .autocapitalization(.none)
+                            .padding()
+                    }
                 }
-                if(repeatUntil == "End Date"){
-                    endRepetitionDate = event.repetitionEndDate!
+                .navigationTitle("Edit Event")
+                .toolbar {
+                    Button("Delete") {
+                        confirmationShown = true
+                    }
+                    .padding(.trailing, 5)
+                    .foregroundColor(Color("AccentColorRed"))
+                }
+                .confirmationDialog(
+                    "Are you sure?",
+                    isPresented: $confirmationShown
+                ) {
+                    Button("Delete event"){
+                        deleteEvent(id: event.key!)
+                        dismiss()
+                    }
+                }
+                .navigationBarItems(leading: Button(action : {
+                    if event.repetition && repetition{
+                        // Event is a repetition event and still be one
+                        // Modify all events of repetition after event.startdate
+                        modifyID = event.repetitionID!
+                        modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
+                        name = self.event.name!
+                        for mevent in modifyEvents{
+                            mevent.setValue(name, forKey: "name")
+                            mevent.setValue(wholeDay,forKey:"wholeDay")
+                            mevent.setValue(self.event.notes,forKey:"notes")
+                            
+                            if(urlString != ""){
+                                mevent.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                            }
+                            
+                            if (location == "Current"){
+                                if saveCurrentLocation{
+                                    mevent.setValue(true, forKey: "location")
+                                    mevent.setValue(currentRegion.center.latitude, forKey: "latitude")
+                                    mevent.setValue(currentRegion.center.longitude, forKey: "longitude")
+                                    mevent.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                    mevent.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                                }
+                            } else if (location == "Custom")
+                            {
+                                mevent.setValue(true, forKey: "location")
+                                mevent.setValue(customRegion.center.latitude, forKey: "latitude")
+                                mevent.setValue(customRegion.center.longitude, forKey: "longitude")
+                                mevent.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                mevent.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                            } else {
+                                mevent.setValue(false, forKey: "location")
+                            }
+                            
+                            if notification {
+                                mevent.setValue(true,forKey:"notification")
+                                if(!wholeDay){
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                } else {
+                                    mevent.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    mevent.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                }
+                                
+                            } else{
+                                mevent.setValue(false,forKey:"notification")
+                            }
+                        }
+                        
+                        event.setValue(repeatUntil, forKey: "repetitionUntil")
+                        event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                        if(repeatUntil == "Repetitions"){
+                            event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                        }
+                        if(repeatUntil == "End Date"){
+                            event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                        }
+                        
+                        if(repeatUntil == "Forever"){
+                            let eventForever = ForeverEvent(context: moc)
+                            eventForever.key = UUID()
+                            eventForever.startdate = event.startdate!
+                            eventForever.enddate = event.enddate!
+                            eventForever.name = self.event.name
+                            eventForever.url = event.url
+                            eventForever.notes = event.notes
+                            
+                            if event.location{
+                                eventForever.location = true
+                                eventForever.latitude = event.latitude
+                                eventForever.longitude = event.longitude
+                                eventForever.latitudeDelta = event.latitudeDelta
+                                eventForever.longitudeDelta = event.longitudeDelta
+                            }else{
+                                eventForever.location = false
+                            }
+                            if event.notification{
+                                eventForever.notification = true
+                                if(!event.wholeDay){
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                } else {
+                                    eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                    eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                }
+                            }else{
+                                eventForever.notification = false
+                            }
+                            
+                            eventForever.repetitionInterval = repetitionInterval
+                            
+                            calendars[calendar].addToForeverEvents(eventForever)
+                            moc.delete(event)
+                            foreverEvent = true
+                            
+                            deleteID = modifyID
+                            deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
+                            
+                            for devent in deleteEvents{
+                                moc.delete(devent)
+                            }
+                        }
+                        
+                        if !foreverEvent{
+                            for mevent in modifyEvents{
+                                calendars[calendar].addToEvents(mevent)
+                            }
+                        }
+                        
+                    } else if event.repetition && !repetition{
+                        // In this case event was a repeating event but should not be one anymore
+                        // Notice that event cannot be an forever event
+                        // Delete all events with repetitionID equal to event.repetitionID
+                        // Create an new new event without repetitions
+                        deleteID = event.repetitionID!
+                        
+                        let newEvent = Event(context: moc)
+                        newEvent.key = UUID()
+                        newEvent.name = self.event.name
+                        newEvent.startdate = startDate
+                        
+                        if(endDate < startDate){
+                            newEvent.enddate = startDate
+                        } else{
+                            newEvent.enddate = endDate
+                        }
+                        
+                        newEvent.wholeDay = wholeDay
+                        // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
+                        if(urlString != ""){
+                            newEvent.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
+                            
+                        }
+                        if(notes != ""){
+                            newEvent.notes = notes
+                        }
+                        if (location == "Current"){
+                            if saveCurrentLocation{
+                                newEvent.location = true
+                                newEvent.latitude = currentRegion.center.latitude
+                                newEvent.longitude = currentRegion.center.longitude
+                                newEvent.latitudeDelta = currentRegion.span.latitudeDelta
+                                newEvent.longitudeDelta = currentRegion.span.longitudeDelta
+                            }
+                        } else if (location == "Custom")
+                        {
+                            newEvent.location = true
+                            newEvent.latitude = customRegion.center.latitude
+                            newEvent.longitude = customRegion.center.longitude
+                            newEvent.latitudeDelta = customRegion.span.latitudeDelta
+                            newEvent.longitudeDelta = customRegion.span.longitudeDelta
+                        } else {
+                            newEvent.location = false
+                        }
+                        if notification {
+                            newEvent.notification = true
+                            if(!wholeDay){
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            } else {
+                                newEvent.notificationTimeAtWholeDay = notficationTimeAtWholeDay
+                                newEvent.notificationMinutesBefore = Int32(notificationMinutesBefore)
+                            }
+                            
+                        } else {
+                            newEvent.notification = false
+                        }
+                        
+                        newEvent.repetition = false
+                
+                        calendars[calendar].addToEvents(newEvent)
+                        
+                        deleteEvents.nsPredicate = searchPredicateRepetitionID(query: deleteID)
+                        
+                        for devent in deleteEvents{
+                            moc.delete(devent)
+                        }
+                    }else{
+                        // In this case event was no repeating event
+                        // Maybe it turns into an repeating event.
+                        // If it turns into an repeating event we have to create more events
+                        // Notice that the event can also turn into an forever event
+                        if repetition{
+                            event.setValue(wholeDay,forKey:"wholeDay")
+                            event.setValue(startDate,forKey:"startdate")
+                            event.setValue(endDate,forKey:"enddate")
+                            event.setValue(self.event.notes,forKey:"notes")
+                            
+                            if(urlString != ""){
+                                event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                            }
+                            
+                            if (location == "Current"){
+                                if saveCurrentLocation{
+                                    event.setValue(true, forKey: "location")
+                                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                                }
+                            } else if (location == "Custom")
+                            {
+                                event.setValue(true, forKey: "location")
+                                event.setValue(customRegion.center.latitude, forKey: "latitude")
+                                event.setValue(customRegion.center.longitude, forKey: "longitude")
+                                event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                            } else {
+                                event.setValue(false, forKey: "location")
+                            }
+                            
+                            if notification {
+                                event.setValue(true,forKey:"notification")
+                                if(!wholeDay){
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                } else {
+                                    event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                }
+                                
+                            } else{
+                                event.setValue(false,forKey:"notification")
+                            }
+                            
+                            event.setValue(true, forKey: "repetition")
+                            event.setValue(repeatUntil, forKey: "repetitionUntil")
+                            event.setValue(repetitionInterval, forKey: "repetitionInterval")
+                            let repetitionID = UUID()
+                            event.setValue(repetitionID, forKey: "repetitionID")
+                            let myCalendar = Calendar.current
+                            if(repeatUntil == "Repetitions"){
+                                event.setValue(Int16(amountOfRepetitions) ?? 10, forKey: "repetitionAmount")
+                                let repetitionsNumber = event.repetitionAmount
+                                if repetitionsNumber > 1{
+                                    for i in 1...(repetitionsNumber-1) {
+                                        var eventR = Event(context: moc)
+                                        eventR.key = UUID()
+                                        eventR = CopyEvent(event1: eventR, event2: event)
+                                        switch repetitionInterval{
+                                        case "Weekly":
+                                            eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
+                                        case "Daily":
+                                            eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
+                                            
+                                        case "Monthly":
+                                            eventR.startdate = myCalendar.date(byAdding: .month, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .month, value: Int(i), to: event.enddate!)
+                                            
+                                        case "Yearly":
+                                            eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
+                                            eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
+                                            
+                                        default:
+                                            break
+                                        }
+                                        calendars[calendar].addToEvents(eventR)
+                                    }
+                                }
+                            }
+                            if(repeatUntil == "End Date"){
+                                event.setValue(endRepetitionDate, forKey: "repetitionEndDate")
+                                var currentDate = event.startdate
+                                var i = 1
+                                while currentDate! < endRepetitionDate{
+                                    var eventR = Event(context: moc)
+                                    eventR.key = UUID()
+                                    eventR = CopyEvent(event1: eventR, event2: event)
+                                    switch repetitionInterval{
+                                    case "Weekly":
+                                        eventR.startdate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .weekOfYear, value: Int(i), to: event.enddate!)
+                                    case "Daily":
+                                        eventR.startdate = myCalendar.date(byAdding: .day, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .day, value: Int(i), to: event.enddate!)
+                                        
+                                    case "Monthly":
+                                        eventR.startdate = myCalendar.date(byAdding: .month, value: i, to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .month, value: i, to: event.enddate!)
+                                        
+                                    case "Yearly":
+                                        eventR.startdate = myCalendar.date(byAdding: .year, value: Int(i), to: event.startdate!)
+                                        eventR.enddate = myCalendar.date(byAdding: .year, value: Int(i), to: event.enddate!)
+                                        
+                                    default:
+                                        break
+                                    }
+                                    currentDate = eventR.startdate
+                                    if currentDate! <= endRepetitionDate{
+                                        calendars[calendar].addToEvents(eventR)
+                                        i = i + 1
+                                    } else{
+                                        moc.delete(eventR)
+                                    }
+                                }
+                            }
+                            if(repeatUntil == "Forever"){
+                                let eventForever = ForeverEvent(context: moc)
+                                eventForever.key = UUID()
+                                eventForever.startdate = event.startdate!
+                                eventForever.enddate = event.enddate!
+                                eventForever.name = self.event.name
+                                eventForever.url = event.url
+                                eventForever.notes = event.notes
+                                
+                                if event.location{
+                                    eventForever.location = true
+                                    eventForever.latitude = event.latitude
+                                    eventForever.longitude = event.longitude
+                                    eventForever.latitudeDelta = event.latitudeDelta
+                                    eventForever.longitudeDelta = event.longitudeDelta
+                                }else{
+                                    eventForever.location = false
+                                }
+                                if event.notification{
+                                    eventForever.notification = true
+                                    if(!event.wholeDay){
+                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                    } else {
+                                        eventForever.notificationTimeAtWholeDay = event.notificationTimeAtWholeDay
+                                        eventForever.notificationMinutesBefore = event.notificationMinutesBefore
+                                    }
+                                }else{
+                                    eventForever.notification = false
+                                }
+                                
+                                eventForever.repetitionInterval = repetitionInterval
+                                
+                                calendars[calendar].addToForeverEvents(eventForever)
+                                moc.delete(event)
+                                foreverEvent = true
+                            }
+                            
+                            if !foreverEvent{
+                                calendars[calendar].addToEvents(event)
+                            }
+                        }else{
+                            event.setValue(wholeDay,forKey:"wholeDay")
+                            event.setValue(startDate,forKey:"startdate")
+                            event.setValue(endDate,forKey:"enddate")
+                            
+                            if(urlString != ""){
+                                event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
+                            }
+                            
+                            if (location == "Current"){
+                                if saveCurrentLocation{
+                                    event.setValue(true, forKey: "location")
+                                    event.setValue(currentRegion.center.latitude, forKey: "latitude")
+                                    event.setValue(currentRegion.center.longitude, forKey: "longitude")
+                                    event.setValue(currentRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                    event.setValue(currentRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                                }
+                            } else if (location == "Custom")
+                            {
+                                event.setValue(true, forKey: "location")
+                                event.setValue(customRegion.center.latitude, forKey: "latitude")
+                                event.setValue(customRegion.center.longitude, forKey: "longitude")
+                                event.setValue(customRegion.span.latitudeDelta, forKey: "latitudeDelta")
+                                event.setValue(customRegion.span.longitudeDelta, forKey: "longitudeDelta")
+                            } else {
+                                event.setValue(false, forKey: "location")
+                            }
+                            
+                            if notification {
+                                event.setValue(true,forKey:"notification")
+                                if(!wholeDay){
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                } else {
+                                    event.setValue(notficationTimeAtWholeDay,forKey:"notificationTimeAtWholeDay")
+                                    event.setValue(Int32(notificationMinutesBefore),forKey:"notificationMinutesBefore")
+                                }
+                                
+                            } else{
+                                event.setValue(false,forKey:"notification")
+                            }
+                                
+                            event.setValue(false, forKey: "repetition")
+                        }
+                    }
+                    
+                    try? moc.save()
+                    
+                    withAnimation{
+                        showConfirmation = true
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        withAnimation{
+                            showConfirmation = false
+                        }
+                    }
+                    
+                    self.mode.wrappedValue.dismiss()
+                }){
+                    HStack{
+                        Image(systemName: "chevron.left")
+                            .font(Font.headline.weight(.bold))
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                        Text("Back")
+                            .foregroundColor(Color(getAccentColorString(from: colorScheme)))
+                    }
+                })
+            }
+            .onAppear {
+                if event.key == nil{
+                    // If the event is deleted, dismiss
+                    dismiss()
+                }else{
+                    // Load the values of event
+                    
+                    calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
+                    wholeDay = event.wholeDay
+                    notification = event.notification
+                    startDate = event.startdate!
+                    endDate = event.enddate!
+                    notification = event.notification
+                    notificationMinutesBefore = Int(event.notificationMinutesBefore)
+                    notficationTimeAtWholeDay = event.notificationTimeAtWholeDay ?? getDateFromHours(hours: "08:00")!
+                    urlString = event.url ?? ""
+                    notes = event.notes ?? ""
+                    endRepetitionDate = event.repetitionEndDate ?? Date()
+                    locationBool = event.location
+                    if locationBool{
+                        location = "Custom"
+                        customRegion = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: event.latitude, longitude: event.longitude), span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                        markers = [Marker(location: MapMarker(coordinate: customRegion.center, tint: .red))]
+                    }
+                    repetition = event.repetition
+                    if repetition{
+                        repeatUntil = event.repetitionUntil!
+                        repetitionInterval = event.repetitionInterval!
+                        if(repeatUntil == "Repetitions"){
+                            amountOfRepetitions = String(event.repetitionAmount)
+                        }
+                        if(repeatUntil == "End Date"){
+                            endRepetitionDate = event.repetitionEndDate!
+                        }
+                    }
                 }
             }
         }
     }
     
+    // Option to delete event by UUID
     func deleteEvent(id: UUID)  {
         events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
         
         for event in events {
             moc.delete(event)
         }
+        removeNotificationByUUID(eventuuid: id.uuidString)
         try? moc.save()
     }
     
+    // Search for events which the same repetition id
+    // I.e. delete all events of the same repetition
     private func searchPredicateRepetitionID(query: UUID) -> NSPredicate? {
         return NSPredicate(format: "repetitionID == %@", query as CVarArg)
     }
     
+    // Search for events which the same repetition id after the startdate of event
+    // I.e. fetch all events of a repetition which should be modified the same way
     private func searchPredicateRepetitionIDModify(query: UUID) -> NSPredicate? {
         return NSPredicate(format: "repetitionID == %@ && startdate >= %@", query as CVarArg, event.startdate! as NSDate)
     }
     
+    // Create a duplicate of an event (used for repetitions which are not forever)
+    // Copys all values of event2 into event1 and returns event1
     func CopyEvent(event1: Event, event2: Event) -> Event{
         event1.name = event2.name
         event1.wholeDay = event2.wholeDay
@@ -881,6 +1323,7 @@ struct EditEventView: View {
                 event1.notificationMinutesBefore = event2.notificationMinutesBefore
             } else {
                 event1.notificationTimeAtWholeDay = event2.notificationTimeAtWholeDay
+                event1.notificationMinutesBefore = event2.notificationMinutesBefore
             }
         }else{
             event1.notification = false
@@ -901,8 +1344,3 @@ struct EditEventView: View {
     }
 }
 
-struct EditEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        EditEventView(event: Event(), locationService: LocationService(), saveEvent: .constant(true), showConfirmation: .constant(true))
-    }
-}
