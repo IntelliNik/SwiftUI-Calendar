@@ -105,3 +105,9 @@ public func addWeekdayTo(components: DateComponents) -> DateComponents?{
     guard let date = Calendar.current.date(from: components) else {return nil}
     return Calendar.current.dateComponents([.day, .month, .year, .weekOfYear, .weekday], from: date)
 }
+
+enum PickerSelection{
+    case current
+    case previous
+    case next
+}

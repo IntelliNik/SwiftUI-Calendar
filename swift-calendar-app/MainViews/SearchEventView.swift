@@ -95,10 +95,3 @@ struct SearchEventView: View {
         return NSPredicate(format: "name BEGINSWITH %@", query)
     }
 }
-
-
-struct SearchEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchEventView()
-    }
-}

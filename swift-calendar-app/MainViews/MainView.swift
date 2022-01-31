@@ -31,11 +31,23 @@ struct MainView: View {
             DayView(dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
         case .week:
-            WeekView(dateComponents: $dateComponents)
+            WeekView(updateView: $updateView, dateComponents: $dateComponents)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+                .onChange(of: updateView){_ in
+                    if dateComponents.day != nil{
+                        containedView = .day
+                    }
+                    updateView = false
+                }
         case .month:
-            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel(dateComponents: dateComponents))
+            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel(dateComponents: dateComponents, viewContext: moc), updateView: $updateView)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
+                .onChange(of: updateView){_ in
+                    if dateComponents.day != nil{
+                        containedView = .day
+                    }
+                        updateView = false
+                    }
         case .year:
             YearView(dateComponents: $dateComponents, updateView: $updateView)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
@@ -57,12 +69,5 @@ struct MainView: View {
         
         
 
-    }
-}
-
-
-struct CalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainView(containedView: .constant(.year))
     }
 }

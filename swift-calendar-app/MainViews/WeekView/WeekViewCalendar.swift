@@ -13,7 +13,8 @@ func checkTodo(position: Int) -> Bool{
 }
 
 struct WeekViewCalendar: View {
-    let dateComponents: DateComponents
+    @Binding var updateView: Bool
+    @Binding var dateComponents: DateComponents
     let height: CGFloat
     let width: CGFloat
 
@@ -25,12 +26,16 @@ struct WeekViewCalendar: View {
                     HStack {
                         ForEach([1,2], id:\.self) { dayofweek in
                             let newComponent = getDayInWeek(of: dateComponents, day: dayofweek + row) ?? dateComponents
-                            WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: (height - 30)/4, width: (width - 10)/2)
-                            if dayofweek == 1 {
-                               Spacer()
-                                    .frame(width: 10, alignment: .trailing)
+                            Button(action: {
+                                dateComponents = setDay(dateComponents: newComponent, day: newComponent.day ?? 0)
+                                updateView = true
+                            }){
+                                WeekViewDayBox(dateComponents: newComponent, todo: checkTodo(position: row + dayofweek), height: (height - 30)/4, width: (width - 10)/2)
+                                if dayofweek == 1 {
+                                   Spacer()
+                                        .frame(width: 10, alignment: .trailing)
+                                }
                             }
-                            
                             
                             // TODO: navigationLink breaks underlying ScrollView
                             /*NavigationLink {
@@ -50,8 +55,8 @@ struct WeekViewCalendar: View {
     }
 }
 
-struct WeekViewCalendar_Previews: PreviewProvider {
-    static var previews: some View {
-        WeekViewCalendar(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now), height: 763, width: 390)
-    }
-}
+//struct WeekViewCalendar_Previews: PreviewProvider {
+//    static var previews: some View {
+//        WeekViewCalendar(dateComponents: Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now), height: 763, width: 390)
+//    }
+//}

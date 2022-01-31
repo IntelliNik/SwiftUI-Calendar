@@ -8,8 +8,12 @@
 import SwiftUI
 
 struct MonthViewDayBox: View {
-    var date : Int //Todo: replace with actual day
+
+    @FetchRequest var eventsFetch: FetchedResults<Event>
     
+    var date : Int //Todo: replace with actual day
+    var eventsOnDay: [Event] = []
+        
     var width: CGFloat
     var length: CGFloat
     @State var fontSize: CGFloat? = nil
@@ -18,6 +22,20 @@ struct MonthViewDayBox: View {
     @EnvironmentObject var currentTime: CurrentTime
     @EnvironmentObject var viewModel: MonthViewModel
     @AppStorage("colorScheme") private var colorScheme = "red"
+
+    init(displayedMonth: DateComponents, date: Int, width: CGFloat, length: CGFloat) {
+        _eventsFetch = FetchRequest<Event>(
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+            ],
+            // Forceunwrap might break!
+            predicate: NSPredicate(format: "startdate <= %@ AND %@ <= enddate", getDateForStartdateComparison(from: setDay(dateComponents: displayedMonth, day: date))! as CVarArg, getDateForEnddateComparison(from: setDay(dateComponents: displayedMonth, day: date))! as CVarArg)
+            )
+        
+        self.date = date
+        self.width = width
+        self.length = length
+    }
     
     var body: some View {
         ZStack {
@@ -27,15 +45,41 @@ struct MonthViewDayBox: View {
             RoundedRectangle(cornerRadius: rectangle ?? false ? 3 : 10, style: .continuous)
                 .fill(.thinMaterial)
                 .frame(width: width, height: length)
-                .overlay(Text(String(date))
-                            .foregroundColor((viewModel.displayedMonth?.year == currentTime.components.year && viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray))
-                .font(.system(size: fontSize ?? 20))
+            VStack(spacing: 2){
+                Text(String(date))
+                    .font(.system(size: fontSize ?? 20))
+                    .foregroundColor((viewModel.displayedMonth?.month == currentTime.components.month && date == currentTime.components.day) ? Color(getAccentColorString(from: colorScheme)) : .gray)
+            
+                //HStack should mark up to 3 events
+                if isVisible() {
+                    HStack(spacing: 5){
+                        ForEach(Array(zip(eventsFetch.indices, eventsFetch)), id: \.0) { i, event in
+                            if(i < 3){
+                                Circle()
+                                    .fill(getColorFromString(stringColor: event.calendar?.color))
+                                    .frame(width: 7, height: 7)
+                            }
+                        }
+                    }
+                        .frame(minHeight: 7, maxHeight: 7)
+                }
+            }
+        }
+    }
+            
+    func isVisible() -> Bool{
+        if eventsFetch.count == 0 {
+            return false
+        }
+            
+        else {
+            return true
         }
     }
 }
 
-struct MonthViewDayBox_Previews: PreviewProvider {
+/*struct MonthViewDayBox_Previews: PreviewProvider {
     static var previews: some View {
         MonthViewDayBox(date: 1, width: 45, length: 45)
     }
-}
+}*/

@@ -107,7 +107,6 @@ struct ShowEventView: View {
                 }
                 
                 Section{
-                    // TODO: doesn't really work within a List
                     if let urlString = event.url{
                         HStack{
                             Image(systemName: "globe").padding()
@@ -146,12 +145,6 @@ struct ShowEventView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    /*
-                     NavigationView{
-                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                     */
-                    
                     Button(action: {confirmationShown = true}){
                         Text("Edit")
                             .foregroundColor(Color(getAccentColorString(from: colorScheme)))
@@ -170,11 +163,5 @@ struct ShowEventView: View {
                 dismiss()
             }
         })
-    }
-}
-
-struct ShowEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        ShowEventView(event: Event())
     }
 }

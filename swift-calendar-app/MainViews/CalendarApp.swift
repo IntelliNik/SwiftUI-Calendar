@@ -24,17 +24,12 @@ struct CalendarApp: App {
     
     @State var selectedView: ContainedView = .allEvents
     @State var title = "All Events"
-    
     @StateObject private var dataController = DataController()
     
     @StateObject private var currentTime = CurrentTime()
     @Environment(\.scenePhase) var scenePhase
     
     @AppStorage("colorScheme") private var colorScheme = "red"
-    
-    // TODO: Remove next lines when everything is done
-    // @FetchRequest(sortDescriptors: []) var event: FetchedResults<Event>
-    // Fetch Request only where we need a request?
     
     var body: some Scene {
         let drag = DragGesture()

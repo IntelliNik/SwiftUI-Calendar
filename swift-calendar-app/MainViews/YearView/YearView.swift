@@ -7,27 +7,31 @@
 
 import SwiftUI
 
+
+// Main view for the YearView.
+// This view uses YearViewYearAndToday and YearViewCalendar.
 struct YearView: View {
-    //struct Year {
-    //    var month : Int
-    //    var year : Int
-    //}
+    
+    // dateComponents: the year which should be displayed
     @Binding var dateComponents: DateComponents
     @Binding var updateView: Bool
-    @State var pickerSelection: PickerSelection = .current
     
+    @State var pickerSelection: PickerSelection = .current
     @State var offset = CGSize(width: 0, height: 0)
     
     @AppStorage("colorScheme") private var colorScheme = "red"
     
     var body: some View {
         VStack {
+            // Include YearViewYearAndToday
             YearViewYearAndToday(dateComponents: $dateComponents)
                 .offset(offset)
             Spacer()
+            // Include YearViewCalendar
             YearViewCalendar(dateComponents: $dateComponents, updateView: $updateView)
                 .offset(offset)
             Spacer()
+            // Picker to select the next or previous year
             Picker("", selection: $pickerSelection) {
                 let next = getNextOrPreviousYear(components: dateComponents, next: true)
                 let previous = getNextOrPreviousYear(components: dateComponents, next: false)
@@ -36,6 +40,7 @@ struct YearView: View {
                 Text(String((next!.year!) as Int)).tag(PickerSelection.next)
             }
             .onChange(of: pickerSelection){ _ in
+                // Depending on the picker selection the YearView for the next or previous opens
                 if(pickerSelection == .previous){
                     withAnimation{
                         offset.width = 400
@@ -64,7 +69,7 @@ struct YearView: View {
                         }
                     }
                 }
-                // reset picker
+                // Reset picker
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                     pickerSelection = .current
                 }
@@ -77,6 +82,7 @@ struct YearView: View {
                 DragGesture()
                     .onEnded(){gesture in
                         print(gesture)
+                        // Include a gesture for the pickerSelection, i.e. the next or previous year
                         if(gesture.translation.width > 0){
                             pickerSelection = .previous
                         } else if(gesture.translation.width < 0){
@@ -84,12 +90,5 @@ struct YearView: View {
                         }
                     }
             )
-
-    }
-}
-
-struct YearView_Previews: PreviewProvider {
-    static var previews: some View {
-        YearView(dateComponents: .constant(Calendar.current.dateComponents([.day, .month, .year, .weekOfYear], from: Date.now)), updateView: .constant(false))
     }
 }

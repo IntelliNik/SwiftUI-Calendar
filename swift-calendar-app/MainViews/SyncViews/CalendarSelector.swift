@@ -12,8 +12,6 @@ import SwiftUI
 //to encorporate syncing with iCloud calendars, we need to include EKCalendarChooser
 //Because we use SwiftUI we need to wrap with the UIViewControllerRepresentable protocol
 
-//TODO: Shoutout sources from the internet
-
 struct CalendarSelector : UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     

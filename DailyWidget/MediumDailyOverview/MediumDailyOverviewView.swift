@@ -25,9 +25,3 @@ struct MediumDailyOverviewView: View {
         }
     }
 }
-
-struct MediumDailyOverviewView_Previews: PreviewProvider {
-    static var previews: some View {
-        MediumDailyOverviewView()
-    }
-}

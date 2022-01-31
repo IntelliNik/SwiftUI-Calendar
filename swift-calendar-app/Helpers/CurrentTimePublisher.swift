@@ -27,6 +27,8 @@ class CurrentTime: ObservableObject {
     @objc private func updateTime() {
         self.components = Calendar.current.dateComponents([.year, .month, .day, .weekOfYear, .hour, .minute, .second], from: Date.now)
         print("timer fired")
+        print("Minute:\(self.components.minute)")
+        print("Hour:\(self.components.hour)")
     }
     
     // This function should be called when the current Scene enters background. It invalidates the timer.
@@ -51,11 +53,8 @@ class CurrentTime: ObservableObject {
     static private func getTimer(withTarget target: CurrentTime) -> Timer {
         let currentTime = Calendar.current.dateComponents([.year, .month, .day, .weekOfYear, .hour, .minute, .second], from: Date.now)
         let diff = Calendar.current.dateComponents([.second], from: Date.now, to: Calendar.current.date(bySettingHour: currentTime.hour!, minute: 0, second: 0, of: Date.now, matchingPolicy: .nextTime, repeatedTimePolicy: .first, direction: .forward)!)
-        
-        //print(Date.now)
-        //print(diff.second!)
-        //print(3600 + diff.second!)
-        
+
         return Timer(fireAt: Date.now.addingTimeInterval(3600 + Double(diff.second!)), interval: 3600, target: target, selector: #selector(updateTime), userInfo: nil, repeats: true)
     }
+    
 }

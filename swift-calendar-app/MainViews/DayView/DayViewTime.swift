@@ -4,15 +4,14 @@
 //
 //  Created by Farhadiba Mohammed on 08.01.22.
 //
+//  File to display the time lines and manage events
 
 import SwiftUI
+import WidgetKit
 struct DayViewTime: View {
     @Binding var dateComponents: DateComponents
-    
     @State var eventsToday: FetchedResults<Event>
-    
     @State var eventToShow: Event?
-    
     @AppStorage("colorScheme") private var colorScheme = "red"
     @EnvironmentObject var currentTime: CurrentTime
     @Environment(\.colorScheme) var darkMode
@@ -25,18 +24,18 @@ struct DayViewTime: View {
             }
         }
         return foundEvents
-      
     }
     
     var body: some View {
-        ScrollViewReader{ scroll in
-            ScrollView(showsIndicators: false){
+        ScrollView(showsIndicators: false){
+            ScrollViewReader{ scroll in
                 ZStack{
                     VStack(alignment: .leading, spacing: 25){
                         ForEach(0...23, id:\.self){ hour in
                             GeometryReader{ geometry in
                                 HStack{
                                     ZStack{
+                                        // Update font color according to appearance
                                         if darkMode == .light {
                                         Text("\(String(hour)):00")
                                             .padding([.top, .bottom]).frame(width: geometry.size.width * 0.2)
@@ -54,10 +53,47 @@ struct DayViewTime: View {
                                         Rectangle().fill(Color(UIColor.lightGray)).frame(height: 2).padding(.trailing, 30)
                                     }
                                 }
-                            }
+                            }.id(hour)
                             Spacer().frame(height: 20)
                         }
                         Spacer()
+                    }
+                }// auto-scroll to current hour while on today's dayview
+                .onChange(of: currentTime.components.hour) { value in
+                    if currentTime.components.day == dateComponents.day{
+                        if value ?? 0 <= 18{
+                            withAnimation {
+                                scroll.scrollTo(value ?? 0, anchor: .top)
+                            }
+                        }else{
+                            withAnimation {
+                                scroll.scrollTo(18, anchor: .top)
+                            }
+                        }
+                    }
+                }//scroll to current hour if today button was pressed
+                .onChange(of: dateComponents.day) { value in
+                    if currentTime.components.day == dateComponents.day{
+                        if currentTime.components.hour ?? 0 <= 18 {
+                            withAnimation {
+                                scroll.scrollTo(currentTime.components.hour, anchor: .top)
+                            }
+                        }else{
+                            withAnimation {
+                                scroll.scrollTo(18, anchor: .top)
+                            }
+                        }
+                    }
+                }//initially scroll to current hour on view load
+                .onAppear{
+                    if currentTime.components.hour ?? 0 <= 18 {
+                        withAnimation {
+                            scroll.scrollTo(currentTime.components.hour, anchor: .top)
+                        }
+                    }else{
+                        withAnimation {
+                            scroll.scrollTo(18, anchor: .top)
+                        }
                     }
                 }
             }
@@ -65,10 +101,4 @@ struct DayViewTime: View {
     }
 }
 
-
-//struct DayViewTime_Previews: PreviewProvider {
-//    static var previews: some View {
-//        DayViewTime(dateComponents: .constant(Calendar.current.dateComponents([.weekday, .day, .month, .year], from: Date.now)))
-//    }
-//}
 

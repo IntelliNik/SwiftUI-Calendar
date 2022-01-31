@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import EventKitUI
 import EventKit
 
 struct MenuView: View {
@@ -18,7 +17,6 @@ struct MenuView: View {
     @Binding var showAddCalendar: Bool
     @Binding var menuOpen: Bool
     @Binding var title: String
-    
     @State var calendarEditMode = false
     @State var showSyncSheet = false
     
@@ -57,28 +55,28 @@ struct MenuView: View {
                     }
                 }
                 Spacer()
-                Button(action: {currentlySelectedView = .day; title = "Day View"; withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .day; title = ""; withAnimation{menuOpen = false}}) {
                     Text("Day View")
                         .padding()
                         .background(currentlySelectedView == .day ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .week; title = "Week View";  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .week; title = "";  withAnimation{menuOpen = false}}) {
                     Text("Week View")
                         .padding()
                         .background(currentlySelectedView == .week ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .month; title = "Month View";  withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .month; title = "";  withAnimation{menuOpen = false}}) {
                     Text("Month View")
                         .padding()
                         .background(currentlySelectedView == .month ? Color(UIColor.darkGray) : .clear)
                         .foregroundColor(.white)
                         .font(.headline)
                 }
-                Button(action: {currentlySelectedView = .year; title = "Year View"; withAnimation{menuOpen = false}}) {
+                Button(action: {currentlySelectedView = .year; title = ""; withAnimation{menuOpen = false}}) {
                     Text("Year View")
                         .padding()
                         .background(currentlySelectedView == .year ? Color(UIColor.darkGray) : .clear)

@@ -9,9 +9,7 @@ import SwiftUI
 
 struct DayViewEachHour: View {
     let eventsThisHour: [Event]
-    
     @State var showEventSheet = false
-    
     @State var eventHourToEdit = 0
     @State var eventIndexToShow = 0
     
