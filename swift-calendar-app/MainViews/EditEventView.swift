@@ -1213,6 +1213,7 @@ struct EditEventView: View {
                             }
                                 
                             event.setValue(false, forKey: "repetition")
+                            calendars[calendar].addToEvents(event)
                         }
                     }
                     
