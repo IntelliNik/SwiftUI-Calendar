@@ -8,16 +8,16 @@
 import SwiftUI
 import MapKit
 
+// View to display an ForeverEvent
+// View is called if an foreverEvent is clicked in the DayView or WeekView
+
 struct ShowForeverEventView: View {
     
+    // Which foreverEvent should be displayed
     @State var event: ForeverEvent
-    
     @State var showShowEvent = false
-    
     @State var showConfirmation = false
-    
     @State var saveEvent = false
-    
     @State var confirmationShown = false
     
     @Environment(\.dismiss) var dismiss
@@ -27,6 +27,7 @@ struct ShowForeverEventView: View {
     var body: some View {
         NavigationView{
             Form{
+                // Section to display the calendar of event
                 Section{
                     HStack{
                         if let calendar = event.calendar{
@@ -37,6 +38,9 @@ struct ShowForeverEventView: View {
                         Text("\(event.calendar?.name ?? "No Calendar")")
                     }
                 }.padding()
+                
+                // Section to display startDate, endDate and wholeDay
+                // We have to check whether the values are nil, i.e. the event has been deleted
                 Section{
                     HStack{
                         Text(event.startdate ?? Date.now, style: .date)
@@ -55,6 +59,8 @@ struct ShowForeverEventView: View {
                         }.padding()
                     }
                 }
+                
+                // Section to display notification and repetition
                 Section{
                     HStack{
                         Image(systemName: "bell.fill")
@@ -72,29 +78,17 @@ struct ShowForeverEventView: View {
                             Text("None")
                         }
                     }
+                    // Note that foreverEvents always have a repetitionInterval
                     HStack{
                         Image(systemName: "repeat")
                         Spacer()
                         Text("\(event.repetitionInterval ?? "Daily")")
-                    }/*
-                    if(event.repetition){
-                        if(event.repetitionUntil! == "Repetitions"){
-                            HStack{
-                                Text("Repetitions: ")
-                                Spacer()
-                                Text("\(event.repetitionAmount)")
-                            }
-                        }
-                        if(event.repetitionUntil! == "End Date"){
-                            HStack{
-                                Text("End Date: ")
-                                Spacer()
-                                Text(event.repetitionEndDate!, style: .date)
-                            }
-                        }
-                    }*/
+                    }
                 }.padding()
+                
+                // Section to display location
                 Section{
+                    // Use MapKit to display the location
                     if(event.location){
                         let region = getRegionFromDatabase(latitude: event.latitude, longitude: event.longitude, latitudeDelta: event.latitudeDelta, longitudeDelta: event.longitudeDelta)
                         Map(coordinateRegion: .constant(region))
@@ -102,16 +96,8 @@ struct ShowForeverEventView: View {
                     }
                 }
                 
+                // Section to display url and notes
                 Section{
-                    // TODO: doesn't really work within a List
-                    /*if let url = event.url{
-                        MetadataView(vm: LinkViewModel(link: url))
-                        HStack{
-                            Image(systemName: "globe").padding()
-                            Spacer()
-                            Text(url).padding()
-                        }
-                    }*/
                     if let urlString = event.url{
                         HStack{
                             Image(systemName: "globe").padding()
@@ -138,12 +124,6 @@ struct ShowForeverEventView: View {
             .toolbar{
                 
                 ToolbarItem(placement: .navigationBarLeading) {
-                    /*
-                     NavigationView{
-                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                     */
-                    
                     Button(action: {dismiss()}){
                         HStack{
                             Image(systemName: "chevron.left")
@@ -156,12 +136,8 @@ struct ShowForeverEventView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    /*
-                     NavigationView{
-                        NavigationLink("Edit", destination:  EditEventView(event: event,locationService: LocationService(),saveEvent: $saveEvent, showConfirmation: $showConfirmation),)
-                    }.foregroundColor(Color(getAccentColorString(from: colorScheme)))
-                     */
-                    
+                    // Button to edit event
+                    // The button calls EditForeverEventView as a view
                     Button(action: {confirmationShown = true}){
                         Text("Edit")
                             .foregroundColor(Color(getAccentColorString(from: colorScheme)))
@@ -176,15 +152,10 @@ struct ShowForeverEventView: View {
             }
         }
         .onChange(of: confirmationShown, perform: {_ in
+            // If the event is deleted, the view is dismissed
             if event.key == nil {
                 dismiss()
             }
         })
-    }
-}
-
-struct ShowForeverEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        ShowForeverEventView(event:ForeverEvent())
     }
 }

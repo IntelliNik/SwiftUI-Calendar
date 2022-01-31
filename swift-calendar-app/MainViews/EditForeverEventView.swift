@@ -354,12 +354,18 @@ struct EditForeverEventView: View {
                 isPresented: $confirmationShown
             ) {
                 Button("Delete event"){
+                    // Call the delete function
                     deleteForeverEvent(id: event.key!)
                     dismiss()
                 }
             }
             .navigationBarItems(leading: Button(action : {
+                // Save the changes
+                
                 if repetition && repeatUntil == "Forever"{
+                    //Event should stay an forever event
+                    //Just modify the values of event
+                    
                     event.setValue(wholeDay,forKey:"wholeDay")
                     event.setValue(startDate,forKey:"startdate")
                     if(endDate < startDate){
@@ -406,6 +412,10 @@ struct EditForeverEventView: View {
                     
                     calendars[calendar].addToForeverEvents(event)
                 }else{
+                    // Event should not be an forever event anymore
+                    // Transform the forever event into a normal event
+                    // Code is similar to the one for add event
+                    
                     let event2 = Event(context: moc)
                     event2.key = UUID()
                     event2.name = self.event.name
@@ -418,7 +428,6 @@ struct EditForeverEventView: View {
                     }
                     
                     event2.wholeDay = wholeDay
-                    // make sure the protocol is set, such that the link works also without entering http:// or https:// at the beginning
                     if(urlString != ""){
                         event2.url = urlString.hasPrefix("http") ? urlString : "https://\(urlString)"
                         
@@ -564,6 +573,8 @@ struct EditForeverEventView: View {
             })
         }
         .onAppear {
+            // Load the values of event
+            
             calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
             wholeDay = event.wholeDay
             notification = event.notification
@@ -586,6 +597,7 @@ struct EditForeverEventView: View {
         }
     }
     
+    // Option to delete event by UUID
     func deleteForeverEvent(id: UUID)  {
         events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
         
@@ -596,6 +608,8 @@ struct EditForeverEventView: View {
         try? moc.save()
     }
     
+    // Create a duplicate of an event (used for repetitions which are not forever)
+    // Copys all values of event2 into event1 and returns event1
     func CopyEvent(event1: Event, event2: Event) -> Event{
         event1.name = event2.name
         event1.wholeDay = event2.wholeDay

@@ -8,6 +8,10 @@
 import Foundation
 import CoreData
 
+// DataController for CoreData
+// An instance of this class is created at the start of the app
+// This instance can be accessed from every view via environment to make changes to the data core
+
 class DataController: ObservableObject {
     
     let containerURL: URL

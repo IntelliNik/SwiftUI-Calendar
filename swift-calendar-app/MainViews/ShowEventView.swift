@@ -165,9 +165,3 @@ struct ShowEventView: View {
         })
     }
 }
-
-struct ShowEventView_Previews: PreviewProvider {
-    static var previews: some View {
-        ShowEventView(event: Event())
-    }
-}

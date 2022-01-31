@@ -297,6 +297,13 @@ class EKCal_Parser: ObservableObject
         return try! viewContext.fetch(fr)
     }
     
+    private func getForeverEventsInMCalendar(mCalendar: MCalendar) -> [ForeverEvent]{
+        let fr = ForeverEvent.fetchRequest()
+        let predicate = NSPredicate(format: "calendar == %@ ", mCalendar)
+        fr.predicate = predicate
+        return try! viewContext.fetch(fr)
+    }
+    
     private func getEventsInEKCalendar(offsetStartFromToday: Int, offsetEndFromToday: Int, calendar: EKCalendar) -> [EKEvent]{
         let currentCalendar = Calendar.current
         
@@ -337,6 +344,15 @@ class EKCal_Parser: ObservableObject
                 continue
             }
             saveEKCalEventFromMEvent(mEvent: mEvent, ekCalendar: ekCalendar)
+        }
+        
+        let mCalForeverEvents = getForeverEventsInMCalendar(mCalendar: mCalendar)
+        
+        for mEvent in mCalForeverEvents{
+            if(mEvent.calendar?.key != mCalendar.key){
+                continue
+            }
+            saveEKCalForeverEventFromMEvent(mEvent: mEvent, ekCalendar: ekCalendar)
         }
     }
     
@@ -384,7 +400,23 @@ class EKCal_Parser: ObservableObject
         }
     }
     
+    func transformStringToFrequenc(fre: String) -> EKRecurrenceFrequency{
+        switch fre{
+        case "Daily":
+            return .daily
+        case "Weekly":
+            return .weekly
+        case "Montly":
+            return .monthly
+        case "Yearly":
+            return .yearly
+        default:
+            return .daily
+        }
+    }
+    
     private func saveEKCalEventFromMEvent(mEvent: Event, ekCalendar: EKCalendar, saveSyncUuidAt: Event? = nil){
+        var saveEvent = true
         let ekEvent = EKEvent(eventStore: eventStore)
         ekEvent.calendar = ekCalendar
         
@@ -395,10 +427,85 @@ class EKCal_Parser: ObservableObject
         ekEvent.isAllDay = mEvent.wholeDay
         
         // repetition
+        if mEvent.repetition{
+            var startEvent = false
+            var results : [Event]
+            results = []
+            let fetch = Event.fetchRequest()
+            fetch.sortDescriptors = [NSSortDescriptor(keyPath: \Event.startdate, ascending: true)]
+            fetch.predicate = NSPredicate(format: "repetitionID == %@", mEvent.repetitionID! as CVarArg)
+            do{
+                results = try viewContext.fetch(fetch)
+                if mEvent.key == results[0].key{
+                    startEvent = true
+                }
+            } catch {
+                print("requesting error")
+            }
+            if startEvent{
+                let ekrules: EKRecurrenceRule = EKRecurrenceRule.init(recurrenceWith: transformStringToFrequenc(fre: mEvent.repetitionInterval!), interval: 1, end: EKRecurrenceEnd(end: results[(results.count)-1].startdate!))
+                ekEvent.recurrenceRules = [ekrules]
+            }else{
+                saveEvent = false
+            }
+        }
         
         // location
+        if mEvent.location{
+            let structuredLocation = EKStructuredLocation()
+            let geoLocation = CLLocation(latitude: mEvent.latitude, longitude: mEvent.longitude)
+            structuredLocation.geoLocation = geoLocation
+            ekEvent.structuredLocation = structuredLocation
+        }
         
         // reminder
+        if mEvent.notification{
+            ekEvent.alarms = [EKAlarm(relativeOffset: TimeInterval((-1)*mEvent.notificationMinutesBefore))]
+        }
+        
+        if let urlString = mEvent.url{
+            if let url = URL(string: urlString){
+                ekEvent.url = url
+            }
+        }
+        
+        ekEvent.notes = mEvent.notes
+        if saveEvent{
+            try! eventStore.save(ekEvent, span: .futureEvents, commit: true)
+        }
+        
+        if(saveSyncUuidAt != nil){
+            saveSyncUuidAt!.importedFromUUID = ekEvent.eventIdentifier
+            try! viewContext.save()
+        }
+    }
+    
+    private func saveEKCalForeverEventFromMEvent(mEvent: ForeverEvent, ekCalendar: EKCalendar, saveSyncUuidAt: Event? = nil){
+        let ekEvent = EKEvent(eventStore: eventStore)
+        ekEvent.calendar = ekCalendar
+        
+        ekEvent.title = mEvent.name
+        
+        ekEvent.startDate = mEvent.startdate
+        ekEvent.endDate = mEvent.enddate
+        ekEvent.isAllDay = mEvent.wholeDay
+        
+        // repetition
+        let ekrules: EKRecurrenceRule = EKRecurrenceRule.init(recurrenceWith: transformStringToFrequenc(fre: mEvent.repetitionInterval!), interval: 1, end: nil)
+        ekEvent.recurrenceRules = [ekrules]
+        
+        // location
+        if mEvent.location{
+            let structuredLocation = EKStructuredLocation()
+            let geoLocation = CLLocation(latitude: mEvent.latitude, longitude: mEvent.longitude)
+            structuredLocation.geoLocation = geoLocation
+            ekEvent.structuredLocation = structuredLocation
+        }
+        
+        // reminder
+        if mEvent.notification{
+            ekEvent.alarms = [EKAlarm(relativeOffset: TimeInterval((-1)*mEvent.notificationMinutesBefore))]
+        }
         
         if let urlString = mEvent.url{
             if let url = URL(string: urlString){

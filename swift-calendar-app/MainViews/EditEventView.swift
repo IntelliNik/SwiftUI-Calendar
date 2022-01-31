@@ -8,10 +8,13 @@
 import SwiftUI
 import MapKit
 
+// Edit view for events
+
 struct EditEventView: View {
     
     @State var datePickerComponents: DatePickerComponents = [.date, .hourAndMinute]
     
+    // Event which shold be modified
     @State var event: Event
     @State var confirmationShown = false
     @State private var name: String = ""
@@ -331,6 +334,8 @@ struct EditEventView: View {
                 }
                 .navigationBarItems(leading: Button(action : {
                     if event.repetition && repetition{
+                        // Event is a repetition event and still be one
+                        // Modify all events of repetition after event.startdate
                         
                         modifyID = event.repetitionID!
                         modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
@@ -430,7 +435,6 @@ struct EditEventView: View {
                     } else {
                         // In this case event was a repeating event but should not be one anymore
                         // Notice that event cannot be an forever event
-                        // Case is finished
                         deleteID = event.repetitionID!
                         
                         let newEvent = Event(context: moc)
@@ -834,7 +838,8 @@ struct EditEventView: View {
                 }
                 .navigationBarItems(leading: Button(action : {
                     if event.repetition && repetition{
-                        
+                        // Event is a repetition event and still be one
+                        // Modify all events of repetition after event.startdate
                         modifyID = event.repetitionID!
                         modifyEvents.nsPredicate = searchPredicateRepetitionIDModify(query: modifyID)
                         name = self.event.name!
@@ -942,7 +947,8 @@ struct EditEventView: View {
                     } else if event.repetition && !repetition{
                         // In this case event was a repeating event but should not be one anymore
                         // Notice that event cannot be an forever event
-                        // Case is finished
+                        // Delete all events with repetitionID equal to event.repetitionID
+                        // Create an new new event without repetitions
                         deleteID = event.repetitionID!
                         
                         let newEvent = Event(context: moc)
@@ -1008,7 +1014,8 @@ struct EditEventView: View {
                     }else{
                         // In this case event was no repeating event
                         // Maybe it turns into an repeating event.
-                        // Case is finished
+                        // If it turns into an repeating event we have to create more events
+                        // Notice that the event can also turn into an forever event
                         if repetition{
                             event.setValue(wholeDay,forKey:"wholeDay")
                             event.setValue(startDate,forKey:"startdate")
@@ -1233,8 +1240,11 @@ struct EditEventView: View {
             }
             .onAppear {
                 if event.key == nil{
+                    // If the event is deleted, dismiss
                     dismiss()
                 }else{
+                    // Load the values of event
+                    
                     calendar = calendars.firstIndex(where: {$0.key == event.calendar?.key!})!
                     wholeDay = event.wholeDay
                     notification = event.notification
@@ -1268,6 +1278,7 @@ struct EditEventView: View {
         }
     }
     
+    // Option to delete event by UUID
     func deleteEvent(id: UUID)  {
         events.nsPredicate = NSPredicate(format: "key == %@", id as CVarArg)
         
@@ -1278,14 +1289,20 @@ struct EditEventView: View {
         try? moc.save()
     }
     
+    // Search for events which the same repetition id
+    // I.e. delete all events of the same repetition
     private func searchPredicateRepetitionID(query: UUID) -> NSPredicate? {
         return NSPredicate(format: "repetitionID == %@", query as CVarArg)
     }
     
+    // Search for events which the same repetition id after the startdate of event
+    // I.e. fetch all events of a repetition which should be modified the same way
     private func searchPredicateRepetitionIDModify(query: UUID) -> NSPredicate? {
         return NSPredicate(format: "repetitionID == %@ && startdate >= %@", query as CVarArg, event.startdate! as NSDate)
     }
     
+    // Create a duplicate of an event (used for repetitions which are not forever)
+    // Copys all values of event2 into event1 and returns event1
     func CopyEvent(event1: Event, event2: Event) -> Event{
         event1.name = event2.name
         event1.wholeDay = event2.wholeDay

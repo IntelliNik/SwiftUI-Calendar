@@ -7,10 +7,20 @@
 
 import SwiftUI
 
+// This view is split into four different parts
+// Part 1 and 2: Display the month box (depends on colorScheme and darkMode)
+// Part 3: display the rows of month box for all weeks except the first week of month
+// Part 4: display the row of month box for the first week of month
+// YearViewMonthBox: Combines part 1 - 4 into one view
+
+// Checks whether a month is the month of Date.now
+// This function is used to give the month of Date.now a different color
 func isToday(from dateComponents: DateComponents, and monthNum: Int, _ currentTime: CurrentTime) -> Bool {
     return dateComponents.year == currentTime.components.year && monthNum == currentTime.components.month
 }
 
+// Display the month box (depends on colorScheme and darkMode)
+// Size depends on the display size (computed in YearViewCalendar)
 struct Part1View: View {
     var dateComponents: DateComponents
     var monthNum: Int
@@ -47,6 +57,8 @@ struct Part1View: View {
     }
 }
 
+// Finalize the box
+// Size depends on the display size (computed in YearViewCalendar)
 struct Part2View: View {
     var width, height: CGFloat
     
@@ -62,7 +74,8 @@ struct Part2View: View {
     }
 }
 
-
+// Display the rows of month box for all weeks except the first week of month
+// Size depends on the display size (computed in YearViewCalendar)
 struct Part3View: View {
     var dateComponents: DateComponents
     var monthNum: Int
@@ -102,7 +115,8 @@ struct Part3View: View {
     }
 }
 
-
+// Display the row of month box for the first week of month
+// Size depends on the display size (computed in YearViewCalendar)
 struct Part4View: View {
     var dateComponents: DateComponents
     var monthNum: Int
@@ -130,38 +144,41 @@ struct Part4View: View {
     }
 }
 
-
+// Displays one month box (depending on a month and year, i.e. dateComponents)
+// Combines the parts 1 - 4 into one view
+// Size depends on the display size (computed in YearViewCalendar)
 struct YearViewMonthBox: View {
     var dateComponents: DateComponents
     var monthNum: Int
+    // String to display for month
     var month : String
     
+    // Computed in YearViewCalendar
     var width, height: CGFloat
     
+    // First day of a month, i.e. monday, tuesday, ... , saturday or sunday
     var startOfMonthDay: Int
+    // number of days of month
     var lastDayOfMonth: Int
     
     var body: some View {
         ZStack(alignment: .trailing) {
     
+            // Part 1 and 2: Display the month box (depends on colorScheme and darkMode)
             Part1View(dateComponents: dateComponents, monthNum: monthNum, month: month, width: width, height:height)
             Part2View(width: width, height:height)
             
             VStack(alignment: .center, spacing: 2) {
                 
+                // Part 4: display the row of month box for the first week of month
                 Part4View(dateComponents: dateComponents, monthNum: monthNum, startOfMonthDay: startOfMonthDay,width: width, height:height)
+                
                 ForEach([7,14,21,28,35], id:\.self)  { row in
                     let number = row - startOfMonthDay
+                    // Part 3: display the rows of month box for all weeks except the first week of month
                     Part3View(dateComponents: dateComponents, monthNum: monthNum, row: number, lastDayOfMonth: lastDayOfMonth,width: width, height:height)
                 }
             }.offset(x:0 , y: 10)
         }
-    }
-}
-
-struct YearViewDayBox_Previews: PreviewProvider {
-    static var previews: some View {
-        YearViewMonthBox(dateComponents: Calendar.current.dateComponents([.year, .month, .day, .weekOfYear], from: Date.now) , monthNum: 1, month: "Jan.", width: 45, height: 45, startOfMonthDay: 5, lastDayOfMonth: 31)
-            .environmentObject(CurrentTime())
     }
 }
