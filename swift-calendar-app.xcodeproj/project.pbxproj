@@ -35,6 +35,8 @@
 		77535AEC2780E0E1003FAD80 /* SearchEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77535AEB2780E0E1003FAD80 /* SearchEventView.swift */; };
 		775DAC5F2780EF2B00FFD397 /* NavigationBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */; };
 		777627DE279016980097826F /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77046DC0278455FC001DA0DA /* HelperFunctions.swift */; };
+		7799A28427A84F8100893C52 /* CurrentTimePublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7799A28327A84F8100893C52 /* CurrentTimePublisher.swift */; };
+		7799A28627A8508500893C52 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7799A28527A8508500893C52 /* NotificationManager.swift */; };
 		779BF16D2781B42000DCFBEB /* EventCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779BF16C2781B42000DCFBEB /* EventCardView.swift */; };
 		77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77AD06962780AEAF00767504 /* ShowEventView.swift */; };
 		77B3C96C2792102000571D8F /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */; };
@@ -133,6 +135,8 @@
 		7752442E2789C89500FE7206 /* DailyWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWidget.swift; sourceTree = "<group>"; };
 		77535AEB2780E0E1003FAD80 /* SearchEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEventView.swift; sourceTree = "<group>"; };
 		775DAC5E2780EF2B00FFD397 /* NavigationBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarView.swift; sourceTree = "<group>"; };
+		7799A28327A84F8100893C52 /* CurrentTimePublisher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentTimePublisher.swift; sourceTree = "<group>"; };
+		7799A28527A8508500893C52 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		779BF16C2781B42000DCFBEB /* EventCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCardView.swift; sourceTree = "<group>"; };
 		77AD06962780AEAF00767504 /* ShowEventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowEventView.swift; sourceTree = "<group>"; };
 		77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 		77046DC2278455FF001DA0DA /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				7799A28327A84F8100893C52 /* CurrentTimePublisher.swift */,
+				7799A28527A8508500893C52 /* NotificationManager.swift */,
 				77046DC0278455FC001DA0DA /* HelperFunctions.swift */,
 				77B3C96B2792102000571D8F /* SettingsBundleHelper.swift */,
 			);
@@ -532,6 +538,7 @@
 				A0069AB727998DCF00A07105 /* CurrentTimePublisher.swift in Sources */,
 				77E08BC227970DBA00D4791A /* DayViewEachHour.swift in Sources */,
 				77212C412781EAB4005ADA99 /* AddCalendarView.swift in Sources */,
+				7799A28627A8508500893C52 /* NotificationManager.swift in Sources */,
 				3579ED9D278DA70400B46AD0 /* (null) in Sources */,
 				A0E101A427A182A0008E3011 /* AllEventsHelpers.swift in Sources */,
 				35FC5CC02779C6E7009033C5 /* YearViewYearAndToday.swift in Sources */,
@@ -547,6 +554,7 @@
 				77AD06972780AEAF00767504 /* ShowEventView.swift in Sources */,
 				35B68335277A182E00D9EBAC /* TodayButton.swift in Sources */,
 				35EE958C2798115600B6F7CD /* ShowForeverEventView.swift in Sources */,
+				7799A28427A84F8100893C52 /* CurrentTimePublisher.swift in Sources */,
 				77F466A62768FF6F0034C68B /* (null) in Sources */,
 				77EA32EB278F607900093312 /* DataController.swift in Sources */,
 				A0D30B252796F1ED00EB1F22 /* DayView.swift in Sources */,
