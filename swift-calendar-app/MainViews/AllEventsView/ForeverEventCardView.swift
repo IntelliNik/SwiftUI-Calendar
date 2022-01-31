@@ -12,7 +12,6 @@ let weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday"
 let months = ["January","February","March","April","May","June","July","August","September","October","November","December"]
 
 struct ForeverEventCardView: View {
-    //@StateObject var model: ForeverEventsCardModel
     let event: ForeverEvent
     @State var editButton: Bool
     @State var deleteButton: Bool

@@ -158,7 +158,6 @@
 		77FB185C278CDC2000C63286 /* SmallDailyOverviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallDailyOverviewView.swift; sourceTree = "<group>"; };
 		A0069AB627998DCF00A07105 /* CurrentTimePublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CurrentTimePublisher.swift; path = "swift-calendar-app/Helpers/CurrentTimePublisher.swift"; sourceTree = SOURCE_ROOT; };
 		A0A8E229279B05DF0046087D /* ViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtension.swift; sourceTree = "<group>"; };
-		A0D09FDA27A19B8500774BE9 /* ForeverEventsCardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeverEventsCardModel.swift; sourceTree = "<group>"; };
 		A0D30B242796F1ED00EB1F22 /* DayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
 		A0D30B262796F22200EB1F22 /* EventView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventView.swift; sourceTree = "<group>"; };
 		A0D30B282796F26500EB1F22 /* DayViewTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayViewTime.swift; sourceTree = "<group>"; };
@@ -297,7 +296,6 @@
 				A0E101A327A182A0008E3011 /* AllEventsHelpers.swift */,
 				779BF16C2781B42000DCFBEB /* EventCardView.swift */,
 				A0E101A1279F319A008E3011 /* ForeverEventCardView.swift */,
-				A0D09FDA27A19B8500774BE9 /* ForeverEventsCardModel.swift */,
 			);
 			path = AllEventsView;
 			sourceTree = "<group>";
