@@ -22,7 +22,7 @@ class DataController: ObservableObject {
     
     
     init() {
-        self.containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.swift-calendar-app")!
+        self.containerURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.swift.calendar.app")!
         self.storeURL = containerURL.appendingPathComponent("store.sqlite")
         
         self.description = NSPersistentStoreDescription(url: storeURL)
