@@ -87,9 +87,6 @@ private func scheduleNotification(event: EventContents) {
     let notification_request = UNNotificationRequest(identifier: notification_id,
                                                      content: createNotificationContent(name: event.name),
                                                      trigger: notification_trigger)
-   //TODO:Remove prints after testing is done
-    print ("Requesting notification at:")
-    print(notification_time)
     center.add(notification_request)
 }
 
@@ -102,8 +99,6 @@ func removeNotificationByUUID(eventuuid : String) {
                 notification_to_remove.append(request.identifier)
             }
         }
-        print ("removing notification:")
-        print(notification_to_remove)
         center.removePendingNotificationRequests(withIdentifiers: notification_to_remove)
     }
 }

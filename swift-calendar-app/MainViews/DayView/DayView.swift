@@ -10,17 +10,32 @@ import SwiftUI
 
 struct DayView: View {
     @Binding var dateComponents: DateComponents
+    
+    @State var dateShown : Date = Date.now
     @State private var pickerSelection: PickerSelection = .current
     @State var offset = CGSize(width: 0, height: 0)
-    
-    @FetchRequest(
+    @State var refreshID = UUID()
+   /* @FetchRequest(
         entity: Event.entity(),
         sortDescriptors: [
             NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
         ],
         predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
-    ) var eventsToday: FetchedResults<Event>
+    ) var eventsToday: FetchedResults<Event>*/
     
+    @FetchRequest var eventsToday: FetchedResults<Event>
+    
+    init(dateComponents: Binding<DateComponents>){
+            self._dateComponents = dateComponents
+            _eventsToday = FetchRequest<Event>(
+                entity: Event.entity(),
+                sortDescriptors: [
+                    NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+                ],
+                predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: Date.now) as NSDate, getEndOfDay(date: Date.now) as NSDate)
+            )
+        }
+        
     @AppStorage("colorScheme") private var colorScheme = "red"
 
     var body: some View {
@@ -29,7 +44,7 @@ struct DayView: View {
                 .offset(offset)
                 .padding()
             
-            DayViewTime(dateComponents: $dateComponents, eventsToday: eventsToday)
+            DayViewTime(dateComponents: $dateComponents, dateToShow: $dateShown)
                 .offset(offset)
             
             Picker("", selection: $pickerSelection) {
@@ -49,6 +64,7 @@ struct DayView: View {
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         dateComponents = getNextOrPreviousDay(components: dateComponents, next: false)!
+                        dateShown = dateShown.addingTimeInterval(-TimeInterval(24*60*60)) //Add a day to the interview
                         offset.width = -400
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -62,9 +78,11 @@ struct DayView: View {
                         offset.width = -400
                     }
                     
-                        dateComponents = getNextOrPreviousDay(components: dateComponents, next: true)!
+              
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         offset.width = 400
+                        dateComponents = getNextOrPreviousDay(components: dateComponents, next: true)!
+                        dateShown = dateShown.addingTimeInterval(TimeInterval(24*60*60)) //Add a day to the interview
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                         withAnimation{

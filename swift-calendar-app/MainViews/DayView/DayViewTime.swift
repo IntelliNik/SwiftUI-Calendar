@@ -10,7 +10,19 @@ import SwiftUI
 import WidgetKit
 struct DayViewTime: View {
     @Binding var dateComponents: DateComponents
-    @State var eventsToday: FetchedResults<Event>
+    @Binding var dateToShow: Date
+    
+    /*
+    @FetchRequest(
+        entity: Event.entity(),
+        sortDescriptors: [
+            NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+        ],
+        predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: dateToShow) as NSDate, getEndOfDay(date: dateToShow) as NSDate)
+    ) var eventsToday: FetchedResults<Event>*/
+    @FetchRequest var eventsToday: FetchedResults<Event>
+
+    
     @State var eventToShow: Event?
     @AppStorage("colorScheme") private var colorScheme = "red"
     @EnvironmentObject var currentTime: CurrentTime
@@ -24,6 +36,19 @@ struct DayViewTime: View {
             }
         }
         return foundEvents
+    }
+    
+    init(dateComponents: Binding<DateComponents>, dateToShow: Binding<Date>) {
+        _dateComponents = dateComponents
+        _dateToShow = dateToShow
+        
+        _eventsToday = FetchRequest<Event>(
+            entity: Event.entity(),
+            sortDescriptors: [
+                NSSortDescriptor(keyPath: \Event.startdate, ascending: true),
+            ],
+            predicate: NSPredicate(format: "startdate >= %@ && startdate <= %@", getBeginningOfDay(date: self._dateToShow.wrappedValue) as NSDate, getEndOfDay(date: self._dateToShow.wrappedValue) as NSDate)
+        )
     }
     
     var body: some View {
