@@ -40,7 +40,7 @@ struct MainView: View {
                     updateView = false
                 }
         case .month:
-            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel(dateComponents: dateComponents, viewContext: moc), updateView: $updateView)
+            MonthView(displayedMonth: $dateComponents, viewModel: MonthViewModel(dateComponents: dateComponents), updateView: $updateView)
                 .transition(AnyTransition.scale.animation(.easeInOut(duration: 0.5)))
                 .onChange(of: updateView){_ in
                     if dateComponents.day != nil{

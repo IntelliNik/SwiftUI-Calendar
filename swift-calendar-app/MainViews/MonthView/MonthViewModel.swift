@@ -11,7 +11,6 @@ import CoreData
 
 class MonthViewModel: ObservableObject
 {
-    private let viewContext: NSManagedObjectContext
     
     //the three months displayed in the picker
     @Published var displayedMonth: DateComponents?
@@ -30,8 +29,7 @@ class MonthViewModel: ObservableObject
     var daysOfMonth = [String?]()
     var daysOfMonthWithWeek = [String?]()
     
-    init(dateComponents: DateComponents, viewContext: NSManagedObjectContext){
-        self.viewContext = viewContext
+    init(dateComponents: DateComponents){
         initMonths(dateComponents: dateComponents)
     }
     
