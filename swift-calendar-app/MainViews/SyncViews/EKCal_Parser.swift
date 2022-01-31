@@ -134,6 +134,7 @@ class EKCal_Parser: ObservableObject
                     eventForever.key = UUID()
                     eventForever.startdate = mEvent.startdate!
                     eventForever.enddate = mEvent.enddate!
+                    eventForever.wholeDay = mEvent.wholeDay
                     eventForever.name = mEvent.name
                     eventForever.url = mEvent.url
                     eventForever.notes = mEvent.notes
