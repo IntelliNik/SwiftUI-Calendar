@@ -362,7 +362,11 @@ struct EditForeverEventView: View {
                 if repetition && repeatUntil == "Forever"{
                     event.setValue(wholeDay,forKey:"wholeDay")
                     event.setValue(startDate,forKey:"startdate")
-                    event.setValue(endDate,forKey:"enddate")
+                    if(endDate < startDate){
+                        event.setValue(startDate,forKey:"enddate")
+                    } else{
+                        event.setValue(endDate,forKey:"enddate")
+                    }
                     
                     if(urlString != ""){
                         event.setValue(urlString.hasPrefix("http") ? urlString : "https://\(urlString)",forKey:"url")
